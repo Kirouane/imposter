@@ -1,0 +1,5 @@
+# PhpStorm local config files
+.idea/
+vendor/
+composer.phar
+data/

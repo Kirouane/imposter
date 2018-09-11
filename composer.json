@@ -1,0 +1,15 @@
+{
+
+    "autoload-dev": {
+        "psr-4": {
+            "Imposter\\" : "src"
+        }
+    },
+    "require": {
+        "guzzle/guzzle": "^3.9",
+        "react/http": "^0.8.3",
+        "greg0/lazer-database": "^1.1",
+        "phpunit/phpunit": "^7.3",
+        "symfony/console": "^4.1"
+    }
+}
