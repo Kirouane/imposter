@@ -9,15 +9,15 @@ use Lazer\Classes\Database as Lazer;
  */
 class Db
 {
+
+    private $data = [];
+
     /**
      * Db constructor.
      */
     public function __construct($path = null)
     {
-        if (!\defined('LAZER_DATA_PATH')) {
-            \define('LAZER_DATA_PATH', realpath(dirname(__DIR__)) . '/data/');
-            //\define('LAZER_DATA_PATH', $path);
-        }
+
     }
 
     /**
@@ -26,7 +26,7 @@ class Db
     public function dropTable(string $tableName)
     {
         if ($this->exists($tableName)) {
-            Lazer::remove('mock');
+            unset($this->data[$tableName]);
         }
     }
 
@@ -37,7 +37,7 @@ class Db
      */
     public function createTable(string $name, array $fields)
     {
-        Lazer::create($name, $fields);
+        $this->data[$name] = [];
     }
 
     /**
@@ -57,26 +57,50 @@ class Db
      */
     public function exists(string $tableName): bool
     {
-        try{
-            \Lazer\Classes\Helpers\Validate::table($tableName)->exists();
-            return true;
-        } catch(\Lazer\Classes\LazerException $e){
-            return false;
-        }
+        return isset($this->data[$tableName]);
     }
 
-    public function newRow(string $name)
+    public function newRow(string $name, $fields)
     {
-        return Lazer::table($name);
+        $row = (object)$fields;
+        $this->data[$name][$row->id] = $row;
+        return $row;
     }
 
     public function findById(string $name, $id)
     {
-        return Lazer::table($name)->find($id);
+        foreach ($this->data[$name] as $row) {
+            if ($row->id === $id) {
+                return $row;
+            }
+        }
+
+        return null;
     }
 
-    public function select(string $name)
+    public function findByFields(string $name, $fields)
     {
-        return Lazer::table($name);
+        foreach ($this->data[$name] as $row) {
+            $found = true;
+            foreach ($fields as $field => $value) {
+
+                if ($row->$field !== $value) {
+                    $found = false;
+                }
+            }
+
+            if ($found) {
+                return $row;
+            }
+        }
+
+        return null;
+    }
+
+    public function saveRow($name, $row)
+    {
+
+        $this->data[$name][$row->id] = $row;
+
     }
 }

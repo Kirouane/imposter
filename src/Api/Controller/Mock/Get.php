@@ -35,11 +35,12 @@ class Get extends AbstractController
     public function __invoke(ServerRequestInterface $request)
     {
         $row = $this->repository->findById($request->getQueryParams()['id']);
+
         return new Response(
             200,
             [
                 'Content-Type' => 'application/json'
-            ], $row->hits
+            ], serialize($row)
         );
     }
 }

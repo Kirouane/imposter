@@ -11,7 +11,7 @@ use Imposter\Db;
  */
 class Di
 {   const DI = [
-        //controller,
+        //controllers,
         \Imposter\Api\Controller\Mock\Post::class => [
             'server',
             'output',
@@ -28,7 +28,6 @@ class Di
         \Imposter\Api\Controller\Match::class => [
             Repository\Mock::class
         ],
-
     ];
 
     /**

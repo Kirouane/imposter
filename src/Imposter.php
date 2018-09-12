@@ -31,12 +31,16 @@ class Imposter
      * @var int
      */
     private $times = null;
-    private $id;
 
     /**
      * @var Di
      */
     private $di;
+
+    /**
+     * @var \Imposter\Model\Mock
+     */
+    private $mock;
 
     public static function mock(int $port)
     {
@@ -78,7 +82,7 @@ class Imposter
 
     public function once(): Imposter
     {
-        $this->times = '1';
+        $this->times = 1;
         $this->timesComparison = '=';
         return $this;
     }
@@ -89,27 +93,32 @@ class Imposter
         $request = $client->post(
             'http://localhost:8080/mock',
             null,
-                 json_encode($this->getBody())
+                 $this->getBody()
         );
-        $this->id = $client->send($request)->getBody(true);
+
+        $body = $client->send($request)->getBody(true);
+
+        $mock = unserialize($body, [\Imposter\Model\Mock::class]);
+        $this->mock = $mock;
         return $this;
     }
 
 
     public function getBody()
     {
-        return [
-            'port' => $this->port,
-            "request_uri_path" => $this->requestPath,
-            "request_body" => $this->requestBody,
-            "request_method" => $this->requestMethod,
-            "request_headers" => '',
-            "request_protocol_version" => '',
-            "request_uploaded_files" => '',
-            "response_body" => $this->responseBody,
-            "response_headers" => '',
-            'hits' => 0
-        ];
+        $hydrator = new \Imposter\Hydrator\Mock();
+        $mock = new \Imposter\Model\Mock();
+
+        return serialize($hydrator->hydrate(
+            $mock,
+            [
+                'port' => $this->port,
+                "request_uri_path" => $this->requestPath,
+                "request_body" => $this->requestBody,
+                "request_method" => $this->requestMethod,
+                "response_body" => $this->responseBody
+            ]
+        ));
     }
 
     public function resolve()
@@ -119,14 +128,17 @@ class Imposter
             'http://localhost:' . $this->port . '/mock',
             null
         );
-        $request->getQuery()->set('id', $this->id);
-        $hits = $client->send($request)->getBody(true);
+        $request->getQuery()->set('id', $this->mock->getId());
+        $body = $client->send($request)->getBody(true);
+
+        /** @var \Imposter\Model\Mock $mock */
+        $mock = unserialize($body, [\Imposter\Model\Mock::class]);
 
         if ($this->times == null) {
             return $this;
         }
 
-        if ($this->times !== $hits) {
+        if ($this->times !== $mock->getHits()) {
             throw new \PHPUnit\Framework\AssertionFailedError('Expectation failed');
         }
         return $this;

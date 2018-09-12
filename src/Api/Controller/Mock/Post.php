@@ -54,24 +54,22 @@ class Post extends AbstractController
     public function __invoke(ServerRequestInterface $request)
     {
         $body = $request->getBody()->getContents();
-        $jsonBody = json_decode($body, true);
+        $mock = unserialize($body, [\Imposter\Model\Mock::class]);
 
-        if (!is_array($jsonBody)) {
+        if (!$mock instanceof \Imposter\Model\Mock) {
             $this->output->writeln('Invalid mock description :' . $body);
             throw new \Exception('Invalid body' . $body);
         }
 
-        $row = $this->repository->newRow($jsonBody);
-
-
-        $this->createImposter($row->port);
+        $mock = $this->repository->insert($mock);
+        $this->createImposter($mock->getPort());
 
         return new Response(
             200,
             [
                 'Content-Type' => 'application/json'
             ],
-            json_encode($row->id)
+            serialize($mock)
         );
     }
 

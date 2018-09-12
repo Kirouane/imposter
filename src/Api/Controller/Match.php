@@ -34,18 +34,18 @@ class Match extends AbstractController
      */
     public function __invoke(ServerRequestInterface $request)
     {
-        $row = $this->repository->findByCriteria([
-            'request_uri_path' => trim($request->getUri()->getPath(), '/')
-        ]);
-        //$row = Lazer::table('mock')->where('request_uri_path', '=', trim($request->getUri()->getPath(), '/'))->find();
-        if ($row->count()) {
-            $row->hits = $row->hits + 1;
-            $row->save();
+        $row = $this->repository->search((new \Imposter\Model\Mock())->setRequestUriPath(trim($request->getUri()->getPath(), '/')));
+
+        if ($row) {
+            $row->setHits($row->getHits() + 1);
+            $this->repository->update($row);
+
             return new Response(
                 200,
                 [
                     'Content-Type' => 'application/json'
-                ],$row->response_body
+                ],
+                $row->getResponseBody()
             );
         }
 

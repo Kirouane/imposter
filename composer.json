@@ -6,10 +6,14 @@
         }
     },
     "require": {
+        "php" : ">=7.0",
+        "ext-json" :"*"
+    },
+    "require-dev": {
         "guzzle/guzzle": "^3.9",
         "react/http": "^0.8.3",
-        "greg0/lazer-database": "^1.1",
         "phpunit/phpunit": "^7.3",
-        "symfony/console": "^4.1"
+        "symfony/console": "^4.1",
+        "roave/security-advisories": "dev-master"
     }
 }

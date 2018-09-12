@@ -13,57 +13,39 @@ use Imposter\Db;
 
 class Mock
 {
-    private $name = 'mock';
-    /**
-     * @var Db
-     */
-    private $db;
-
-    private $fields = [
-        'id' => 'integer',
-        'port' => 'integer',
-        'request_uri_path' => 'string',
-        'request_body' => 'string',
-        'request_method' => 'string',
-        'request_headers' => 'string',
-        'request_protocol_version' => 'string',
-        'request_uploaded_files' => 'string',
-
-        'response_body' => 'string',
-        'response_headers' => 'string',
-        'hits' => 'integer'
-    ];
-
-    public function __construct(Db $db)
-    {
-        $this->db = $db;
-    }
+    private $data = [];
 
     public function recreate()
     {
-        $this->db->recreate($this->name, $this->fields);
+        $this->data = [];
     }
 
-    public function newRow($fields)
+    public function insert(\Imposter\Model\Mock $mock)
     {
-        $row = $this->db->newRow($this->name);
-        foreach ($fields as $key => $value) {
-            $row->$key = $value;
-        }
-
-        $row->save();
-
-        return $row;
+        $mock->setId(uniqid('', true));
+        $this->data[$mock->getId()] = $mock;
+        return $mock;
     }
 
     public function findById($id)
     {
-        return $this->db->findById($this->name, $id);
+        return $this->data[$id] ?? null;
     }
 
-    public function findByCriteria(array $array)
+    public function update(\Imposter\Model\Mock $row)
     {
+        $this->data[$row->getId()] = $row;
+    }
 
-        return $this->db->select($this->name)->where('request_uri_path', '=', $array['request_uri_path'])->find();
+    public function search(\Imposter\Model\Mock $request)
+    {
+        /** @var \Imposter\Model\Mock $mock */
+        foreach ($this->data as $mock) {
+            if ($mock->getRequestUriPath() === $request->getRequestUriPath()) {
+                return $mock;
+            }
+        }
+
+        return null;
     }
 }
