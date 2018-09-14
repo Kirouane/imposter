@@ -48,4 +48,9 @@ class Mock
 
         return null;
     }
+
+    public function drop()
+    {
+        $this->data = [];
+    }
 }

@@ -21,9 +21,8 @@ class Di
         \Imposter\Api\Controller\Mock\Get::class => [
             Repository\Mock::class
         ],
-
-        Repository\Mock::class => [
-            \Imposter\Db::class
+        \Imposter\Api\Controller\Mock\Delete::class => [
+            Repository\Mock::class
         ],
         \Imposter\Api\Controller\Match::class => [
             Repository\Mock::class

@@ -13,17 +13,22 @@ class Scenario extends TestCase
     public function scenario()
     {
         $mock = Imposter::mock(8081)
-            ->withPath('test-api')
+            ->withPath('users/1')
             ->withBody('{}')
             ->withMethod('GET')
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
 
-
         $client = new Client();
-        $response = $client->get('http://localhost:8081/test-api')->send()->getBody(true);
+        $response = $client->get('http://localhost:8081/users/1')->send()->getBody(true);
         self::assertSame($response, '{"response" :"okay"}');
-        $mock->resolve();
+
+
+    }
+
+    public function tearDown()
+    {
+        Imposter::close();
     }
 }

@@ -9,8 +9,6 @@
 namespace Imposter;
 
 
-
-use Imposter\Repository\Mock;
 use React\Http\Server as ReactServer;
 
 class Server
@@ -43,7 +41,7 @@ class Server
         $this->di->set('server', $this);
     }
 
-    public function run($port): void
+    public function run($port)
     {
         if (isset($this->sockets[$port])) {
             $this->di->get('output')->writelin("$port already in use.");
@@ -57,7 +55,7 @@ class Server
     /**
      * @param $port
      */
-    public function listen($port): void
+    public function listen($port)
     {
         if (isset($this->sockets[$port])) {
             $this->di->get('output')->writeln("$port already in use.");
