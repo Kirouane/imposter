@@ -11,6 +11,8 @@ namespace Imposter;
 
 use Imposter\Model\Mock;
 use Imposter\Repository\HttpMock;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\Constraint\IsIdentical;
 
 class Imposter
 {
@@ -36,6 +38,8 @@ class Imposter
 
     private static $imposters = [];
 
+    private $timesComparison = '===';
+
     public static function mock(int $port): Imposter
     {
         if (!self::$repository) {
@@ -55,22 +59,38 @@ class Imposter
         $this->port = $port;
     }
 
-    public function withPath(string $requestPath): Imposter
+    /**
+     * @param $value
+     * @return Constraint
+     */
+    private function getConstraintFromValue($value): Constraint
     {
-        $this->mock->setRequestUriPath($requestPath);
+        if (\is_object($value) && !$value instanceof Constraint) {
+            throw new \InvalidArgumentException('the argument must be a scalar or an instance of ' . Constraint::class);
+        }
+
+        if (!$value instanceof Constraint) {
+            $value = new IsIdentical($value);
+        }
+
+        return $value;
+    }
+
+    public function withPath($value): Imposter
+    {
+        $this->mock->setRequestUriPath($this->getConstraintFromValue($value));
         return $this;
     }
 
-    public function withMethod(string $requestMethod): Imposter
+    public function withMethod($value): Imposter
     {
-        $this->mock->setRequestMethod($requestMethod);
+        $this->mock->setRequestMethod($this->getConstraintFromValue($value));
         return $this;
     }
 
-
-    public function withBody(string $requestBody): Imposter
+    public function withBody($value): Imposter
     {
-        $this->mock->setRequestBody($requestBody);
+        $this->mock->setRequestBody($this->getConstraintFromValue($value));
         return $this;
     }
 
@@ -83,7 +103,6 @@ class Imposter
     public function once(): Imposter
     {
         $this->times = 1;
-        $this->timesComparison = '=';
         return $this;
     }
 
@@ -101,7 +120,9 @@ class Imposter
             return $this;
         }
 
-        if ($this->times !== $mock->getHits()) {
+        $assertion = '$assertion=(' . $this->times . $this->timesComparison . (int)$mock->getHits() . ');';
+        eval($assertion);
+        if (!$assertion) {
             throw new \PHPUnit\Framework\AssertionFailedError('Expectation failed');
         }
 

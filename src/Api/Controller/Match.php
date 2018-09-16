@@ -34,7 +34,8 @@ class Match extends AbstractController
      */
     public function __invoke(ServerRequestInterface $request)
     {
-        $row = $this->repository->search((new \Imposter\Model\Mock())->setRequestUriPath(trim($request->getUri()->getPath(), '/')));
+
+        $row = $this->repository->matchRequest($request);
 
         if ($row) {
             $row->setHits($row->getHits() + 1);

@@ -9,14 +9,39 @@
 namespace Imposter\Model;
 
 
-class Mock implements \JsonSerializable
+use PHPUnit\Framework\Constraint\Constraint;
+
+class Mock
 {
+    /**
+     * @var string|null
+     */
     private $id;
+
+    /**
+     * @var int
+     */
     private $port;
+
+    /**
+     * @var Constraint|null
+     */
     private $requestUriPath;
+
+    /**
+     * @var Constraint|null
+     */
     private $requestBody;
+
+    /**
+     * @var Constraint|null
+     */
     private $requestMethod;
-    private $response_body;
+
+    /**
+     * @var string|null
+     */
+    private $responseBody;
 
     /**
      * @var int
@@ -35,32 +60,32 @@ class Mock implements \JsonSerializable
      * @param mixed $id
      * @return Mock
      */
-    public function setId($id)
+    public function setId($id): Mock
     {
         $this->id = $id;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
 
     /**
-     * @param mixed $port
+     * @param int $port
      * @return Mock
      */
-    public function setPort($port)
+    public function setPort(int $port): Mock
     {
         $this->port = $port;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Constraint|null
      */
     public function getRequestUriPath()
     {
@@ -68,17 +93,17 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param mixed $requestUriPath
+     * @param Constraint $requestUriPath
      * @return Mock
      */
-    public function setRequestUriPath($requestUriPath)
+    public function setRequestUriPath(Constraint $requestUriPath): Mock
     {
         $this->requestUriPath = $requestUriPath;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Constraint|null
      */
     public function getRequestBody()
     {
@@ -86,17 +111,17 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param mixed $requestBody
+     * @param Constraint $requestBody
      * @return Mock
      */
-    public function setRequestBody($requestBody)
+    public function setRequestBody(Constraint $requestBody): Mock
     {
         $this->requestBody = $requestBody;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Constraint|null
      */
     public function getRequestMethod()
     {
@@ -104,65 +129,49 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param mixed $requestMethod
+     * @param Constraint $requestMethod
      * @return Mock
      */
-    public function setRequestMethod($requestMethod)
+    public function setRequestMethod(Constraint $requestMethod): Mock
     {
         $this->requestMethod = $requestMethod;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getResponseBody()
     {
-        return $this->response_body;
+        return $this->responseBody;
     }
 
     /**
-     * @param mixed $response_body
+     * @param string $responseBody
      * @return Mock
      */
-    public function setResponseBody($response_body)
+    public function setResponseBody(string $responseBody): Mock
     {
-        $this->response_body = $response_body;
+        $this->responseBody = $responseBody;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getHits()
+    public function getHits(): int
     {
         return $this->hits;
     }
 
     /**
-     * @param mixed $hits
+     * @param int $hits
      * @return Mock
      */
-    public function setHits($hits)
+    public function setHits(int $hits): Mock
     {
         $this->hits = $hits;
         return $this;
     }
 
-    /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    public function jsonSerialize()
-    {
-
-    }
-
-    public function toArray()
-    {
-
-    }
 }

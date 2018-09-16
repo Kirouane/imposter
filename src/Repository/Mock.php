@@ -10,6 +10,8 @@ namespace Imposter\Repository;
 
 
 use Imposter\Db;
+use Imposter\Imposter\Matcher;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Mock
 {
@@ -41,16 +43,34 @@ class Mock
     {
         /** @var \Imposter\Model\Mock $mock */
         foreach ($this->data as $mock) {
-            if ($mock->getRequestUriPath() === $request->getRequestUriPath()) {
+            $matcher = new Matcher($mock);
+            if ($matcher->match($request)) {
                 return $mock;
             }
+            //$mock->getRequestUriPath()->evaluate($request->getRequestUriPath());
+            //return $mock;
         }
 
         return null;
     }
 
+
+
     public function drop()
     {
         $this->data = [];
+    }
+
+    public function matchRequest(ServerRequestInterface $request)
+    {
+        /** @var \Imposter\Model\Mock $mock */
+        foreach ($this->data as $mock) {
+            $matcher = new Matcher($mock);
+            if ($matcher->match($request)) {
+                return $mock;
+            }
+        }
+
+        return null;
     }
 }

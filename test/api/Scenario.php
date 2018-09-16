@@ -12,7 +12,8 @@ class Scenario extends TestCase
      */
     public function scenario()
     {
-        $mock = Imposter::mock(8081)
+
+        Imposter::mock(8081)
             ->withPath('users/1')
             ->withBody('{}')
             ->withMethod('GET')
@@ -23,7 +24,6 @@ class Scenario extends TestCase
         $client = new Client();
         $response = $client->get('http://localhost:8081/users/1')->send()->getBody(true);
         self::assertSame($response, '{"response" :"okay"}');
-
 
     }
 

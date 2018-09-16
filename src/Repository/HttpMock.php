@@ -36,7 +36,12 @@ class HttpMock
         return unserialize($body, [\Imposter\Model\Mock::class]);
     }
 
-    public function find(\Imposter\Model\Mock $mock)
+    /**
+     * @param \Imposter\Model\Mock $mock
+     * @return \Imposter\Model\Mock
+     * @throws \Exception
+     */
+    public function find(\Imposter\Model\Mock $mock): \Imposter\Model\Mock
     {
         $request = $this->client->get(
             'http://localhost:' . $mock->getPort(). '/mock',
