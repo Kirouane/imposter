@@ -14,6 +14,7 @@ use Imposter\Imposter\Term\Body;
 use Imposter\Imposter\Term\Method;
 use Imposter\Imposter\Term\Path;
 use Imposter\Model\Mock;
+use PHPUnit\Framework\AssertionFailedError;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Matcher
@@ -32,10 +33,12 @@ class Matcher
         $this->mock = $mock;
     }
 
-
+    /**
+     * @param ServerRequestInterface $request
+     * @return bool
+     */
     public function match(ServerRequestInterface $request)
     {
-        /** @var AbstractTerm[ $terms */
         $terms = [
             new Body($this->mock),
             new Path($this->mock),
@@ -46,7 +49,11 @@ class Matcher
 
         /** @var AbstractTerm $term */
         foreach ($terms as $term) {
-            $matched &= $term->match($request);
+            try {
+                $term->match($request);
+            } catch (AssertionFailedError $e) {
+                $matched = false;
+            }
         }
 
         return $matched;

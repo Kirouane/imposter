@@ -1,14 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/5/18
- * Time: 1:44 PM
- */
 
 namespace Imposter;
 
-
+use Imposter\Imposter\Prediction\CallTime\AbstractCallTime;
+use Imposter\Imposter\Prediction\CallTime\AtLeast;
+use Imposter\Imposter\Prediction\CallTime\AtMost;
+use Imposter\Imposter\Prediction\CallTime\Equals;
 use Imposter\Model\Mock;
 use Imposter\Repository\HttpMock;
 use PHPUnit\Framework\Constraint\Constraint;
@@ -20,11 +17,11 @@ class Imposter
      * @var int
      */
     private $port;
+
     /**
      * @var int
      */
     private $times;
-
 
     /**
      * @var Mock
@@ -36,9 +33,16 @@ class Imposter
      */
     private static $repository;
 
+    /**
+     * @var Imposter[]
+     */
     private static $imposters = [];
 
-    private $timesComparison = '===';
+    /**
+     * @var AbstractCallTime
+     */
+    private $callTimePrediction;
+
 
     public static function mock(int $port): Imposter
     {
@@ -102,7 +106,35 @@ class Imposter
 
     public function once(): Imposter
     {
-        $this->times = 1;
+        return $this->times(1);
+    }
+
+    public function never(): Imposter
+    {
+        return $this->times(0);
+    }
+
+    public function twice(): Imposter
+    {
+        return $this->times(2);
+    }
+
+    public function times($times): Imposter
+    {
+        $this->callTimePrediction = new Equals($times, $this->mock);
+        return $this;
+    }
+
+    public function atLeast($times): Imposter
+    {
+        $this->callTimePrediction = new AtLeast($times, $this->mock);
+        return $this;
+    }
+
+
+    public function atMost($times): Imposter
+    {
+        $this->callTimePrediction = new AtMost($times, $this->mock);
         return $this;
     }
 
@@ -116,15 +148,11 @@ class Imposter
     {
         $mock = self::$repository->find($this->mock);
 
-        if ($this->times === null) {
+        if ($this->callTimePrediction === null) {
             return $this;
         }
 
-        $assertion = '$assertion=(' . $this->times . $this->timesComparison . (int)$mock->getHits() . ');';
-        eval($assertion);
-        if (!$assertion) {
-            throw new \PHPUnit\Framework\AssertionFailedError('Expectation failed');
-        }
+        $this->callTimePrediction->check($mock->getHits());
 
         return $this;
     }

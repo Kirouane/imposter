@@ -39,23 +39,6 @@ class Mock
         $this->data[$row->getId()] = $row;
     }
 
-    public function search(\Imposter\Model\Mock $request)
-    {
-        /** @var \Imposter\Model\Mock $mock */
-        foreach ($this->data as $mock) {
-            $matcher = new Matcher($mock);
-            if ($matcher->match($request)) {
-                return $mock;
-            }
-            //$mock->getRequestUriPath()->evaluate($request->getRequestUriPath());
-            //return $mock;
-        }
-
-        return null;
-    }
-
-
-
     public function drop()
     {
         $this->data = [];

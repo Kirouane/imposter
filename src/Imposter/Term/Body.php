@@ -24,12 +24,6 @@ class Body extends AbstractTerm
             return true;
         }
 
-        try {
-            $this->mock->getRequestBody()->evaluate($request->getBody()->getContents());
-        } catch (\PHPUnit\Framework\AssertionFailedError $e) {
-            return false;
-        }
-
-        return true;
+        $this->mock->getRequestBody()->evaluate($request->getBody()->getContents());
     }
 }

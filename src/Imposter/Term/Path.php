@@ -23,12 +23,6 @@ class Path extends AbstractTerm
             return true;
         }
 
-        try {
-            $this->mock->getRequestUriPath()->evaluate($request->getUri()->getPath());
-        } catch (\PHPUnit\Framework\AssertionFailedError $e) {
-            return false;
-        }
-
-        return true;
+        $this->mock->getRequestUriPath()->evaluate($request->getUri()->getPath());
     }
 }

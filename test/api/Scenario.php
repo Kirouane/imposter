@@ -14,8 +14,7 @@ class Scenario extends TestCase
     {
 
         Imposter::mock(8081)
-            ->withPath('users/1')
-            ->withBody('{}')
+            ->withPath('/users/1')
             ->withMethod('GET')
             ->returnBody('{"response" :"okay"}')
             ->once()
@@ -24,7 +23,6 @@ class Scenario extends TestCase
         $client = new Client();
         $response = $client->get('http://localhost:8081/users/1')->send()->getBody(true);
         self::assertSame($response, '{"response" :"okay"}');
-
     }
 
     public function tearDown()

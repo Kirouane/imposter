@@ -23,12 +23,6 @@ class Method extends AbstractTerm
             return true;
         }
 
-        try {
-            $this->mock->getRequestMethod()->evaluate($request->getMethod());
-        } catch (\PHPUnit\Framework\AssertionFailedError $e) {
-            return false;
-        }
-
-        return true;
+        $this->mock->getRequestMethod()->evaluate($request->getMethod());
     }
 }
