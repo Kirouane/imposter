@@ -13,14 +13,17 @@ namespace Imposter\Repository;
 class HttpMock
 {
     /**
-     * @var \Guzzle\Http\Client
+     * @var \\Guzzle\Http\ClientInterface
      */
     private $client;
 
-    public function __construct()
+    /**
+     * HttpMock constructor.
+     * @param \Guzzle\Http\ClientInterface|null $client
+     */
+    public function __construct(\Guzzle\Http\ClientInterface $client = null)
     {
-
-        $this->client = new \Guzzle\Http\Client();
+        $this->client = $client ?: new \Guzzle\Http\Client();
     }
 
     public function insert(\Imposter\Model\Mock $mock)
