@@ -35,27 +35,26 @@ class Matcher
 
     /**
      * @param ServerRequestInterface $request
-     * @return bool
+     * @return \Exception[]
      */
-    public function match(ServerRequestInterface $request)
+    public function match(ServerRequestInterface $request): array
     {
         $terms = [
             new Body($this->mock),
             new Path($this->mock),
             new Method($this->mock),
         ];
-
-        $matched = true;
+        $exceptions = [];
 
         /** @var AbstractTerm $term */
         foreach ($terms as $term) {
             try {
                 $term->match($request);
             } catch (AssertionFailedError $e) {
-                $matched = false;
+                $exceptions[] = $e;
             }
         }
 
-        return $matched;
+        return $exceptions;
     }
 }

@@ -16,12 +16,11 @@ class Body extends AbstractTerm
 
     /**
      * @param ServerRequestInterface $request
-     * @return bool
      */
     public function match(ServerRequestInterface $request)
     {
         if (!$this->mock->getRequestBody()) {
-            return true;
+            return;
         }
 
         $this->mock->getRequestBody()->evaluate($request->getBody()->getContents());

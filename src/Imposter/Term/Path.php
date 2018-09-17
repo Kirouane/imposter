@@ -15,12 +15,11 @@ class Path extends AbstractTerm
 {
     /**
      * @param ServerRequestInterface $request
-     * @return bool
      */
     public function match(ServerRequestInterface $request)
     {
         if (!$this->mock->getRequestUriPath()) {
-            return true;
+            return;
         }
 
         $this->mock->getRequestUriPath()->evaluate($request->getUri()->getPath());

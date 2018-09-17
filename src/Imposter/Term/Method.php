@@ -15,12 +15,11 @@ class Method extends AbstractTerm
 {
     /**
      * @param ServerRequestInterface $request
-     * @return bool
      */
     public function match(ServerRequestInterface $request)
     {
         if (!$this->mock->getRequestMethod()) {
-            return true;
+            return;
         }
 
         $this->mock->getRequestMethod()->evaluate($request->getMethod());

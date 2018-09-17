@@ -8,8 +8,6 @@
 
 namespace Imposter\Repository;
 
-
-use Imposter\Db;
 use Imposter\Imposter\Matcher;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -49,7 +47,8 @@ class Mock
         /** @var \Imposter\Model\Mock $mock */
         foreach ($this->data as $mock) {
             $matcher = new Matcher($mock);
-            if ($matcher->match($request)) {
+            $exceptions = $matcher->match($request);
+            if (empty($exceptions)) {
                 return $mock;
             }
         }
