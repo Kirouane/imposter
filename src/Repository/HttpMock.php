@@ -10,6 +10,9 @@ namespace Imposter\Repository;
 
 
 
+use Imposter\Model\Mock;
+use Imposter\Server;
+
 class HttpMock
 {
     /**
@@ -26,45 +29,48 @@ class HttpMock
         $this->client = $client ?: new \Guzzle\Http\Client();
     }
 
-    public function insert(\Imposter\Model\Mock $mock)
+    /**
+     * @param Mock $mock
+     * @return Mock
+     * @throws \Exception
+     */
+    public function insert(Mock $mock): Mock
     {
-        $request = $this->client->post(
-            'http://localhost:8080/mock',
-            null,
-            serialize($mock)
-        );
+        $request = $this->client->post(Server::URL . '/mock', null, serialize($mock));
+        $body = $this->client->send($request);
 
-        $body = $this->client->send($request)->getBody(true);
+        if (!$body) {
+            throw new \UnexpectedValueException('Response body not found');
+        }
 
-        return unserialize($body, [\Imposter\Model\Mock::class]);
+        return unserialize($body->getBody(true), [Mock::class]);
     }
 
     /**
-     * @param \Imposter\Model\Mock $mock
-     * @return \Imposter\Model\Mock
+     * @param Mock $mock
+     * @return Mock
      * @throws \Exception
      */
-    public function find(\Imposter\Model\Mock $mock): \Imposter\Model\Mock
+    public function find(Mock $mock): Mock
     {
-        $request = $this->client->get(
-            'http://localhost:' . $mock->getPort(). '/mock',
-            null
-        );
+        $request = $this->client->get(Server::URL . '/mock', null);
         $request->getQuery()->set('id', $mock->getId());
-        $body = $this->client->send($request)->getBody(true);
+        $body = $this->client->send($request);
 
-        /** @var \Imposter\Model\Mock $mock */
-        return unserialize($body, [\Imposter\Model\Mock::class]);
+        if (!$body) {
+            throw new \UnexpectedValueException('Response body not found');
+        }
+
+        return unserialize($body->getBody(true), [Mock::class]);
     }
 
 
+    /**
+     * @throws \Exception
+     */
     public function drop()
     {
-        $request = $this->client->delete(
-            'http://localhost:8080/mock',
-            null
-        );
-
+        $request = $this->client->delete(Server::URL . '/mock', null);
         $this->client->send($request);
     }
 }

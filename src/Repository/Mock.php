@@ -90,4 +90,12 @@ class Mock
 
         return null;
     }
+
+    /**
+     * @return MockModel[]
+     */
+    public function findAll(): array
+    {
+        return $this->data;
+    }
 }

@@ -1,18 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/11/18
- * Time: 12:43 PM
- */
+declare(strict_types=1);
 
 namespace Imposter;
 
-
 use React\Http\Server as ReactServer;
 
+/**
+ * Class Server
+ * @package Imposter
+ */
 class Server
 {
+    const HOST = 'localhost';
+    const PROTOCOL = 'http';
+    const PORT = 2424;
+
+    const URL = self::PROTOCOL . '://' . self::HOST . ':' . self::PORT;
+
     /**
      * @var Di
      */
@@ -41,7 +45,10 @@ class Server
         $this->di->set('server', $this);
     }
 
-    public function run($port)
+    /**
+     * @param int $port
+     */
+    public function run(int $port)
     {
         if (isset($this->sockets[$port])) {
             $this->di->get('output')->writelin("$port already in use.");
@@ -53,9 +60,9 @@ class Server
     }
 
     /**
-     * @param $port
+     * @param int $port
      */
-    public function listen($port)
+    public function listen(int $port)
     {
         if (isset($this->sockets[$port])) {
             $this->di->get('output')->writeln("$port already in use.");

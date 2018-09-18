@@ -34,7 +34,38 @@ class Get extends AbstractController
      */
     public function __invoke(ServerRequestInterface $request)
     {
-        $row = $this->repository->findById($request->getQueryParams()['id']);
+        $id = $request->getQueryParams()['id'] ?? null;
+
+        if ($id) {
+            return $this->getOne($id);
+        }
+
+        return $this->getAll();
+
+    }
+
+    /**
+     * @return Response
+     */
+    private function getAll(): Response
+    {
+        $rows = $this->repository->findAll();
+
+        return new Response(
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ], serialize($rows)
+        );
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     */
+    private function getOne($id): Response
+    {
+        $row = $this->repository->findById($id);
 
         return new Response(
             200,

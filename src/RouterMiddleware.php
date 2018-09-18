@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/3/18
- * Time: 12:49 PM
- */
+declare(strict_types=1);
 
 namespace Imposter;
 
@@ -12,8 +7,13 @@ namespace Imposter;
 use Imposter\Api\Controller\Match;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
+use React\Http\Response as HttpResponse;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class RouterMiddleware
+ * @package Imposter
+ */
 class RouterMiddleware
 {
     /**
@@ -27,23 +27,35 @@ class RouterMiddleware
      */
     private $di;
 
+    /**
+     * RouterMiddleware constructor.
+     * @param Di $di
+     */
     public function __construct(Di $di)
     {
         $this->di = $di;
         $this->output = $di->get('output');
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return mixed|Response
+     */
     public function __invoke(ServerRequestInterface $request)
     {
         return $this->getResponse($request);
     }
 
-    private function getResponse(ServerRequestInterface $request)
+    /**
+     * @param ServerRequestInterface $request
+     * @return HttpResponse
+     */
+    private function getResponse(ServerRequestInterface $request): HttpResponse
     {
         try {
             $path = trim($request->getUri()->getPath(), '/');
 
-            if (strpos(strtolower($path), 'mock') !== false) {
+            if (stripos($path, 'mock') !== false) {
                 return $this->getMockResponse($path, $request);
             }
 
@@ -65,11 +77,16 @@ class RouterMiddleware
         }
     }
 
-    private function getMockResponse($path, $request)
+    /**
+     * @param $path
+     * @param $request
+     * @return HttpResponse
+     */
+    private function getMockResponse(string $path, ServerRequestInterface $request): Response
     {
-        $path = explode('/', $path);
-        $path = array_map('ucfirst', $path);
-        $controller = 'Imposter\Api\Controller\\' . implode('\\', $path) . '\\' . ucfirst(strtolower($request->getMethod()));
+        $arrayPath = explode('/', $path);
+        $arrayPath = array_map('ucfirst', $arrayPath);
+        $controller = 'Imposter\Api\Controller\\' . implode('\\', $arrayPath) . '\\' . ucfirst(strtolower($request->getMethod()));
 
         if (!class_exists($controller)) {
             return new Response(404);
@@ -78,7 +95,11 @@ class RouterMiddleware
         return ($this->di->get($controller))($request);
     }
 
-    private function getMatchResponse($request)
+    /**
+     * @param ServerRequestInterface $request
+     * @return Response
+     */
+    private function getMatchResponse(ServerRequestInterface $request): Response
     {
         return ($this->di->get(Match::class))($request);
     }

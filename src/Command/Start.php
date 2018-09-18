@@ -18,8 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Start extends Command
 {
-    const DEFAULT_PORT = 8080;
-
     protected function configure()
     {
         $this->setName('start');
@@ -33,7 +31,7 @@ class Start extends Command
 
         $port = $input->getOption('port');
         if (!$port) {
-            $port = self::DEFAULT_PORT;
+            $port = \Imposter\Server::PORT;
         }
 
         $server = new Server($di);
