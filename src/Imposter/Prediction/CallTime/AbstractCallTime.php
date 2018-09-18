@@ -8,7 +8,6 @@
 
 namespace Imposter\Imposter\Prediction\CallTime;
 
-
 use Imposter\Model\Mock;
 
 abstract class AbstractCallTime
@@ -30,10 +29,8 @@ abstract class AbstractCallTime
     public function __construct(int $times, Mock $mock)
     {
         $this->times = $times;
-        $this->mock = $mock;
+        $this->mock  = $mock;
     }
 
-
     abstract public function check($times);
-
 }

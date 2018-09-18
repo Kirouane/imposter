@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-
 use Imposter\Api\Controller\Match;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
@@ -21,7 +20,6 @@ class RouterMiddleware
      */
     private $output;
 
-
     /**
      * @var Di
      */
@@ -33,7 +31,7 @@ class RouterMiddleware
      */
     public function __construct(Di $di)
     {
-        $this->di = $di;
+        $this->di     = $di;
         $this->output = $di->get('output');
     }
 
@@ -65,13 +63,13 @@ class RouterMiddleware
             return new Response(
                 400,
                 [
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/json',
                 ],
                 json_encode([
                     'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString()
+                    'file'    => $e->getFile(),
+                    'line'    => $e->getLine(),
+                    'trace'   => $e->getTraceAsString(),
                 ])
             );
         }
@@ -84,8 +82,8 @@ class RouterMiddleware
      */
     private function getMockResponse(string $path, ServerRequestInterface $request): Response
     {
-        $arrayPath = explode('/', $path);
-        $arrayPath = array_map('ucfirst', $arrayPath);
+        $arrayPath  = explode('/', $path);
+        $arrayPath  = array_map('ucfirst', $arrayPath);
         $controller = 'Imposter\Api\Controller\\' . implode('\\', $arrayPath) . '\\' . ucfirst(strtolower($request->getMethod()));
 
         if (!class_exists($controller)) {

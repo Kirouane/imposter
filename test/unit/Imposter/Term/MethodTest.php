@@ -1,7 +1,7 @@
 <?php
 
-use Imposter\Imposter\Term\Body;
-use Imposter\Imposter\Term\Method;
+namespace Imposter\Imposter\Term;
+
 use Imposter\Model\Mock;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
@@ -14,14 +14,13 @@ use PHPUnit\Framework\Constraint\IsIdentical;
 
 class MethodTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @test
      */
     public function matchNoConstraint()
     {
-        $request = new \RingCentral\Psr7\ServerRequest('GET','/path');
-        $mock = new Mock();
+        $request = new \RingCentral\Psr7\ServerRequest('GET', '/path');
+        $mock    = new Mock();
 
         $term = new Method($mock);
         self::assertNull($term->match($request));
@@ -32,7 +31,7 @@ class MethodTest extends \PHPUnit\Framework\TestCase
      */
     public function matchWithConstraintSuccess()
     {
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getMethod')->andReturn('GET')->once();
         $mock = new Mock();
         $mock->setRequestMethod(new IsIdentical('GET'));
@@ -46,7 +45,7 @@ class MethodTest extends \PHPUnit\Framework\TestCase
      */
     public function matchWithConstraintFail()
     {
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getMethod')->andReturn('GET')->once();
         $mock = new Mock();
         $mock->setRequestMethod(new IsIdentical('POST'));
@@ -57,9 +56,8 @@ class MethodTest extends \PHPUnit\Framework\TestCase
         try {
             $term->match($request);
         } catch (\PHPUnit\Framework\AssertionFailedError $e) {
-
         }
 
-        self::assertInstanceOf( \Exception::class, $e);
+        self::assertInstanceOf(\Exception::class, $e);
     }
 }

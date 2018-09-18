@@ -1,4 +1,5 @@
 <?php
+
 namespace Imposter;
 
 use Imposter\Imposter\Prediction\CallTime\AtLeast;
@@ -57,7 +58,6 @@ class ImposterTest extends TestCase
 
         $imposter->atMost(0);
         self::assertInstanceOf(AtMost::class, $imposter->getCallTimePrediction());
-
 
         Imposter::close();
     }

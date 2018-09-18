@@ -8,25 +8,22 @@
 
 namespace Imposter\Api\Controller\Mock;
 
-
 use Imposter\Api\Controller\AbstractController;
 use Imposter\Repository\Mock;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
+
 class Get extends AbstractController
 {
-
     /**
      * @var Mock
      */
     private $repository;
 
-
     public function __construct(Mock $repository)
     {
         $this->repository = $repository;
     }
-
 
     /**
      * @param ServerRequestInterface $request
@@ -41,7 +38,6 @@ class Get extends AbstractController
         }
 
         return $this->getAll();
-
     }
 
     /**
@@ -54,8 +50,9 @@ class Get extends AbstractController
         return new Response(
             200,
             [
-                'Content-Type' => 'application/json'
-            ], serialize($rows)
+                'Content-Type' => 'application/json',
+            ],
+            serialize($rows)
         );
     }
 
@@ -70,8 +67,9 @@ class Get extends AbstractController
         return new Response(
             200,
             [
-                'Content-Type' => 'application/json'
-            ], serialize($row)
+                'Content-Type' => 'application/json',
+            ],
+            serialize($row)
         );
     }
 }

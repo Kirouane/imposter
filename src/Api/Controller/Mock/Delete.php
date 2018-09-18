@@ -8,7 +8,6 @@
 
 namespace Imposter\Api\Controller\Mock;
 
-
 use Imposter\Api\Controller\AbstractController;
 use Imposter\Repository\Mock;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,7 +19,6 @@ class Delete extends AbstractController
      * @var Mock
      */
     private $repository;
-
 
     public function __construct(Mock $repository)
     {
@@ -38,7 +36,7 @@ class Delete extends AbstractController
         return new Response(
             200,
             [
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
             ]
         );
     }

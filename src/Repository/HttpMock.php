@@ -8,25 +8,28 @@
 
 namespace Imposter\Repository;
 
-
-
+use GuzzleHttp\Client;
 use Imposter\Model\Mock;
 use Imposter\Server;
 
+/**
+ * Class HttpMock
+ * @package Imposter\Repository
+ */
 class HttpMock
 {
     /**
-     * @var \\Guzzle\Http\ClientInterface
+     * @var \\GuzzleHttp\ClientInterface
      */
     private $client;
 
     /**
      * HttpMock constructor.
-     * @param \Guzzle\Http\ClientInterface|null $client
+     * @param \GuzzleHttp\ClientInterface|null $client
      */
-    public function __construct(\Guzzle\Http\ClientInterface $client = null)
+    public function __construct(\GuzzleHttp\ClientInterface $client = null)
     {
-        $this->client = $client ?: new \Guzzle\Http\Client();
+        $this->client = $client ?: new \GuzzleHttp\Client();
     }
 
     /**
@@ -37,7 +40,7 @@ class HttpMock
     public function insert(Mock $mock): Mock
     {
         $request = $this->client->post(Server::URL . '/mock', null, serialize($mock));
-        $body = $this->client->send($request);
+        $body    = $this->client->send($request);
 
         if (!$body) {
             throw new \UnexpectedValueException('Response body not found');
@@ -63,7 +66,6 @@ class HttpMock
 
         return unserialize($body->getBody(true), [Mock::class]);
     }
-
 
     /**
      * @throws \Exception

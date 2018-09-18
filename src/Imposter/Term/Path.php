@@ -8,7 +8,6 @@
 
 namespace Imposter\Imposter\Term;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 
 class Path extends AbstractTerm

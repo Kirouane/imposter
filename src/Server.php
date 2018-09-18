@@ -11,9 +11,9 @@ use React\Http\Server as ReactServer;
  */
 class Server
 {
-    const HOST = 'localhost';
+    const HOST     = 'localhost';
     const PROTOCOL = 'http';
-    const PORT = 2424;
+    const PORT     = 2424;
 
     const URL = self::PROTOCOL . '://' . self::HOST . ':' . self::PORT;
 
@@ -33,14 +33,24 @@ class Server
     private $reactServer;
 
     /**
+     * @var \React\EventLoop\LoopInterface
+     */
+    private $loop;
+
+    /**
+     * @var \Imposter\RouterMiddleware
+     */
+    private $router;
+
+    /**
      * Server constructor.
      * @param Di $di
      */
     public function __construct(Di $di)
     {
-        $this->di = $di;
-        $this->loop = \React\EventLoop\Factory::create();
-        $this->router =  new \Imposter\RouterMiddleware($this->di);
+        $this->di          = $di;
+        $this->loop        = \React\EventLoop\Factory::create();
+        $this->router      =  new RouterMiddleware($this->di);
         $this->reactServer = new ReactServer($this->router);
         $this->di->set('server', $this);
     }
@@ -69,7 +79,7 @@ class Server
             return;
         }
 
-        $socket = new \React\Socket\Server($port, $this->loop);
+        $socket               = new \React\Socket\Server($port, $this->loop);
         $this->sockets[$port] = $socket;
         $this->reactServer->listen($socket);
     }

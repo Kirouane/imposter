@@ -4,3 +4,4 @@ vendor/
 composer.phar
 data/
 build/
+.php_cs.cache

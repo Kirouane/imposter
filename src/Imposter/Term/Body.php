@@ -8,12 +8,10 @@
 
 namespace Imposter\Imposter\Term;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 
 class Body extends AbstractTerm
 {
-
     /**
      * @param ServerRequestInterface $request
      */

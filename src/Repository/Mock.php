@@ -19,9 +19,6 @@ class Mock
      */
     private $data = [];
 
-    /**
-     *
-     */
     public function recreate()
     {
         $this->data = [];
@@ -65,9 +62,6 @@ class Mock
         return $row;
     }
 
-    /**
-     *
-     */
     public function drop()
     {
         $this->recreate();
@@ -81,7 +75,7 @@ class Mock
     {
         /** @var MockModel $mock */
         foreach ($this->data as $mock) {
-            $matcher = new Matcher($mock);
+            $matcher    = new Matcher($mock);
             $exceptions = $matcher->match($request);
             if (empty($exceptions)) {
                 return $mock;

@@ -1,6 +1,7 @@
 <?php
 
-use Imposter\Imposter\Term\Body;
+namespace Imposter\Imposter\Term;
+
 use Imposter\Model\Mock;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
@@ -13,14 +14,13 @@ use PHPUnit\Framework\Constraint\IsIdentical;
 
 class BodyTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @test
      */
     public function matchNoConstraint()
     {
-        $request = new \RingCentral\Psr7\ServerRequest('GET','/path');
-        $mock = new Mock();
+        $request = new \RingCentral\Psr7\ServerRequest('GET', '/path');
+        $mock    = new Mock();
 
         $term = new Body($mock);
         self::assertNull($term->match($request));
@@ -31,7 +31,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
      */
     public function matchWithConstraintSuccess()
     {
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getBody->getContents')->andReturn('{}')->once();
         $mock = new Mock();
         $mock->setRequestBody(new IsIdentical('{}'));
@@ -45,7 +45,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
      */
     public function matchWithConstraintFail()
     {
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getBody->getContents')->andReturn('[]')->once();
         $mock = new Mock();
         $mock->setRequestBody(new IsIdentical('{}'));
@@ -56,10 +56,8 @@ class BodyTest extends \PHPUnit\Framework\TestCase
         try {
             $term->match($request);
         } catch (\Exception $e) {
-
         }
 
-        self::assertInstanceOf( \Exception::class, $e);
-
+        self::assertInstanceOf(\Exception::class, $e);
     }
 }

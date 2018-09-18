@@ -3,29 +3,28 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-use Imposter\Db;
-
 /**
  * Class Di
  * @package Interval
  */
 class Di
-{   const DI = [
+{
+    const DI = [
         //controllers,
         \Imposter\Api\Controller\Mock\Post::class => [
             'server',
             'output',
-            Repository\Mock::class
+            Repository\Mock::class,
         ],
 
         \Imposter\Api\Controller\Mock\Get::class => [
-            Repository\Mock::class
+            Repository\Mock::class,
         ],
         \Imposter\Api\Controller\Mock\Delete::class => [
-            Repository\Mock::class
+            Repository\Mock::class,
         ],
         \Imposter\Api\Controller\Match::class => [
-            Repository\Mock::class
+            Repository\Mock::class,
         ],
     ];
 

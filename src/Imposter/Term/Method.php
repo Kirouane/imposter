@@ -8,7 +8,6 @@
 
 namespace Imposter\Imposter\Term;
 
-
 use Psr\Http\Message\ServerRequestInterface;
 
 class Method extends AbstractTerm

@@ -17,12 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Post extends AbstractController
 {
-
     /**
      * @var Server
      */
     private $server;
-
 
     /**
      * @var OutputInterface
@@ -41,8 +39,8 @@ class Post extends AbstractController
      */
     public function __construct(Server $server, OutputInterface $output, Mock $repository)
     {
-        $this->server = $server;
-        $this->output = $output;
+        $this->server     = $server;
+        $this->output     = $output;
         $this->repository = $repository;
     }
 
@@ -67,7 +65,7 @@ class Post extends AbstractController
         return new Response(
             200,
             [
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
             ],
             serialize($mock)
         );

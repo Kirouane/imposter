@@ -59,7 +59,7 @@ class Imposter
             self::$initialized = true;
         }
 
-        $instance = new self($port);
+        $instance          = new self($port);
         self::$imposters[] = $instance;
 
         return $instance;
@@ -240,5 +240,4 @@ class Imposter
     {
         return $this->callTimePrediction;
     }
-
 }

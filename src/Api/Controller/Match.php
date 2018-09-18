@@ -7,21 +7,18 @@
  */
 
 namespace Imposter\Api\Controller;
+
 use Imposter\Repository\Mock;
-use Lazer\Classes\Database as Lazer;
 
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 
 class Match extends AbstractController
 {
-
-
     /**
      * @var Mock
      */
     private $repository;
-
 
     public function __construct(Mock $repository)
     {
@@ -34,7 +31,6 @@ class Match extends AbstractController
      */
     public function __invoke(ServerRequestInterface $request)
     {
-
         $row = $this->repository->matchRequest($request);
 
         if ($row) {
@@ -44,7 +40,7 @@ class Match extends AbstractController
             return new Response(
                 200,
                 [
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/json',
                 ],
                 $row->getResponseBody()
             );
@@ -53,8 +49,9 @@ class Match extends AbstractController
         return new Response(
             404,
             [
-                'Content-Type' => 'application/json'
-            ], 'Not found'
+                'Content-Type' => 'application/json',
+            ],
+            'Not found'
         );
     }
 }

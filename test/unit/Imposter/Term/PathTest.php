@@ -1,8 +1,7 @@
 <?php
 
-use Imposter\Imposter\Term\Body;
-use Imposter\Imposter\Term\Method;
-use Imposter\Imposter\Term\Path;
+namespace Imposter\Imposter\Term;
+
 use Imposter\Model\Mock;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
@@ -15,14 +14,13 @@ use PHPUnit\Framework\Constraint\IsIdentical;
 
 class PathTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @test
      */
     public function matchNoConstraint()
     {
-        $request = new \RingCentral\Psr7\ServerRequest('GET','/path');
-        $mock = new Mock();
+        $request = new \RingCentral\Psr7\ServerRequest('GET', '/path');
+        $mock    = new Mock();
 
         $term = new Path($mock);
         self::assertNull($term->match($request));
@@ -33,7 +31,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
      */
     public function matchWithConstraintSuccess()
     {
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/path')->once();
         $mock = new Mock();
         $mock->setRequestUriPath(new IsIdentical('/path'));
@@ -47,7 +45,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
      */
     public function matchWithConstraintFail()
     {
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/none')->once();
         $mock = new Mock();
         $mock->setRequestUriPath(new IsIdentical('/path'));
@@ -58,10 +56,8 @@ class PathTest extends \PHPUnit\Framework\TestCase
         try {
             $term->match($request);
         } catch (\Exception $e) {
-
         }
 
-        self::assertInstanceOf( \Exception::class, $e);
-
+        self::assertInstanceOf(\Exception::class, $e);
     }
 }

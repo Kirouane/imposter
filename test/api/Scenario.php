@@ -1,8 +1,7 @@
 <?php
-namespace Test\Api;
 
-use Guzzle\Http\Client;
-use Imposter\Imposter;
+namespace Imposter;
+
 use PHPUnit\Framework\TestCase;
 
 class Scenario extends TestCase
@@ -12,7 +11,6 @@ class Scenario extends TestCase
      */
     public function scenario()
     {
-
         Imposter::mock(8081)
             ->withPath('/users/1')
             ->withMethod('GET')
@@ -20,7 +18,7 @@ class Scenario extends TestCase
             ->once()
             ->send();
 
-        $client = new Client();
+        $client   = new \GuzzleHttp\Client();
         $response = $client->get('http://localhost:8081/users/1')->send()->getBody(true);
         self::assertSame($response, '{"response" :"okay"}');
     }

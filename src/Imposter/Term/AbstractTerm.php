@@ -8,7 +8,6 @@
 
 namespace Imposter\Imposter\Term;
 
-
 use Imposter\Model\Mock;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -27,7 +26,6 @@ abstract class AbstractTerm
     {
         $this->mock = $mock;
     }
-
 
     abstract public function match(ServerRequestInterface $request);
 }

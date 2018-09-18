@@ -8,7 +8,6 @@
 
 namespace Imposter\Imposter\Prediction\CallTime;
 
-
 class AtMost extends AbstractCallTime
 {
     public function check($times)
@@ -16,7 +15,6 @@ class AtMost extends AbstractCallTime
         if ($this->times > $times) {
             throw new \PHPUnit\Framework\ExpectationFailedException($this->getMessage($times));
         }
-
     }
 
     private function getMessage($times)
@@ -34,5 +32,4 @@ class AtMost extends AbstractCallTime
             $times
         );
     }
-
 }

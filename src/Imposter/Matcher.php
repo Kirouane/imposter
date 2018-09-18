@@ -8,7 +8,6 @@
 
 namespace Imposter\Imposter;
 
-
 use Imposter\Imposter\Term\AbstractTerm;
 use Imposter\Imposter\Term\Body;
 use Imposter\Imposter\Term\Method;

@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/17/18
- * Time: 12:36 PM
- */
+
+namespace Imposter\Imposter;
 
 class MatcherTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,15 +9,14 @@ class MatcherTest extends \PHPUnit\Framework\TestCase
      */
     public function matchSucceed()
     {
-        $mock = new \Imposter\Model\Mock();
+        $mock    = new \Imposter\Model\Mock();
         $service = new \Imposter\Imposter\Matcher($mock);
 
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request    = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $exceptions = $service->match($request);
         self::assertInternalType('array', $exceptions);
         self::assertEmpty($exceptions);
     }
-
 
     /**
      * @test
@@ -32,7 +27,7 @@ class MatcherTest extends \PHPUnit\Framework\TestCase
         $mock->setRequestUriPath(new \PHPUnit\Framework\Constraint\IsIdentical('/path'));
         $service = new \Imposter\Imposter\Matcher($mock);
 
-        $request = Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/none')->once();
         $exceptions = $service->match($request);
         self::assertInternalType('array', $exceptions);

@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/16/18
- * Time: 5:16 PM
- */
+
+namespace Imposter\Imposter\Prediction\CallTime;
 
 class AtLeastTest extends \PHPUnit\Framework\TestCase
 {
-
-
     public function checkProvider()
     {
         return [
@@ -23,10 +17,13 @@ class AtLeastTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @dataProvider checkProvider
+     * @param mixed $times
+     * @param mixed $expectedTimes
+     * @param mixed $expectedException
      */
     public function check($times, $expectedTimes, $expectedException)
     {
-        $callTime = new \Imposter\Imposter\Prediction\CallTime\AtLeast($expectedTimes, new \Imposter\Model\Mock());
+        $callTime     = new \Imposter\Imposter\Prediction\CallTime\AtLeast($expectedTimes, new \Imposter\Model\Mock());
         $hasException = false;
 
         try {

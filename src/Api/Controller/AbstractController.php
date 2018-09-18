@@ -8,9 +8,6 @@
 
 namespace Imposter\Api\Controller;
 
-
-
 class AbstractController
 {
-
 }

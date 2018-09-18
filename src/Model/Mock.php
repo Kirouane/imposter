@@ -8,7 +8,6 @@
 
 namespace Imposter\Model;
 
-
 use PHPUnit\Framework\Constraint\Constraint;
 
 class Mock
@@ -173,5 +172,4 @@ class Mock
         $this->hits = $hits;
         return $this;
     }
-
 }
