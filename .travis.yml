@@ -12,11 +12,11 @@ before_install:
   - composer global require hirak/prestissimo
 
 install:
-  - travis_retry composer update --no-progress --profile --no-scripts --no-suggest
+  - travis_retry composer install --no-progress --profile --no-scripts --no-suggest
 
 script:
    - mkdir -p build/logs
-   - vendor/bin/grumphp run
+   - php vendor/bin/phpunit
 
 after_success:
-  - travis_retry php vendor/bin/coveralls
+  - travis_retry php vendor/bin/php-coveralls
