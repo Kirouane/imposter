@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace Imposter;
 
+use Imposter\Di\InterfaceFactory;
+use Imposter\Log\LoggerFactory;
+use Imposter\Log\LogRepository;
+
 /**
  * Class Di
  * @package Interval
@@ -30,9 +34,12 @@ class Di
         \Imposter\Api\Controller\Mock\Server\Delete::class => [
             'server'
         ],
+        Api\Controller\Mock\Log\Html\Get::class => [
+            LogRepository::class
+        ],
 
-        \Imposter\ServerController::class => [
-            Repository\HttpMock::class
+        \Imposter\Repository\Mock::class => [
+            LoggerFactory::class
         ]
     ];
 
@@ -62,7 +69,14 @@ class Di
             return $this->services[$name] = new $name(...$args);
         }
 
-        return $this->services[$name] = new $name();
+        $service = new $name();
+
+        if ($service instanceof InterfaceFactory) {
+            $service = $service->create($this);
+
+        }
+
+        return $this->services[$name] = $service;
     }
 
     public function set($name, $service)

@@ -10,6 +10,8 @@ namespace Imposter\Repository;
 
 use Imposter\Imposter\Matcher;
 use Imposter\Model\Mock as MockModel;
+use Monolog\Logger;
+use PHPUnit\Framework\TestFailure;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Mock
@@ -18,6 +20,20 @@ class Mock
      * @var MockModel[]
      */
     private $data = [];
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * Mock constructor.
+     * @param Logger $logger
+     */
+    public function __construct(Logger $logger)
+    {
+        $this->logger = $logger;
+    }
 
     public function recreate()
     {
@@ -73,10 +89,16 @@ class Mock
      */
     public function matchRequest(ServerRequestInterface $request)
     {
+        $mock = null;
         /** @var MockModel $mock */
         foreach ($this->data as $mock) {
             $matcher    = new Matcher($mock);
             $exceptions = $matcher->match($request);
+
+            foreach ($exceptions as $exception) {
+                $this->logger->err(TestFailure::exceptionToString($exception));
+            }
+
             if (empty($exceptions)) {
                 return $mock;
             }

@@ -82,13 +82,20 @@ class HttpMock
 
     /**
      * @return bool
+     * @throws \Exception
      */
     public function start()
     {
-        $dir = \dirname(__DIR__) . '/bin';
+        $dir = \dirname(__DIR__ , 2) . '/bin';
         pclose(popen("php $dir/Imposter.php start &", 'r'));
+        $sleep = 1/100;
+        $count = 0;
         while (!$this->isStarted()) {
-            usleep(10000);
+            if ($count > 1/$sleep) {
+                throw new \Exception('Cannot start Imposter');
+            }
+            usleep((int)($sleep * 1000));
+            $count ++;
         }
 
         return true;
@@ -109,6 +116,7 @@ class HttpMock
 
     /**
      * @return bool
+     * @throws \Exception
      */
     public function restart(): bool
     {

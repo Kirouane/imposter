@@ -1,5 +1,6 @@
 # PhpStorm local config files
-.idea/
+.idea/*
+!.idea/inspectionProfiles
 vendor/
 composer.phar
 data/

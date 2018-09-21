@@ -21,19 +21,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Delete extends AbstractController
 {
     /**
-     * @var Mock
-     */
-    private $repository;
-
-    /**
      * @var \Imposter\Server
      */
     private $server;
 
-    /**
-     * @var OutputInterface
-     */
-    private $output;
 
     /**
      * Delete constructor.

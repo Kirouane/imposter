@@ -2,9 +2,10 @@
 
 namespace Imposter;
 
+use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\TestCase;
 
-class Scenario extends TestCase
+class ScenarioTest extends TestCase
 {
     /**
      * @test
@@ -13,13 +14,13 @@ class Scenario extends TestCase
     {
         Imposter::mock(8081)
             ->withPath('/users/1')
-            ->withMethod('GET')
+            ->withMethod(new RegularExpression('/PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
 
         $client   = new \GuzzleHttp\Client();
-        $response = $client->get('http://localhost:8081/users/1')->getBody()->getContents();
+        $response = $client->post('http://localhost:8081/users/1')->getBody()->getContents();
         self::assertSame($response, '{"response" :"okay"}');
     }
 

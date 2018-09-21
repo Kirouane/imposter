@@ -2,6 +2,7 @@
 
 namespace Imposter\Repository;
 
+use Monolog\Logger;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
 class MockTest extends \PHPUnit\Framework\TestCase
@@ -11,7 +12,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function recreate()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
         $repository->insert(new \Imposter\Model\Mock());
         self::assertTrue($repository->hasData());
         $repository->recreate();
@@ -23,7 +24,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function insert()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         self::assertInstanceOf(\Imposter\Model\Mock::class, $mock);
         self::assertInternalType('string', $mock->getId());
@@ -34,7 +35,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function findById()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         $mock       = $repository->findById($mock->getId());
         self::assertInstanceOf(\Imposter\Model\Mock::class, $mock);
@@ -46,7 +47,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function update()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         $mock->setPort(11);
         $repository->update($mock);
@@ -61,7 +62,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function drop()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
         $repository->insert(new \Imposter\Model\Mock());
         self::assertTrue($repository->hasData());
         $repository->drop();
@@ -73,7 +74,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function matchRequestSuccess()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         $mock->setRequestUriPath(new IsIdentical('/path'));
 
@@ -90,7 +91,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function matchRequestFail()
     {
-        $repository = new \Imposter\Repository\Mock();
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class)->shouldReceive('err')->getMock());
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         $mock->setRequestUriPath(new IsIdentical('/path'));
 

@@ -55,9 +55,9 @@ class Imposter
         }
 
         if (!self::$initialized) {
-            if (!self::getRepository()->isStarted()) {
-                self::getRepository()->start();
-            }
+            //if (!self::getRepository()->isStarted()) {
+                self::getRepository()->restart();
+            //}
             self::getRepository()->drop();
             self::$initialized = true;
         }
