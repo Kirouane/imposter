@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/13/18
- * Time: 1:47 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Repository;
 
-use GuzzleHttp\Client;
 use Imposter\Model\Mock;
 use Imposter\Server;
 
@@ -39,14 +33,13 @@ class HttpMock
      */
     public function insert(Mock $mock): Mock
     {
-        $request = $this->client->post(Server::URL . '/mock', null, serialize($mock));
-        $body    = $this->client->send($request);
+        $response = $this->client->post(Server::URL . '/mock', ['body' => serialize($mock)]);
 
-        if (!$body) {
-            throw new \UnexpectedValueException('Response body not found');
+        if (!$response) {
+            throw new \UnexpectedValueException('Response not found');
         }
 
-        return unserialize($body->getBody(true), [Mock::class]);
+        return unserialize($response->getBody()->getContents(), [Mock::class]);
     }
 
     /**
@@ -56,15 +49,27 @@ class HttpMock
      */
     public function find(Mock $mock): Mock
     {
-        $request = $this->client->get(Server::URL . '/mock', null);
-        $request->getQuery()->set('id', $mock->getId());
-        $body = $this->client->send($request);
+        $response = $this->client->get(Server::URL . '/mock', ['query' => ['id' => $mock->getId()]]);
 
-        if (!$body) {
+        if (!$response) {
             throw new \UnexpectedValueException('Response body not found');
         }
 
-        return unserialize($body->getBody(true), [Mock::class]);
+        return unserialize($response->getBody()->getContents(), [Mock::class]);
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll(): array
+    {
+        $response = $this->client->get(Server::URL . '/mock');
+
+        if (!$response) {
+            throw new \UnexpectedValueException('Response body not found');
+        }
+
+        return unserialize($response->getBody()->getContents(), [Mock::class]);
     }
 
     /**
@@ -72,7 +77,56 @@ class HttpMock
      */
     public function drop()
     {
-        $request = $this->client->delete(Server::URL . '/mock', null);
-        $this->client->send($request);
+        $this->client->delete(Server::URL . '/mock', null);
+    }
+
+    /**
+     * @return bool
+     */
+    public function start()
+    {
+        $dir = \dirname(__DIR__) . '/bin';
+        pclose(popen("php $dir/Imposter.php start &", 'r'));
+        while (!$this->isStarted()) {
+            usleep(10000);
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function stop()
+    {
+        try {
+            $this->client->delete(Server::URL . '/mock/server', null);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function restart(): bool
+    {
+        $this->stop();
+        $this->start();
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStarted(): bool
+    {
+        try {
+            $this->findAll();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

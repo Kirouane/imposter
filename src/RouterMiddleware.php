@@ -37,7 +37,7 @@ class RouterMiddleware
 
     /**
      * @param ServerRequestInterface $request
-     * @return mixed|Response
+     * @return HttpResponse
      */
     public function __invoke(ServerRequestInterface $request)
     {
@@ -85,10 +85,6 @@ class RouterMiddleware
         $arrayPath  = explode('/', $path);
         $arrayPath  = array_map('ucfirst', $arrayPath);
         $controller = 'Imposter\Api\Controller\\' . implode('\\', $arrayPath) . '\\' . ucfirst(strtolower($request->getMethod()));
-
-        if (!class_exists($controller)) {
-            return new Response(404);
-        }
 
         return ($this->di->get($controller))($request);
     }

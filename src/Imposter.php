@@ -29,9 +29,9 @@ class Imposter
     private $mock;
 
     /**
-     * @var HttpMock
+     * @var Di
      */
-    private static $repository;
+    private static $di;
 
     /**
      * @var Imposter[]
@@ -50,12 +50,15 @@ class Imposter
      */
     public static function mock(int $port): Imposter
     {
-        if (!self::$repository) {
-            self::$repository = new HttpMock();
+        if (!self::$di) {
+            self::$di = new Di();
         }
 
         if (!self::$initialized) {
-            self::$repository->drop();
+            if (!self::getRepository()->isStarted()) {
+                self::getRepository()->start();
+            }
+            self::getRepository()->drop();
             self::$initialized = true;
         }
 
@@ -192,7 +195,7 @@ class Imposter
      */
     public function send(): Imposter
     {
-        $this->mock = self::$repository->insert($this->mock);
+        $this->mock = self::getRepository()->insert($this->mock);
         return $this;
     }
 
@@ -202,7 +205,7 @@ class Imposter
      */
     public function resolve(): Imposter
     {
-        $mock = self::$repository->find($this->mock);
+        $mock = self::getRepository()->find($this->mock);
 
         if ($this->callTimePrediction === null) {
             return $this;
@@ -226,11 +229,11 @@ class Imposter
     }
 
     /**
-     * @param HttpMock $repository
+     * @return HttpMock
      */
-    public static function setRepository(HttpMock $repository)
+    public static function getRepository()
     {
-        self::$repository = $repository;
+        return self::$di->get(HttpMock::class);
     }
 
     /**

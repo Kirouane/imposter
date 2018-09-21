@@ -26,6 +26,14 @@ class Di
         \Imposter\Api\Controller\Match::class => [
             Repository\Mock::class,
         ],
+
+        \Imposter\Api\Controller\Mock\Server\Delete::class => [
+            'server'
+        ],
+
+        \Imposter\ServerController::class => [
+            Repository\HttpMock::class
+        ]
     ];
 
     /**

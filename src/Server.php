@@ -83,4 +83,9 @@ class Server
         $this->sockets[$port] = $socket;
         $this->reactServer->listen($socket);
     }
+
+    public function stop()
+    {
+        $this->loop->stop();
+    }
 }

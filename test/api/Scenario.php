@@ -19,7 +19,7 @@ class Scenario extends TestCase
             ->send();
 
         $client   = new \GuzzleHttp\Client();
-        $response = $client->get('http://localhost:8081/users/1')->send()->getBody(true);
+        $response = $client->get('http://localhost:8081/users/1')->getBody()->getContents();
         self::assertSame($response, '{"response" :"okay"}');
     }
 
