@@ -9,6 +9,12 @@
 namespace Imposter;
 
 
+use Imposter\Repository\HttpMock;
+
+/**
+ * Class ImposterState
+ * @package Imposter
+ */
 class ImposterState
 {
     /**
@@ -22,12 +28,37 @@ class ImposterState
     private static $di;
 
 
-    public function init()
+    /**
+     * @throws \Exception
+     */
+    public function __construct()
     {
         if (!self::$di) {
             self::$di = new Di();
         }
+    }
 
+    /**
+     * @return HttpMock
+     */
+    public static function getRepository()
+    {
+        return self::$di->get(HttpMock::class);
+    }
+
+    /**
+     * @return Di
+     */
+    public static function getDi(): Di
+    {
+        return self::$di;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function capture()
+    {
         if (!self::$initialized) {
             if (!self::getRepository()->isStarted()) {
                 self::getRepository()->restart();
@@ -35,5 +66,10 @@ class ImposterState
             self::getRepository()->drop();
             self::$initialized = true;
         }
+    }
+
+    public function release()
+    {
+        self::$initialized = false;
     }
 }

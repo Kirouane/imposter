@@ -18,20 +18,16 @@ use PHPUnit\Framework\Constraint\IsIdentical;
  */
 class Imposter
 {
-    /**
-     * @var
-     */
-    private static $initialized = false;
-
-    /**
-     * @var Di
-     */
-    private static $di;
 
     /**
      * @var Imposter[]
      */
     private static $httpImposters = [];
+
+    /**
+     * @var ImposterState
+     */
+    private static $state;
 
     /**
      * @param int $port
@@ -40,19 +36,9 @@ class Imposter
      */
     public static function mock(int $port): ImposterHttp
     {
-        if (!self::$di) {
-            self::$di = new Di();
-        }
-
-        if (!self::$initialized) {
-            if (!self::getRepository()->isStarted()) {
-                self::getRepository()->restart();
-            }
-            self::getRepository()->drop();
-            self::$initialized = true;
-        }
-
-        return self::$httpImposters[] = new ImposterHttp($port, self::$di->get(HttpMock::class));
+        self::$state = self::$state ?: new ImposterState();
+        self::$state->capture();
+        return self::$httpImposters[] = new ImposterHttp($port, self::$state->getDi()->get(HttpMock::class));
     }
 
     /**
@@ -60,7 +46,8 @@ class Imposter
      */
     public static function close()
     {
-        self::$initialized = false;
+
+        self::$state->release();
         /** @var ImposterHttp $imposter */
         foreach (self::$httpImposters as $imposter) {
             $imposter->resolve();
@@ -69,11 +56,4 @@ class Imposter
         self::$httpImposters = [];
     }
 
-    /**
-     * @return HttpMock
-     */
-    public static function getRepository()
-    {
-        return self::$di->get(HttpMock::class);
-    }
 }
