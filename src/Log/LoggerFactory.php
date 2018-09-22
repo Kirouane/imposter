@@ -24,7 +24,7 @@ class LoggerFactory implements \Imposter\Di\InterfaceFactory
 
         $handler = $this->getHandler($di);
         $handler->setFormatter(new HtmlFormatter());
-        $log = new Logger('name');
+        $log = new Logger('Imposter');
         $log->pushHandler($handler);
 
         return $log;

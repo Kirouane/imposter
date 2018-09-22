@@ -23,6 +23,7 @@ class Di
 
         \Imposter\Api\Controller\Mock\Get::class => [
             Repository\Mock::class,
+            \Imposter\ViewFactory::class
         ],
         \Imposter\Api\Controller\Mock\Delete::class => [
             Repository\Mock::class,
@@ -35,9 +36,9 @@ class Di
             'server'
         ],
         Api\Controller\Mock\Log\Html\Get::class => [
-            LogRepository::class
+            LogRepository::class,
+            \Imposter\ViewFactory::class
         ],
-
         \Imposter\Repository\Mock::class => [
             LoggerFactory::class
         ]

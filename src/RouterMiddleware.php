@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Imposter;
 
 use Imposter\Api\Controller\Match;
+use Imposter\Log\LoggerFactory;
+use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 use React\Http\Response as HttpResponse;
@@ -26,6 +28,11 @@ class RouterMiddleware
     private $di;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * RouterMiddleware constructor.
      * @param Di $di
      */
@@ -33,6 +40,7 @@ class RouterMiddleware
     {
         $this->di     = $di;
         $this->output = $di->get('output');
+        $this->logger = $di->get(LoggerFactory::class);
     }
 
     /**
@@ -51,6 +59,7 @@ class RouterMiddleware
     private function getResponse(ServerRequestInterface $request): HttpResponse
     {
         try {
+
             $path = trim($request->getUri()->getPath(), '/');
 
             if (stripos($path, 'mock') !== false) {
@@ -59,7 +68,8 @@ class RouterMiddleware
 
             return $this->getMatchResponse($request);
         } catch (\Throwable $e) {
-            $this->output->writeln($e);
+            $this->logger->critical($e);
+            $this->output->writeln($e->getMessage());
             return new Response(
                 400,
                 [

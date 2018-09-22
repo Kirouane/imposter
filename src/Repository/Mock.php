@@ -89,22 +89,29 @@ class Mock
      */
     public function matchRequest(ServerRequestInterface $request)
     {
-        $mock = null;
+        $match = null;
+
+        $exceptions = [];
         /** @var MockModel $mock */
         foreach ($this->data as $mock) {
             $matcher    = new Matcher($mock);
-            $exceptions = $matcher->match($request);
-
-            foreach ($exceptions as $exception) {
-                $this->logger->err(TestFailure::exceptionToString($exception));
-            }
+            $exceptions = array_merge($exceptions, $matcher->match($request));
 
             if (empty($exceptions)) {
-                return $mock;
+                $this->logger->info('Mock found');
+                $match = $mock;
+                break;
             }
         }
 
-        return null;
+        if (!$match) {
+            foreach ($exceptions as $exception) {
+                $this->logger->warning(TestFailure::exceptionToString($exception));
+            }
+
+        }
+
+        return $match;
     }
 
     /**

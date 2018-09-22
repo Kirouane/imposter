@@ -55,9 +55,9 @@ class Imposter
         }
 
         if (!self::$initialized) {
-            //if (!self::getRepository()->isStarted()) {
+            if (!self::getRepository()->isStarted()) {
                 self::getRepository()->restart();
-            //}
+            }
             self::getRepository()->drop();
             self::$initialized = true;
         }
@@ -226,6 +226,8 @@ class Imposter
         foreach (self::$imposters as $imposter) {
             $imposter->resolve();
         }
+
+        self::$imposters = [];
     }
 
     /**

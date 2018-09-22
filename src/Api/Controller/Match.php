@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: nassim.kirouane
@@ -13,6 +14,10 @@ use Imposter\Repository\Mock;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 
+/**
+ * Class Match
+ * @package Imposter\Api\Controller
+ */
 class Match extends AbstractController
 {
     /**
@@ -20,6 +25,10 @@ class Match extends AbstractController
      */
     private $repository;
 
+    /**
+     * Match constructor.
+     * @param Mock $repository
+     */
     public function __construct(Mock $repository)
     {
         $this->repository = $repository;

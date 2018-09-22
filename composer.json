@@ -33,7 +33,8 @@
     },
     "require": {
         "php" : ">=7.0",
-        "ext-json" :"*"
+        "ext-json" :"*",
+        "symfony/templating": "^3.3"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^6.3@dev",

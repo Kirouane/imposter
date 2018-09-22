@@ -13,6 +13,7 @@ use Imposter\Api\Controller\AbstractController;
 use Imposter\Log\LogRepository;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
+use Symfony\Component\Templating\EngineInterface;
 
 class Get extends AbstractController
 {
@@ -20,14 +21,19 @@ class Get extends AbstractController
      * @var LogRepository
      */
     private $repository;
+    /**
+     * @var EngineInterface
+     */
+    private $view;
 
     /**
      * Get constructor.
      * @param LogRepository $repository
      */
-    public function __construct(LogRepository $repository)
+    public function __construct(LogRepository $repository, EngineInterface $view)
     {
         $this->repository = $repository;
+        $this->view = $view;
     }
 
 
@@ -44,7 +50,7 @@ class Get extends AbstractController
             [
                 'Content-Type' => 'text/html',
             ],
-            implode('', $logs)
+            $this->view->render(__DIR__ . '/get.phtml', ['logs' => $logs])
         );
     }
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Imposter Logs</title>
+        <style>
+        body {
+            font-size: 12px;
+        }
+        h1 {
+            font-size: 14px;
+        }
+        .monolog-output pre {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<?php /** @var array $logs */
+foreach ($logs as $log) : ?>
+    <?= $log; ?>
+<?php endforeach; ?>
+</body>
+</html>
+
