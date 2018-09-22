@@ -74,7 +74,11 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function matchRequestSuccess()
     {
-        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class));
+        $repository = new \Imposter\Repository\Mock(
+            \Mockery::mock(Logger::class)
+            ->shouldReceive('info')
+            ->getMock()
+        );
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         $mock->setRequestUriPath(new IsIdentical('/path'));
 
@@ -91,7 +95,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
      */
     public function matchRequestFail()
     {
-        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class)->shouldReceive('err')->getMock());
+        $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class)->shouldReceive('warning')->getMock());
         $mock       = $repository->insert(new \Imposter\Model\Mock());
         $mock->setRequestUriPath(new IsIdentical('/path'));
 

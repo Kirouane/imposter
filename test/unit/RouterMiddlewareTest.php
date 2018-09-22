@@ -30,7 +30,7 @@ class RouterMiddlewareTest extends TestCase
         $di->shouldReceive('get')->with('Imposter\Api\Controller\Mock\Test\Get')->andReturn(function() {
             return new \React\Http\Response(200);
         });
-
+        $di->shouldReceive('get')->with('Imposter\Log\LoggerFactory');
         $request = \Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $request->shouldReceive('getUri->getPath')->andReturn('mock/test');
         $request->shouldReceive('getMethod')->andReturn('GET');
