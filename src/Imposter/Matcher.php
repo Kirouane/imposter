@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/16/18
- * Time: 12:27 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Imposter;
 
@@ -16,6 +11,10 @@ use Imposter\Model\Mock;
 use PHPUnit\Framework\AssertionFailedError;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class Matcher
+ * @package Imposter\Imposter
+ */
 class Matcher
 {
     /**

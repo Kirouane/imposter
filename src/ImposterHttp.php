@@ -37,6 +37,7 @@ class ImposterHttp
     /**
      * Imposter constructor.
      * @param int $port
+     * @param HttpMock $repository
      */
     public function __construct(int $port, HttpMock $repository)
     {
@@ -165,7 +166,7 @@ class ImposterHttp
     }
 
     /**
-     * @return Imposter
+     * @return ImposterHttp
      * @throws \Exception
      */
     public function send(): ImposterHttp

@@ -84,7 +84,7 @@ class HttpMock
      * @return bool
      * @throws \Exception
      */
-    public function start()
+    public function start(): bool
     {
         $dir = \dirname(__DIR__ , 2) . '/bin';
         pclose(popen("php $dir/Imposter.php start &", 'r'));
@@ -92,7 +92,7 @@ class HttpMock
         $count = 0;
         while (!$this->isStarted()) {
             if ($count > 1/$sleep) {
-                throw new \Exception('Cannot start Imposter');
+                throw new \RuntimeException('Cannot start Imposter');
             }
             usleep((int)($sleep * 1000));
             $count ++;

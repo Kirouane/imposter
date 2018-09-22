@@ -15,31 +15,31 @@ class Di
 {
     const DI = [
         //controllers,
-        \Imposter\Api\Controller\Mock\Post::class => [
+        Api\Controller\Mock\Post::class => [
             'server',
             'output',
             Repository\Mock::class,
         ],
 
-        \Imposter\Api\Controller\Mock\Get::class => [
+        Api\Controller\Mock\Get::class => [
             Repository\Mock::class,
-            \Imposter\ViewFactory::class
+            ViewFactory::class
         ],
-        \Imposter\Api\Controller\Mock\Delete::class => [
+        Api\Controller\Mock\Delete::class => [
             Repository\Mock::class,
         ],
-        \Imposter\Api\Controller\Match::class => [
+        Api\Controller\Match::class => [
             Repository\Mock::class,
         ],
 
-        \Imposter\Api\Controller\Mock\Server\Delete::class => [
+        Api\Controller\Mock\Server\Delete::class => [
             'server'
         ],
         Api\Controller\Mock\Log\Html\Get::class => [
             LogRepository::class,
-            \Imposter\ViewFactory::class
+            ViewFactory::class
         ],
-        \Imposter\Repository\Mock::class => [
+        Repository\Mock::class => [
             LoggerFactory::class
         ]
     ];
@@ -80,6 +80,10 @@ class Di
         return $this->services[$name] = $service;
     }
 
+    /**
+     * @param $name
+     * @param $service
+     */
     public function set($name, $service)
     {
         $this->services[$name] = $service;

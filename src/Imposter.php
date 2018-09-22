@@ -3,14 +3,7 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-use Imposter\Imposter\Prediction\CallTime\AbstractCallTime;
-use Imposter\Imposter\Prediction\CallTime\AtLeast;
-use Imposter\Imposter\Prediction\CallTime\AtMost;
-use Imposter\Imposter\Prediction\CallTime\Equals;
-use Imposter\Model\Mock;
 use Imposter\Repository\HttpMock;
-use PHPUnit\Framework\Constraint\Constraint;
-use PHPUnit\Framework\Constraint\IsIdentical;
 
 /**
  * Class Imposter

@@ -1,24 +1,31 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/21/18
- * Time: 12:46 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Log;
 
-
+/**
+ * Class LogRepository
+ * @package Imposter\Log
+ */
 class LogRepository
 {
+    /**
+     * @var array
+     */
     private $data = [];
 
+    /**
+     * @param $log
+     */
     public function add($log)
     {
         $this->data[] = $log;
     }
 
-    public function getAll()
+    /**
+     * @return array
+     */
+    public function getAll(): array
     {
         return $this->data;
     }

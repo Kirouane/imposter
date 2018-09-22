@@ -1,17 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/21/18
- * Time: 12:51 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Di;
 
-
 use Imposter\Di;
 
+/**
+ * Interface InterfaceFactory
+ * @package Imposter\Di
+ */
 interface InterfaceFactory
 {
+    /**
+     * @param Di $di
+     * @return mixed
+     */
     public function create(Di $di);
 }

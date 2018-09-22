@@ -1,18 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/14/18
- * Time: 6:31 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Api\Controller\Mock\Server;
 
 use Imposter\Api\Controller\AbstractController;
-use Imposter\Repository\Mock;
 use Psr\Http\Message\ServerRequestInterface;
-use React\Http\Response;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /***
  * Class Delete
@@ -29,8 +21,6 @@ class Delete extends AbstractController
     /**
      * Delete constructor.
      * @param \Imposter\Server $server
-     * @param OutputInterface $output
-     * @param Mock $repository
      */
     public function __construct(\Imposter\Server $server)
     {
@@ -39,7 +29,7 @@ class Delete extends AbstractController
 
     /**
      * @param ServerRequestInterface $request
-     * @return Response
+     * @return void
      */
     public function __invoke(ServerRequestInterface $request)
     {

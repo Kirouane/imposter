@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/3/18
- * Time: 6:17 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Api\Controller\Mock;
 
@@ -15,6 +10,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class Post
+ * @package Imposter\Api\Controller\Mock
+ */
 class Post extends AbstractController
 {
     /**
@@ -33,9 +32,9 @@ class Post extends AbstractController
 
     /**
      * Post constructor.
-     * @param \React\Http\Server $server
-     * @param \React\EventLoop\LoopInterface $loop
+     * @param Server $server
      * @param OutputInterface $output
+     * @param Mock $repository
      */
     public function __construct(Server $server, OutputInterface $output, Mock $repository)
     {
@@ -47,7 +46,7 @@ class Post extends AbstractController
     /**
      * @param ServerRequestInterface $request
      * @return Response
-     * @throws \Lazer\Classes\LazerException
+     * @throws \Exception
      */
     public function __invoke(ServerRequestInterface $request)
     {
@@ -56,7 +55,7 @@ class Post extends AbstractController
 
         if (!$mock instanceof \Imposter\Model\Mock) {
             $this->output->writeln('Invalid mock description :' . $body);
-            throw new \Exception('Invalid body' . $body);
+            throw new \RuntimeException('Invalid body' . $body);
         }
 
         $mock = $this->repository->insert($mock);
@@ -71,6 +70,9 @@ class Post extends AbstractController
         );
     }
 
+    /**
+     * @param $port
+     */
     private function createImposter($port)
     {
         $this->server->listen($port);

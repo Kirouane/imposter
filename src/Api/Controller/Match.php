@@ -1,11 +1,5 @@
 <?php
 declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/6/18
- * Time: 6:17 PM
- */
 
 namespace Imposter\Api\Controller;
 

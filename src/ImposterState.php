@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/22/18
- * Time: 2:48 PM
- */
+declare(strict_types=1);
 
 namespace Imposter;
 
@@ -20,12 +15,12 @@ class ImposterState
     /**
      * @var
      */
-    private static $initialized = false;
+    private $initialized = false;
 
     /**
      * @var Di
      */
-    private static $di;
+    private $di;
 
 
     /**
@@ -33,25 +28,25 @@ class ImposterState
      */
     public function __construct()
     {
-        if (!self::$di) {
-            self::$di = new Di();
+        if (!$this->di) {
+            $this->di = new Di();
         }
     }
 
     /**
      * @return HttpMock
      */
-    public static function getRepository()
+    public function getRepository(): HttpMock
     {
-        return self::$di->get(HttpMock::class);
+        return $this->di->get(HttpMock::class);
     }
 
     /**
      * @return Di
      */
-    public static function getDi(): Di
+    public function getDi(): Di
     {
-        return self::$di;
+        return $this->di;
     }
 
     /**
@@ -59,17 +54,17 @@ class ImposterState
      */
     public function capture()
     {
-        if (!self::$initialized) {
-            if (!self::getRepository()->isStarted()) {
-                self::getRepository()->restart();
+        if (!$this->initialized) {
+            if (!$this->getRepository()->isStarted()) {
+                $this->getRepository()->restart();
             }
-            self::getRepository()->drop();
-            self::$initialized = true;
+            $this->getRepository()->drop();
+            $this->initialized = true;
         }
     }
 
     public function release()
     {
-        self::$initialized = false;
+        $this->initialized = false;
     }
 }

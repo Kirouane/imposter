@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/21/18
- * Time: 12:59 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Api\Controller\Mock\Log\Html;
 
@@ -15,12 +10,17 @@ use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 use Symfony\Component\Templating\EngineInterface;
 
+/***
+ * Class Get
+ * @package Imposter\Api\Controller\Mock\Log\Html
+ */
 class Get extends AbstractController
 {
     /**
      * @var LogRepository
      */
     private $repository;
+
     /**
      * @var EngineInterface
      */
@@ -29,6 +29,7 @@ class Get extends AbstractController
     /**
      * Get constructor.
      * @param LogRepository $repository
+     * @param EngineInterface $view
      */
     public function __construct(LogRepository $repository, EngineInterface $view)
     {

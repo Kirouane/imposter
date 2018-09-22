@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/10/18
- * Time: 12:47 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Repository;
 
@@ -14,6 +9,10 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestFailure;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class Mock
+ * @package Imposter\Repository
+ */
 class Mock
 {
     /**
@@ -34,6 +33,7 @@ class Mock
     {
         $this->logger = $logger;
     }
+
 
     public function recreate()
     {

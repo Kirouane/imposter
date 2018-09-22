@@ -1,23 +1,29 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/16/18
- * Time: 5:00 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Imposter\Prediction\CallTime;
 
+/**
+ * Class AtMost
+ * @package Imposter\Imposter\Prediction\CallTime
+ */
 class AtMost extends AbstractCallTime
 {
-    public function check($times)
+    /**
+     * @param int $times
+     */
+    public function check(int $times)
     {
         if ($this->times > $times) {
             throw new \PHPUnit\Framework\ExpectationFailedException($this->getMessage($times));
         }
     }
 
-    private function getMessage($times)
+    /**
+     * @param $times
+     * @return string
+     */
+    private function getMessage($times): string
     {
         return sprintf(
             "Expected at most %d calls that match:\n" .

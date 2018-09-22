@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/3/18
- * Time: 12:36 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Command;
 
@@ -16,14 +11,23 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class Start
+ * @package Imposter\Command
+ */
 class Start extends Command
 {
+
     protected function configure()
     {
         $this->setName('start');
         $this->addOption('port', 'p', InputOption::VALUE_OPTIONAL);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $di = new Di();
@@ -31,7 +35,7 @@ class Start extends Command
 
         $port = $input->getOption('port');
         if (!$port) {
-            $port = \Imposter\Server::PORT;
+            $port = Server::PORT;
         }
 
         $server = new Server($di);

@@ -38,11 +38,6 @@ class Server
     private $loop;
 
     /**
-     * @var \Imposter\RouterMiddleware
-     */
-    private $router;
-
-    /**
      * Server constructor.
      * @param Di $di
      */
@@ -50,8 +45,7 @@ class Server
     {
         $this->di          = $di;
         $this->loop        = \React\EventLoop\Factory::create();
-        $this->router      =  new RouterMiddleware($this->di);
-        $this->reactServer = new ReactServer($this->router);
+        $this->reactServer = new ReactServer(new RouterMiddleware($this->di));
         $this->di->set('server', $this);
     }
 

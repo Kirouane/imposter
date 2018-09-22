@@ -1,15 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/16/18
- * Time: 5:02 PM
- */
+declare(strict_types=1);
+
 
 namespace Imposter\Imposter\Prediction\CallTime;
 
 use Imposter\Model\Mock;
 
+/**
+ * Class AbstractCallTime
+ * @package Imposter\Imposter\Prediction\CallTime
+ */
 abstract class AbstractCallTime
 {
     /**
@@ -25,6 +25,7 @@ abstract class AbstractCallTime
     /**
      * Equals constructor.
      * @param int $times
+     * @param Mock $mock
      */
     public function __construct(int $times, Mock $mock)
     {
@@ -32,5 +33,9 @@ abstract class AbstractCallTime
         $this->mock  = $mock;
     }
 
-    abstract public function check($times);
+    /**
+     * @param int $times
+     * @return void
+     */
+    abstract public function check(int $times);
 }

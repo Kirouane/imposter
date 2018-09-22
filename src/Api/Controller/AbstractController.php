@@ -1,13 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/9/18
- * Time: 6:40 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Api\Controller;
 
+/**
+ * Class AbstractController
+ * @package Imposter\Api\Controller
+ */
 class AbstractController
 {
 }

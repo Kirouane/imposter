@@ -1,16 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/16/18
- * Time: 1:04 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Imposter\Term;
 
 use Imposter\Model\Mock;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class AbstractTerm
+ * @package Imposter\Imposter\Term
+ */
 abstract class AbstractTerm
 {
     /**
@@ -27,5 +26,9 @@ abstract class AbstractTerm
         $this->mock = $mock;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return void
+     */
     abstract public function match(ServerRequestInterface $request);
 }

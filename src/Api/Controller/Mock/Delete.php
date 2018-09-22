@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/14/18
- * Time: 6:31 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Api\Controller\Mock;
 
@@ -13,6 +8,10 @@ use Imposter\Repository\Mock;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 
+/**
+ * Class Delete
+ * @package Imposter\Api\Controller\Mock
+ */
 class Delete extends AbstractController
 {
     /**
@@ -20,6 +19,10 @@ class Delete extends AbstractController
      */
     private $repository;
 
+    /**
+     * Delete constructor.
+     * @param Mock $repository
+     */
     public function __construct(Mock $repository)
     {
         $this->repository = $repository;

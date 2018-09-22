@@ -1,15 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/16/18
- * Time: 1:03 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Imposter\Term;
 
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class Path
+ * @package Imposter\Imposter\Term
+ */
 class Path extends AbstractTerm
 {
     /**

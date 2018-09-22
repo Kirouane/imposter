@@ -1,27 +1,26 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/21/18
- * Time: 12:25 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Log;
 
-
 use Imposter\Di;
+use Imposter\Di\InterfaceFactory;
 use Monolog\Formatter\HtmlFormatter;
+use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
 /**
  * Class LoggerFactory
  * @package Imposter\Log
  */
-class LoggerFactory implements \Imposter\Di\InterfaceFactory
+class LoggerFactory implements InterfaceFactory
 {
-    public function create(Di $di)
+    /**
+     * @param Di $di
+     * @return Logger
+     */
+    public function create(Di $di): Logger
     {
-
         $handler = $this->getHandler($di);
         $handler->setFormatter(new HtmlFormatter());
         $log = new Logger('Imposter');
@@ -32,11 +31,11 @@ class LoggerFactory implements \Imposter\Di\InterfaceFactory
 
     /**
      * @param Di $di
-     * @return \Monolog\Handler\AbstractProcessingHandler
+     * @return AbstractProcessingHandler
      */
-    private function getHandler(Di $di)
+    private function getHandler(Di $di): AbstractProcessingHandler
     {
-        return new class($di->get(LogRepository::class)) extends \Monolog\Handler\AbstractProcessingHandler {
+        return new class($di->get(LogRepository::class)) extends AbstractProcessingHandler {
 
             /**
              * @var LogRepository

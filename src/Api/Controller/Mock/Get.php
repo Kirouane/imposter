@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/3/18
- * Time: 6:17 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Api\Controller\Mock;
 
@@ -14,17 +9,27 @@ use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 use Symfony\Component\Templating\EngineInterface;
 
+/**
+ * Class Get
+ * @package Imposter\Api\Controller\Mock
+ */
 class Get extends AbstractController
 {
     /**
      * @var Mock
      */
     private $repository;
+
     /**
      * @var EngineInterface
      */
     private $view;
 
+    /**
+     * Get constructor.
+     * @param Mock $repository
+     * @param EngineInterface $view
+     */
     public function __construct(Mock $repository, EngineInterface $view)
     {
         $this->repository = $repository;
@@ -47,6 +52,7 @@ class Get extends AbstractController
     }
 
     /**
+     * @param ServerRequestInterface $request
      * @return Response
      */
     private function getAll(ServerRequestInterface $request): Response
@@ -68,6 +74,7 @@ class Get extends AbstractController
 
     /**
      * @param $id
+     * @param ServerRequestInterface $request
      * @return Response
      */
     private function getOne($id, ServerRequestInterface $request): Response
@@ -90,9 +97,10 @@ class Get extends AbstractController
 
     /**
      * @param array $rows
-     * @param $format
+     * @param string $format
+     * @return Response
      */
-    private function render(array $rows, $format)
+    private function render(array $rows, string $format = null): Response
     {
         return new Response(
             200,
