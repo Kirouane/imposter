@@ -42,9 +42,7 @@ class Match extends AbstractController
 
             return new Response(
                 200,
-                [
-                    'Content-Type' => 'application/json',
-                ],
+                $row->getResponseHeaders(),
                 $row->getResponseBody()
             );
         }

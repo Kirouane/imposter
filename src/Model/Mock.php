@@ -37,9 +37,19 @@ class Mock implements \JsonSerializable
     private $requestMethod;
 
     /**
+     * @var Constraint|null
+     */
+    private $requestHeaders;
+
+    /**
      * @var string|null
      */
     private $responseBody;
+
+    /**
+     * @var array
+     */
+    private $responseHeaders = [];
 
     /**
      * @var int
@@ -137,6 +147,24 @@ class Mock implements \JsonSerializable
     }
 
     /**
+     * @return null|Constraint
+     */
+    public function getRequestHeaders()
+    {
+        return $this->requestHeaders;
+    }
+
+    /**
+     * @param null|Constraint $requestHeaders
+     * @return Mock
+     */
+    public function setRequestHeaders(Constraint $requestHeaders): Mock
+    {
+        $this->requestHeaders = $requestHeaders;
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function getResponseBody()
@@ -151,6 +179,24 @@ class Mock implements \JsonSerializable
     public function setResponseBody(string $responseBody): Mock
     {
         $this->responseBody = $responseBody;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getResponseHeaders(): array
+    {
+        return $this->responseHeaders;
+    }
+
+    /**
+     * @param array $responseHeaders
+     * @return Mock
+     */
+    public function setResponseHeaders(array $responseHeaders): Mock
+    {
+        $this->responseHeaders = $responseHeaders;
         return $this;
     }
 
@@ -186,10 +232,12 @@ class Mock implements \JsonSerializable
             'request' => [
                 'path' => $this->getRequestUriPath() ? $this->getRequestUriPath()->toString() : null,
                 'method' => $this->getRequestMethod() ? $this->getRequestMethod()->toString() : null,
-                'body' => $this->getRequestBody() ? $this->getRequestBody()->toString() : null
+                'body' => $this->getRequestBody() ? $this->getRequestBody()->toString() : null,
+                'headers' => $this->getRequestHeaders() ? $this->getRequestHeaders()->toString() : null
             ],
             'response' => [
-                'body' => $this->getResponseBody()
+                'body' => $this->getResponseBody(),
+                'headers' => $this->getResponseHeaders(),
             ]
         ];
     }

@@ -105,4 +105,59 @@ class ScenarioTest extends TestCase
         Imposter::close();
     }
 
+    /**
+     * @test
+     */
+    public function matchHeader()
+    {
+        Imposter::mock(8081)
+            ->withHeaders(['key' => ['value']])
+            ->returnHeaders(['key response' => 'value response'])
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->post('http://localhost:8081', ['headers' => ['key' => 'value']]);
+        self::assertSame($response->getHeader('key response'), ['value response']);
+    }
+
+    /**
+     * @test
+     */
+    public function matchHeaders()
+    {
+        Imposter::mock(8081)
+            ->withHeaders(['key 1' => ['value 1'], 'key 2' => ['value 2']])
+            ->returnHeaders(['key response' => 'value response'])
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->post('http://localhost:8081', ['headers' => ['key 1' => 'value 1', 'key 2' => 'value 2']]);
+        self::assertSame($response->getHeader('key response'), ['value response']);
+    }
+
+
+    /**
+     * @test
+     */
+    public function notMatchHeaders()
+    {
+        Imposter::mock(8081)
+            ->withHeaders(['key 1' => ['value 1'], 'key 2' => ['value 2']])
+            ->returnHeaders(['key response' => 'value response'])
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+
+        $e = null;
+        try {
+            $client->post('http://localhost:8081', ['headers' => ['key 1' => 'value 1', 'key 2' => 'value 3']]);
+        } catch (\Exception $e) {
+
+        }
+
+        self::assertNotNull($e);
+    }
 }

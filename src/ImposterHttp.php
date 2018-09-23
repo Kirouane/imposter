@@ -9,6 +9,7 @@ use Imposter\Imposter\Prediction\CallTime\AtMost;
 use Imposter\Imposter\Prediction\CallTime\Equals;
 use Imposter\Model\Mock;
 use Imposter\Repository\HttpMock;
+use PHPUnit\Framework\Constraint\ArraySubset;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
@@ -94,12 +95,38 @@ class ImposterHttp
     }
 
     /**
+     * @param array $value
+     * @return ImposterHttp
+     */
+    public function withHeaders(array $value): ImposterHttp
+    {
+        if (!$value instanceof Constraint) {
+            $value = new ArraySubset($value);
+        }
+
+
+        $this->mock->setRequestHeaders($value);
+        return $this;
+    }
+
+    /**
      * @param string $responseBody
      * @return ImposterHttp
      */
     public function returnBody(string $responseBody): ImposterHttp
     {
         $this->mock->setResponseBody($responseBody);
+        return $this;
+    }
+
+    /**
+     * @param array $responseHeaders
+     * @return ImposterHttp
+     */
+    public function returnHeaders(array $responseHeaders): ImposterHttp
+    {
+
+        $this->mock->setResponseHeaders($responseHeaders);
         return $this;
     }
 

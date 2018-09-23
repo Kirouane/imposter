@@ -91,13 +91,12 @@ class Mock
     {
         $match = null;
 
-        $allAxceptions = [];
+        $allExceptions = [];
         /** @var MockModel $mock */
         foreach ($this->data as $mock) {
-            $this->logger->info(json_encode($mock));
             $matcher    = new Matcher($mock);
             $exceptions = $matcher->match($request);
-            $allAxceptions = array_merge($allAxceptions, $exceptions);
+            $allExceptions = array_merge($allExceptions, $exceptions);
             if (empty($exceptions)) {
                 $this->logger->info('Mock found');
                 $match = $mock;
@@ -106,10 +105,9 @@ class Mock
         }
 
         if (!$match) {
-            foreach ($allAxceptions as $exception) {
+            foreach ($allExceptions as $exception) {
                 $this->logger->warning(TestFailure::exceptionToString($exception));
             }
-
         }
 
         return $match;
