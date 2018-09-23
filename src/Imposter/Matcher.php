@@ -5,6 +5,7 @@ namespace Imposter\Imposter;
 
 use Imposter\Imposter\Term\AbstractTerm;
 use Imposter\Imposter\Term\Body;
+use Imposter\Imposter\Term\Headers;
 use Imposter\Imposter\Term\Method;
 use Imposter\Imposter\Term\Path;
 use Imposter\Model\Mock;
@@ -41,6 +42,7 @@ class Matcher
             new Body($this->mock),
             new Path($this->mock),
             new Method($this->mock),
+            new Headers($this->mock),
         ];
         $exceptions = [];
 
