@@ -29,9 +29,25 @@ class Imposter
      */
     public static function mock(int $port): ImposterHttp
     {
+        self::init();
+        return self::$httpImposters[] = new ImposterHttp($port, self::$state->getDi()->get(HttpMock::class));
+    }
+
+    public static function reset()
+    {
+        self::$httpImposters = [];
+        self::init();
+    }
+
+    /**
+     * @param int $port
+     * @return void
+     * @throws \Exception
+     */
+    public static function init()
+    {
         self::$state = self::$state ?: new ImposterState();
         self::$state->capture();
-        return self::$httpImposters[] = new ImposterHttp($port, self::$state->getDi()->get(HttpMock::class));
     }
 
     /**
@@ -39,7 +55,6 @@ class Imposter
      */
     public static function close()
     {
-
         self::$state->release();
         /** @var ImposterHttp $imposter */
         foreach (self::$httpImposters as $imposter) {

@@ -53,7 +53,7 @@ class ScenarioTest extends TestCase
     /**
      * @test
      */
-    public function matchBugPredictionFails()
+    public function matchPredictionFails()
     {
         Imposter::mock(8081)
             ->withPath('/users/1')
@@ -65,13 +65,44 @@ class ScenarioTest extends TestCase
         $client   = new \GuzzleHttp\Client();
 
         $e = null;
-        $response = $client->post('http://localhost:8081/users/1')->getBody()->getContents();
+        $client->post('http://localhost:8081/users/1')->getBody()->getContents();
         try {
             Imposter::close();
         } catch (\Exception $e) {
 
         }
 
+        Imposter::reset();
+
         self::assertNotNull($e);
     }
+
+    /**
+     * @test
+     */
+    public function matchMultipleMock()
+    {
+        Imposter::mock(8081)
+            ->withPath('/users/1')
+            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
+            ->returnBody('{"response" :"1"}')
+            ->once()
+            ->send();
+
+        Imposter::mock(8081)
+            ->withPath('/users/2')
+            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
+            ->returnBody('{"response" :"2"}')
+            ->once()
+            ->send();
+
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->post('http://localhost:8081/users/1')->getBody()->getContents();
+        self::assertSame($response, '{"response" :"1"}');
+        $response = $client->post('http://localhost:8081/users/2')->getBody()->getContents();
+        self::assertSame($response, '{"response" :"2"}');
+        Imposter::close();
+    }
+
 }

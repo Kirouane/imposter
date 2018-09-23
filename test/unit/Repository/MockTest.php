@@ -105,4 +105,31 @@ class MockTest extends \PHPUnit\Framework\TestCase
         $found = $repository->matchRequest($request);
         self::assertNull($found);
     }
+
+    /**
+     * @test
+     */
+    public function matchRequestMultipleMockSuccess()
+    {
+        $repository = new \Imposter\Repository\Mock(
+            \Mockery::mock(Logger::class)
+                ->shouldReceive('info')
+                ->getMock()
+                ->shouldReceive('warning')
+                ->getMock()
+        );
+        $mock       = $repository->insert(new \Imposter\Model\Mock());
+        $mock->setRequestUriPath(new IsIdentical('/path1'));
+
+        $mock       = $repository->insert(new \Imposter\Model\Mock());
+        $mock->setRequestUriPath(new IsIdentical('/path2'));
+
+
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request->shouldReceive('getUri->getPath')->andReturn('/path2')->once();
+
+        $found = $repository->matchRequest($request);
+        self::assertInstanceOf(\Imposter\Model\Mock::class, $found);
+        self::assertSame($found->getId(), $mock->getId());
+    }
 }
