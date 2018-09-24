@@ -52,6 +52,16 @@ class Mock implements \JsonSerializable
     private $responseHeaders = [];
 
     /**
+     * @var string
+     */
+    private $file;
+
+    /**
+     * @var int
+     */
+    private $line;
+
+    /**
      * @var int
      */
     private $hits = 0;
@@ -215,6 +225,42 @@ class Mock implements \JsonSerializable
     public function setHits(int $hits): Mock
     {
         $this->hits = $hits;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile(): string
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $file
+     * @return Mock
+     */
+    public function setFile(string $file): Mock
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLine(): int
+    {
+        return $this->line;
+    }
+
+    /**
+     * @param int $line
+     * @return Mock
+     */
+    public function setLine(int $line): Mock
+    {
+        $this->line = $line;
         return $this;
     }
 

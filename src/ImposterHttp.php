@@ -198,6 +198,13 @@ class ImposterHttp
      */
     public function send(): ImposterHttp
     {
+        $trace = debug_backtrace();
+        $trace = reset($trace);
+
+        $this->mock
+            ->setFile($trace['file'])
+            ->setLine($trace['line']);
+
         $this->mock = $this->repository->insert($this->mock);
         return $this;
     }
