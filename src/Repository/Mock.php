@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Imposter\Repository;
 
 use Imposter\Imposter\Matcher;
+use Imposter\Imposter\MatchResult;
+use Imposter\Imposter\MatchResults;
 use Imposter\Model\Mock as MockModel;
 use Monolog\Logger;
 use PHPUnit\Framework\TestFailure;
@@ -91,12 +93,12 @@ class Mock
     {
         $match = null;
 
-        $allExceptions = [];
+        $results = new MatchResults();
         /** @var MockModel $mock */
         foreach ($this->data as $mock) {
             $matcher    = new Matcher($mock);
             $exceptions = $matcher->match($request);
-            $allExceptions = array_merge($allExceptions, $exceptions);
+            $results[] = new MatchResult($mock, $exceptions);
             if (empty($exceptions)) {
                 $this->logger->info('Mock found');
                 $match = $mock;
@@ -105,9 +107,7 @@ class Mock
         }
 
         if (!$match) {
-            foreach ($allExceptions as $exception) {
-                $this->logger->warning(TestFailure::exceptionToString($exception));
-            }
+            $this->logger->warning('Mock not match', ['matchResult' => $results]);
         }
 
         return $match;

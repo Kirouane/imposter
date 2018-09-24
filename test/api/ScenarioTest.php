@@ -21,7 +21,7 @@ class ScenarioTest extends TestCase
             ->send();
 
         $client   = new \GuzzleHttp\Client();
-            $response = $client->post('http://localhost:8081/users/1')->getBody()->getContents();
+        $response = $client->post('http://localhost:8081/users/1')->getBody()->getContents();
         self::assertSame($response, '{"response" :"okay"}');
         Imposter::close();
     }

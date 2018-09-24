@@ -5,7 +5,7 @@ namespace Imposter\Log;
 
 use Imposter\Di;
 use Imposter\Di\InterfaceFactory;
-use Monolog\Formatter\HtmlFormatter;
+use Imposter\ViewFactory;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 

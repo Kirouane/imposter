@@ -1,0 +1,15 @@
+<div class="container-fluid border border-<?= $levelClass ?>">
+    <div class="row alert-<?= $levelClass ?>" role="alert">
+        <?= $date ?> - <?= $levelName; ?>
+    </div>
+    <div class="row">
+        <?php foreach ($results as $result) : ?>
+        <div class="col-6">
+            <?= $result->getMock()->getFile(); ?>:<?= $result->getMock()->getLine(); ?> <br />
+            <?php foreach ($result->getExceptions() as $exception) : ?>
+                <?= \PHPUnit\Framework\TestFailure::exceptionToString($exception); ?>
+            <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>

@@ -5,7 +5,7 @@
         cacheTokens="false">
     <testsuites>
         <testsuite name="imposter">
-            <directory>./tests</directory>
+            <directory>./test</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -55,9 +55,9 @@ class ImposterState
     public function capture()
     {
         if (!$this->initialized) {
-            //if (!$this->getRepository()->isStarted()) {
+            if (!$this->getRepository()->isStarted()) {
                 $this->getRepository()->restart();
-            //}
+            }
             $this->getRepository()->drop();
             $this->initialized = true;
         }
