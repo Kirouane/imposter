@@ -119,6 +119,7 @@ class ScenarioTest extends TestCase
         $client   = new \GuzzleHttp\Client();
         $response = $client->post('http://localhost:8081', ['headers' => ['key' => 'value']]);
         self::assertSame($response->getHeader('key response'), ['value response']);
+        Imposter::close();
     }
 
     /**
@@ -135,6 +136,7 @@ class ScenarioTest extends TestCase
         $client   = new \GuzzleHttp\Client();
         $response = $client->post('http://localhost:8081', ['headers' => ['key 1' => 'value 1', 'key 2' => 'value 2']]);
         self::assertSame($response->getHeader('key response'), ['value response']);
+        Imposter::close();
     }
 
 
