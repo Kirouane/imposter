@@ -33,6 +33,10 @@ class Imposter
         return self::$httpImposters[] = new ImposterHttp($port, self::$state->getDi()->get(HttpMock::class));
     }
 
+
+    /**
+     *
+     */
     public static function reset()
     {
         self::$httpImposters = [];
@@ -63,5 +67,4 @@ class Imposter
 
         self::$httpImposters = [];
     }
-
 }
