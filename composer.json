@@ -31,8 +31,7 @@
     },
     "require": {
         "php" : ">=7.0",
-        "ext-json" :"*",
-        "symfony/templating": "^3.3"
+        "ext-json" :"*"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^6.3@dev",
@@ -41,6 +40,7 @@
         "mockery/mockery": "^1.0@dev",
         "symfony/console": "^3.3",
         "php-coveralls/php-coveralls": "2.1.x-dev",
-        "monolog/monolog": "1.x-dev"
+        "monolog/monolog": "1.x-dev",
+        "symfony/templating": "^2.0"
     }
 }
