@@ -193,8 +193,8 @@ class ImposterHttp
     }
 
     /**
+     * @noinspection PhpDocMissingThrowsInspection
      * @return ImposterHttp
-     * @throws \Exception
      */
     public function send(): ImposterHttp
     {
@@ -205,6 +205,7 @@ class ImposterHttp
             ->setFile($trace['file'])
             ->setLine($trace['line']);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->mock = $this->repository->insert($this->mock);
         return $this;
     }
