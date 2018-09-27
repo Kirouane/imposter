@@ -26,4 +26,5 @@ trait PhpunitTrait
     {
         Imposter::close();
     }
+
 }

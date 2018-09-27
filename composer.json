@@ -31,16 +31,16 @@
     },
     "require": {
         "php" : ">=7.0",
-        "ext-json" :"*"
-    },
-    "require-dev": {
+        "ext-json" :"*",
         "guzzlehttp/guzzle": "^6.3@dev",
         "react/http": "dev-master",
         "phpunit/phpunit": "6.5.x-dev",
-        "mockery/mockery": "^1.0@dev",
         "symfony/console": "^3.3",
-        "php-coveralls/php-coveralls": "2.1.x-dev",
         "monolog/monolog": "1.x-dev",
         "symfony/templating": "^2.0"
+    },
+    "require-dev": {
+        "php-coveralls/php-coveralls": "2.1.x-dev",
+        "mockery/mockery": "^1.0@dev"
     }
 }
