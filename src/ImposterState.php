@@ -67,4 +67,14 @@ class ImposterState
     {
         $this->initialized = false;
     }
+
+    /**
+     *
+     */
+    public function stop()
+    {
+        if (!$this->getRepository()->isStarted()) {
+            $this->getRepository()->stop();
+        }
+    }
 }

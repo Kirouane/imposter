@@ -67,4 +67,9 @@ class Imposter
 
         self::$httpImposters = [];
     }
+
+    public static function shutdown()
+    {
+        self::$state->stop();
+    }
 }
