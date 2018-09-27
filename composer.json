@@ -32,12 +32,12 @@
     "require": {
         "php" : ">=7.0",
         "ext-json" :"*",
-        "guzzlehttp/guzzle": "^6.3@dev",
-        "react/http": "dev-master",
-        "phpunit/phpunit": "6.5.x-dev",
         "symfony/console": "^3.3",
         "symfony/templating": "^2.0",
-        "monolog/monolog": "^1.23"
+        "monolog/monolog": "^1.23",
+        "guzzlehttp/guzzle": "^6.3",
+        "react/http": "^0.8.3",
+        "phpunit/phpunit": "^6.5"
     },
     "require-dev": {
         "php-coveralls/php-coveralls": "2.1.x-dev",
