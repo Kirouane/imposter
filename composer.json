@@ -32,12 +32,12 @@
     "require": {
         "php" : ">=7.0",
         "ext-json" :"*",
-        "symfony/console": ">= 2.0",
-        "symfony/templating": ">= 2.0",
-        "monolog/monolog": ">= 1.0",
-        "guzzlehttp/guzzle": "^6.3",
+        "symfony/console": ">= 2, < 5",
+        "symfony/templating": ">= 2, < 5",
+        "monolog/monolog": ">= 1,  < 2",
+        "guzzlehttp/guzzle": ">= 6, < 7 ",
         "react/http": "^0.8.3",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "> 6, < 8"
     },
     "require-dev": {
         "php-coveralls/php-coveralls": "2.1.x-dev",
