@@ -45,6 +45,7 @@ class Get extends AbstractController
     public function __invoke(ServerRequestInterface $request)
     {
         $logs = $this->repository->getAll();
+        rsort($logs);
 
         return new Response(
             200,
