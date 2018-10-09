@@ -70,6 +70,7 @@ class Imposter
 
     public static function shutdown()
     {
+        self::$state = self::$state ?: new ImposterState();
         self::$state->stop();
     }
 }
