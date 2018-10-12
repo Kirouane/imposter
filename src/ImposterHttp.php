@@ -9,9 +9,6 @@ use Imposter\Imposter\Prediction\CallTime\AtMost;
 use Imposter\Imposter\Prediction\CallTime\Equals;
 use Imposter\Model\Mock;
 use Imposter\Repository\HttpMock;
-use PHPUnit\Framework\Constraint\ArraySubset;
-use PHPUnit\Framework\Constraint\Constraint;
-use PHPUnit\Framework\Constraint\IsIdentical;
 
 /**
  * Class Imposter
@@ -49,16 +46,16 @@ class ImposterHttp
 
     /**
      * @param $value
-     * @return Constraint
+     * @return Predicate
      */
-    private function getConstraintFromValue($value): Constraint
+    private function getPredicateFromValue($value): Predicate
     {
-        if (\is_object($value) && !$value instanceof Constraint) {
-            throw new \InvalidArgumentException('the argument must be a scalar or an instance of ' . Constraint::class);
+        if (\is_object($value) && !$value instanceof Predicate) {
+            throw new \InvalidArgumentException('the argument must be a scalar or an instance of ' . Predicate::class);
         }
 
-        if (!$value instanceof Constraint) {
-            $value = new IsIdentical($value);
+        if (!$value instanceof Predicate) {
+            $value = (new PredicateFactory())->equals($value);
         }
 
         return $value;
@@ -70,7 +67,7 @@ class ImposterHttp
      */
     public function withPath($value): ImposterHttp
     {
-        $this->mock->setRequestUriPath($this->getConstraintFromValue($value));
+        $this->mock->setRequestUriPath($this->getPredicateFromValue($value));
         return $this;
     }
 
@@ -80,7 +77,7 @@ class ImposterHttp
      */
     public function withMethod($value): ImposterHttp
     {
-        $this->mock->setRequestMethod($this->getConstraintFromValue($value));
+        $this->mock->setRequestMethod($this->getPredicateFromValue($value));
         return $this;
     }
 
@@ -90,7 +87,7 @@ class ImposterHttp
      */
     public function withBody($value): ImposterHttp
     {
-        $this->mock->setRequestBody($this->getConstraintFromValue($value));
+        $this->mock->setRequestBody($this->getPredicateFromValue($value));
         return $this;
     }
 
@@ -98,10 +95,10 @@ class ImposterHttp
      * @param array $value
      * @return ImposterHttp
      */
-    public function withHeaders(array $value): ImposterHttp
+    public function withHeaders(array $values): ImposterHttp
     {
-        if (!$value instanceof Constraint) {
-            $value = new ArraySubset($value);
+        if (!$values instanceof Predicate) {
+            $value = (new PredicateFactory())->arraySubset($values);
         }
 
 

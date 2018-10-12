@@ -50,7 +50,7 @@ class Matcher
         foreach ($terms as $term) {
             try {
                 $term->match($request);
-            } catch (AssertionFailedError $e) {
+            } catch (\Exception $e) {
                 $exceptions[] = $e;
             }
         }

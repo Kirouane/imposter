@@ -21,7 +21,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
+            ->withMethod($this->predicateImposter()->regExp('/GET|PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
@@ -40,7 +40,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod(new RegularExpression('/PUT|POST/'))
+            ->withMethod($this->predicateImposter()->regExp('/PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->send();
 
@@ -65,7 +65,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod(new RegularExpression('/PUT|POST/'))
+            ->withMethod($this->predicateImposter()->regExp('/PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->twice()
             ->send();
@@ -93,7 +93,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
+            ->withMethod($this->predicateImposter()->regExp('/GET|PUT|POST/'))
             ->returnBody('{"response" :"1"}')
             ->once()
             ->send();
@@ -101,7 +101,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/2')
-            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
+            ->withMethod($this->predicateImposter()->regExp('/GET|PUT|POST/'))
             ->returnBody('{"response" :"2"}')
             ->once()
             ->send();
@@ -120,6 +120,7 @@ class ScenarioTest extends TestCase
      */
     public function matchHeader()
     {
+        Imposter::shutdown();
         $this
             ->openImposter(8081)
             ->withHeaders(['key' => ['value']])

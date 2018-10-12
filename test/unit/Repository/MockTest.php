@@ -2,6 +2,7 @@
 
 namespace Imposter\Repository;
 
+use Imposter\PredicateFactory;
 use Monolog\Logger;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
@@ -80,7 +81,8 @@ class MockTest extends \PHPUnit\Framework\TestCase
             ->getMock()
         );
         $mock       = $repository->insert(new \Imposter\Model\Mock());
-        $mock->setRequestUriPath(new IsIdentical('/path'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path'));
+
 
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/path')->once();
@@ -97,7 +99,7 @@ class MockTest extends \PHPUnit\Framework\TestCase
     {
         $repository = new \Imposter\Repository\Mock(\Mockery::mock(Logger::class)->shouldReceive('warning')->getMock());
         $mock       = $repository->insert(new \Imposter\Model\Mock());
-        $mock->setRequestUriPath(new IsIdentical('/path'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path'));
 
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/none')->once();
@@ -119,10 +121,10 @@ class MockTest extends \PHPUnit\Framework\TestCase
                 ->getMock()
         );
         $mock       = $repository->insert(new \Imposter\Model\Mock());
-        $mock->setRequestUriPath(new IsIdentical('/path1'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path1'));
 
         $mock       = $repository->insert(new \Imposter\Model\Mock());
-        $mock->setRequestUriPath(new IsIdentical('/path2'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path2'));
 
 
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);

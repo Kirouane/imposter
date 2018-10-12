@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Imposter\Model;
 
-use PHPUnit\Framework\Constraint\Constraint;
+use Imposter\Predicate;
 
 /**
  * Class Mock
@@ -22,22 +22,22 @@ class Mock implements \JsonSerializable
     private $port;
 
     /**
-     * @var Constraint|null
+     * @var Predicate|null
      */
     private $requestUriPath;
 
     /**
-     * @var Constraint|null
+     * @var Predicate|null
      */
     private $requestBody;
 
     /**
-     * @var Constraint|null
+     * @var Predicate|null
      */
     private $requestMethod;
 
     /**
-     * @var Constraint|null
+     * @var Predicate|null
      */
     private $requestHeaders;
 
@@ -103,7 +103,7 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @return Constraint|null
+     * @return Predicate|null
      */
     public function getRequestUriPath()
     {
@@ -111,17 +111,17 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param Constraint $requestUriPath
+     * @param Predicate $requestUriPath
      * @return Mock
      */
-    public function setRequestUriPath(Constraint $requestUriPath): Mock
+    public function setRequestUriPath(Predicate $requestUriPath): Mock
     {
         $this->requestUriPath = $requestUriPath;
         return $this;
     }
 
     /**
-     * @return Constraint|null
+     * @return Predicate|null
      */
     public function getRequestBody()
     {
@@ -129,17 +129,17 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param Constraint $requestBody
+     * @param Predicate $requestBody
      * @return Mock
      */
-    public function setRequestBody(Constraint $requestBody): Mock
+    public function setRequestBody(Predicate $requestBody): Mock
     {
         $this->requestBody = $requestBody;
         return $this;
     }
 
     /**
-     * @return Constraint|null
+     * @return Predicate|null
      */
     public function getRequestMethod()
     {
@@ -147,17 +147,17 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param Constraint $requestMethod
+     * @param Predicate $requestMethod
      * @return Mock
      */
-    public function setRequestMethod(Constraint $requestMethod): Mock
+    public function setRequestMethod(Predicate $requestMethod): Mock
     {
         $this->requestMethod = $requestMethod;
         return $this;
     }
 
     /**
-     * @return null|Constraint
+     * @return null|Predicate
      */
     public function getRequestHeaders()
     {
@@ -165,10 +165,10 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @param null|Constraint $requestHeaders
+     * @param null|Predicate $requestHeaders
      * @return Mock
      */
-    public function setRequestHeaders(Constraint $requestHeaders): Mock
+    public function setRequestHeaders(Predicate $requestHeaders): Mock
     {
         $this->requestHeaders = $requestHeaders;
         return $this;

@@ -73,4 +73,12 @@ class Imposter
         self::$state = self::$state ?: new ImposterState();
         self::$state->stop();
     }
+
+    /**
+     * @return PredicateFactory
+     */
+    public static function predicate(): PredicateFactory
+    {
+        return new PredicateFactory();
+    }
 }
