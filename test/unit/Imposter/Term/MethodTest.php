@@ -3,6 +3,7 @@
 namespace Imposter\Imposter\Term;
 
 use Imposter\Model\Mock;
+use Imposter\PredicateFactory;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
 /**
@@ -34,7 +35,7 @@ class MethodTest extends \PHPUnit\Framework\TestCase
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getMethod')->andReturn('GET')->once();
         $mock = new Mock();
-        $mock->setRequestMethod(new IsIdentical('GET'));
+        $mock->setRequestMethod((new PredicateFactory())->equals('GET'));
 
         $term = new Method($mock);
         self::assertNull($term->match($request));
@@ -48,14 +49,14 @@ class MethodTest extends \PHPUnit\Framework\TestCase
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getMethod')->andReturn('GET')->once();
         $mock = new Mock();
-        $mock->setRequestMethod(new IsIdentical('POST'));
+        $mock->setRequestMethod((new PredicateFactory())->equals('POST'));
 
         $term = new Method($mock);
 
         $e = null;
         try {
             $term->match($request);
-        } catch (\PHPUnit\Framework\AssertionFailedError $e) {
+        } catch (\Exception $e) {
         }
 
         self::assertInstanceOf(\Exception::class, $e);

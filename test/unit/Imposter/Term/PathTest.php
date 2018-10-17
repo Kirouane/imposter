@@ -3,6 +3,7 @@
 namespace Imposter\Imposter\Term;
 
 use Imposter\Model\Mock;
+use Imposter\PredicateFactory;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
 /**
@@ -34,7 +35,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/path')->once();
         $mock = new Mock();
-        $mock->setRequestUriPath(new IsIdentical('/path'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path'));
 
         $term = new Path($mock);
         self::assertNull($term->match($request));
@@ -48,7 +49,8 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/none')->once();
         $mock = new Mock();
-        $mock->setRequestUriPath(new IsIdentical('/path'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path'));
+
 
         $term = new Path($mock);
 

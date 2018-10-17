@@ -27,4 +27,12 @@ trait PhpunitTrait
         Imposter::close();
     }
 
+    /**
+     * @return PredicateFactory
+     */
+    public function predicateImposter()
+    {
+        return Imposter::predicate();
+    }
+
 }

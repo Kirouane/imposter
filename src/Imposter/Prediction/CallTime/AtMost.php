@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Imposter\Imposter\Prediction\CallTime;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class AtMost
  * @package Imposter\Imposter\Prediction\CallTime
@@ -15,7 +17,7 @@ class AtMost extends AbstractCallTime
     public function check(int $times)
     {
         if ($this->times > $times) {
-            throw new \PHPUnit\Framework\ExpectationFailedException($this->getMessage($times));
+            TestCase::fail($this->getMessage($times));
         }
     }
 

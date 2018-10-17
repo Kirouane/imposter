@@ -2,6 +2,8 @@
 
 namespace Imposter\Imposter;
 
+use Imposter\PredicateFactory;
+
 class MatcherTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -24,7 +26,8 @@ class MatcherTest extends \PHPUnit\Framework\TestCase
     public function matchFailed()
     {
         $mock = new \Imposter\Model\Mock();
-        $mock->setRequestUriPath(new \PHPUnit\Framework\Constraint\IsIdentical('/path'));
+        $mock->setRequestUriPath((new PredicateFactory())->equals('/path'));
+
         $service = new \Imposter\Imposter\Matcher($mock);
 
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
