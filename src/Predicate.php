@@ -44,7 +44,13 @@ class Predicate
      */
     public function evaluate($compareValue)
     {
-        TestCase::{$this->name}($this->value, $compareValue);
+        if (class_exists($this->name)) {
+            $constraint = new $this->name($compareValue);
+            $constraint->evaluate($this->value);
+        } else {
+            TestCase::{$this->name}($this->value, $compareValue);
+        }
+
     }
 
     public function toString()

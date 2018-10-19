@@ -52,4 +52,13 @@ class PredicateFactory
     {
         return new Predicate('assertArraySubset', $values);
     }
+
+    /**
+     * @param string $pattern
+     * @return Predicate
+     */
+    public function jsonMatch(string $pattern)
+    {
+        return new Predicate(\Imposter\Predicate\MatchJson::class, $pattern);
+    }
 }
