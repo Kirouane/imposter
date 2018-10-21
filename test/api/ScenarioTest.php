@@ -35,6 +35,51 @@ class ScenarioTest extends TestCase
     /**
      * @test
      */
+    public function matchBody()
+    {
+        $this
+            ->openImposter(8081)
+            ->withBody($this->predicateImposter()->jsonMatch('{"test":"[a-z]{4}"}'))
+            ->returnBody('{"response" :"okay"}')
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->post('http://localhost:8081/users/1', ['body' => '{"test":"abcd"}'])->getBody()->getContents();
+        self::assertSame($response, '{"response" :"okay"}');
+        $this->closeImposers();
+    }
+
+    /**
+     * @test
+     */
+    public function matchNotBody()
+    {
+        Imposter::shutdown();
+        $this
+            ->openImposter(8081)
+            ->withBody($this->predicateImposter()->jsonMatch('{"test":"[a-z]{4}"}'))
+            ->returnBody('{"response" :"okay"}')
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+
+        $e = null;
+        try {
+            $response = $client->post('http://localhost:8081/users/1', ['body' => '{"test":"abc"}'])->getBody()->getContents();
+            Imposter::close();
+        } catch (\Exception $e) {
+
+        }
+
+        self::assertNotNull($e);
+    }
+
+
+    /**
+     * @test
+     */
     public function notMatch()
     {
         $this
@@ -48,7 +93,7 @@ class ScenarioTest extends TestCase
 
         $e = null;
         try {
-            $response = $client->get('http://localhost:8081/users/1')->getBody()->getContents();
+            $client->get('http://localhost:8081/users/1')->getBody()->getContents();
             Imposter::close();
         } catch (\Exception $e) {
 
