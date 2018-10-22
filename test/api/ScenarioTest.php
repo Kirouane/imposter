@@ -2,7 +2,6 @@
 
 namespace Imposter;
 
-use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\TestCase;
 
 /**
