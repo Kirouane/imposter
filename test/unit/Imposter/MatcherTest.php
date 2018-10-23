@@ -2,7 +2,8 @@
 
 namespace Imposter\Imposter;
 
-use Imposter\PredicateFactory;
+use Imposter\Common\PredicateFactory;
+use PHPUnit\Framework\Constraint\IsIdentical;
 
 class MatcherTest extends \PHPUnit\Framework\TestCase
 {
@@ -11,8 +12,8 @@ class MatcherTest extends \PHPUnit\Framework\TestCase
      */
     public function matchSucceed()
     {
-        $mock    = new \Imposter\Model\Mock();
-        $service = new \Imposter\Imposter\Matcher($mock);
+        $mock    = new \Imposter\Common\Model\Mock();
+        $service = new \Imposter\Server\Imposter\Matcher($mock);
 
         $request    = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $exceptions = $service->match($request);
@@ -25,10 +26,10 @@ class MatcherTest extends \PHPUnit\Framework\TestCase
      */
     public function matchFailed()
     {
-        $mock = new \Imposter\Model\Mock();
-        $mock->setRequestUriPath((new PredicateFactory())->equals('/path'));
+        $mock = new \Imposter\Common\Model\Mock();
+        $mock->setRequestUriPath(new IsIdentical('/path'));
 
-        $service = new \Imposter\Imposter\Matcher($mock);
+        $service = new \Imposter\Server\Imposter\Matcher($mock);
 
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getUri->getPath')->andReturn('/none')->once();

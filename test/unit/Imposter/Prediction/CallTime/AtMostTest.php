@@ -23,7 +23,7 @@ class AtMostTest extends \PHPUnit\Framework\TestCase
      */
     public function check($times, $expectedTimes, $expectedException)
     {
-        $callTime     = new \Imposter\Imposter\Prediction\CallTime\AtMost($expectedTimes, new \Imposter\Model\Mock());
+        $callTime     = new \Imposter\Client\Imposter\Prediction\CallTime\AtMost($expectedTimes, new \Imposter\Common\Model\Mock());
         $hasException = false;
 
         try {

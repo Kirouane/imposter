@@ -19,6 +19,6 @@ use Symfony\Component\Console\Application;
 
 $application = new Application();
 
-$application->add(new \Imposter\Command\Start());
+$application->add(new \Imposter\Server\Command\Start());
 
 $application->run();

@@ -2,8 +2,9 @@
 
 namespace Imposter\Imposter\Term;
 
-use Imposter\Model\Mock;
-use Imposter\PredicateFactory;
+use Imposter\Common\Model\Mock;
+use Imposter\Common\PredicateFactory;
+use Imposter\Server\Imposter\Term\Body;
 use PHPUnit\Framework\Constraint\IsIdentical;
 
 /**
@@ -35,7 +36,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getBody->getContents')->andReturn('{}')->once();
         $mock = new Mock();
-        $mock->setRequestBody((new PredicateFactory())->equals('{}'));
+        $mock->setRequestBody(new IsIdentical('{}'));
 
         $term = new Body($mock);
         self::assertNull($term->match($request));
@@ -49,7 +50,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getBody->getContents')->andReturn('[]')->once();
         $mock = new Mock();
-        $mock->setRequestBody((new PredicateFactory())->equals('{}'));
+        $mock->setRequestBody(new IsIdentical('{}'));
 
         $term = new Body($mock);
 
