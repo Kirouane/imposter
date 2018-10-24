@@ -8,7 +8,6 @@
 
 namespace Imposter\Log;
 
-
 use Imposter\Imposter\MatchResult;
 use Imposter\Imposter\MatchResults;
 use Monolog\Formatter\NormalizerFormatter;
@@ -58,6 +57,25 @@ class HtmlFormatter extends NormalizerFormatter
     }
 
     /**
+     * Creates an HTML table
+     *
+     * @param $record
+     * @return string
+     */
+    private function addTable($record)
+    {
+        $embeddedTable = '<table cellspacing="1" width="100%">';
+
+        foreach ($record as $key => $value) {
+            $value = TdElement::escaped($this->convertToString($value));
+            $embeddedTable .= $this->addRow($key, $value);
+        }
+        $embeddedTable .= '</table>';
+
+        return $this->addRow('Context', TdElement::default($embeddedTable));
+    }
+
+    /**
      * Create a HTML h1 tag
      *
      * @param  string $title Text to be in the h1
@@ -83,32 +101,19 @@ class HtmlFormatter extends NormalizerFormatter
         $output = $this->addTitle($record['level_name'], $record['level'], $record['datetime']->format($this->dateFormat));
         $output .= '<table cellspacing="1" width="100%" class="monolog-output">';
 
-        $output .= $this->addRow('Message', TdElement::default($record['message']));
+        $output .= $this->addRow('Message', TdElement::escaped($record['message']));
 
         if (isset($record['context']['matchResult'])) {
             $output .= $this->addMatchResults($record['context']['matchResult']);
             unset($record['context']['matchResult']);
         }
 
-
         if ($record['context']) {
-            $embeddedTable = '<table cellspacing="1" width="100%">';
-
-            foreach ($record['context'] as $key => $value) {
-                $value = TdElement::default($this->convertToString($value));
-                $embeddedTable .= $this->addRow($key, $value);
-            }
-            $embeddedTable .= '</table>';
-            $output .= $this->addRow('Context', TdElement::escaped($embeddedTable));
+            $this->addTable($record['context']);
         }
+
         if ($record['extra']) {
-            $embeddedTable = '<table cellspacing="1" width="100%">';
-            foreach ($record['extra'] as $key => $value) {
-                $value = TdElement::default($this->convertToString($value));
-                $embeddedTable .= $this->addRow($key, $value);
-            }
-            $embeddedTable .= '</table>';
-            $output .= $this->addRow('Context', TdElement::escaped($embeddedTable));
+            $this->addTable($record['extra']);
         }
 
         return $output.'</table>';
