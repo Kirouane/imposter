@@ -2,6 +2,9 @@
 
 namespace Imposter;
 
+use Imposter\Common\Constraint\MatchJson;
+use PHPUnit\Framework\Constraint\JsonMatches;
+use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,7 +23,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod($this->predicateImposter()->regExp('/GET|PUT|POST/'))
+            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
@@ -38,7 +41,7 @@ class ScenarioTest extends TestCase
     {
         $this
             ->openImposter(8081)
-            ->withBody($this->predicateImposter()->jsonMatch('{"test":"[a-z]{4}"}'))
+            ->withBody(new MatchJson('{"test":"[a-z]{4}"}'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
@@ -54,10 +57,10 @@ class ScenarioTest extends TestCase
      */
     public function matchNotBody()
     {
-        Imposter::shutdown();
+        //Imposter::shutdown();
         $this
             ->openImposter(8081)
-            ->withBody($this->predicateImposter()->jsonMatch('{"test":"[a-z]{4}"}'))
+            ->withBody(new MatchJson('{"test":"[a-z]{4}"}'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
@@ -84,7 +87,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod($this->predicateImposter()->regExp('/PUT|POST/'))
+            ->withMethod(new RegularExpression('/PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->send();
 
@@ -109,7 +112,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod($this->predicateImposter()->regExp('/PUT|POST/'))
+            ->withMethod(new RegularExpression('/PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
             ->twice()
             ->send();
@@ -137,7 +140,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
-            ->withMethod($this->predicateImposter()->regExp('/GET|PUT|POST/'))
+            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
             ->returnBody('{"response" :"1"}')
             ->once()
             ->send();
@@ -145,7 +148,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withPath('/users/2')
-            ->withMethod($this->predicateImposter()->regExp('/GET|PUT|POST/'))
+            ->withMethod(new RegularExpression('/GET|PUT|POST/'))
             ->returnBody('{"response" :"2"}')
             ->once()
             ->send();
@@ -164,7 +167,6 @@ class ScenarioTest extends TestCase
      */
     public function matchHeader()
     {
-        Imposter::shutdown();
         $this
             ->openImposter(8081)
             ->withHeaders(['key' => ['value']])

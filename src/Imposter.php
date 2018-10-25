@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-use Imposter\Repository\HttpMock;
+use Imposter\Client\ImposterHttp;
+use Imposter\Client\ImposterState;
+use Imposter\Client\Repository\HttpMock;
 
 /**
  * Class Imposter
@@ -72,13 +74,5 @@ class Imposter
     {
         self::$state = self::$state ?: new ImposterState();
         self::$state->stop();
-    }
-
-    /**
-     * @return PredicateFactory
-     */
-    public static function predicate(): PredicateFactory
-    {
-        return new PredicateFactory();
     }
 }

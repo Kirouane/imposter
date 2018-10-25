@@ -9,6 +9,7 @@
 namespace Imposter;
 
 
+use Imposter\Common\Di;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -27,16 +28,16 @@ class RouterMiddlewareTest extends TestCase
                 ->getMock()
         );
 
-        $di->shouldReceive('get')->with('Imposter\Api\Controller\Mock\Test\Get')->andReturn(function() {
+        $di->shouldReceive('get')->with('Imposter\Server\Api\Controller\Mock\Test\Get')->andReturn(function() {
             return new \React\Http\Response(200);
         });
-        $di->shouldReceive('get')->with('Imposter\Log\LoggerFactory');
+        $di->shouldReceive('get')->with('Imposter\Server\Log\LoggerFactory');
         $request = \Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $request->shouldReceive('getUri->getPath')->andReturn('mock/test');
         $request->shouldReceive('getMethod')->andReturn('GET');
 
 
-        $middleware = new \Imposter\RouterMiddleware($di);
+        $middleware = new Server\RouterMiddleware($di);
         $response = $middleware->__invoke($request);
         self::assertInstanceOf( \React\Http\Response::class, $response);
         self::assertSame(200, $response->getStatusCode());

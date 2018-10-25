@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Imposter;
 
+use Imposter\Client\ImposterHttp;
 /**
  * Trait PhpunitTrait
  * @package Imposter
@@ -25,14 +26,6 @@ trait PhpunitTrait
     public function closeImposers()
     {
         Imposter::close();
-    }
-
-    /**
-     * @return PredicateFactory
-     */
-    public function predicateImposter()
-    {
-        return Imposter::predicate();
     }
 
 }

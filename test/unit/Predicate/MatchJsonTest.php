@@ -9,6 +9,7 @@
 namespace Imposter\Predicate;
 
 
+use Imposter\Common\Constraint\MatchJson;
 use PHPUnit\Framework\TestCase;
 
 class MatchJsonTest extends TestCase
@@ -38,7 +39,7 @@ class MatchJsonTest extends TestCase
             ['["a","b"]', '["b","a"]', true],
 
             ['{"a":["a"]}', '{"a":["a"]}', true],
-            ['{"a":["a", "b"]}', '{"a":["a"]}', true],
+            ['{"a":["a", "b"]}', '{"a":["a"]}', true],//17
             ['{"a":["a"]}', '{"a":["a", "b"]}', false],
 
             ['{"a":{"b":"b"}}', '{"a":{"b":"b"}}', true],
@@ -53,13 +54,13 @@ class MatchJsonTest extends TestCase
     /**
      * @dataProvider matchesProvider
      */
-    public function testMatches($value, $other, $matches)
+    public function testMatches($value, $pattern, $matches)
     {
-        $predicate = new MatchJson($value);
+        $predicate = new MatchJson($pattern);
         $reflection = new \ReflectionClass($predicate);
         $method = $reflection->getMethod('matches');
         $method->setAccessible(true);
 
-        self::assertSame($matches, $method->invoke($predicate, $other));
+        self::assertSame($matches, $method->invoke($predicate, $value));
     }
 }
