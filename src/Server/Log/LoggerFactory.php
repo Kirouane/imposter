@@ -5,7 +5,6 @@ namespace Imposter\Server\Log;
 
 use Imposter\Common\Di;
 use Imposter\Common\Di\InterfaceFactory;
-use Imposter\Server\Log\LogRepository;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 

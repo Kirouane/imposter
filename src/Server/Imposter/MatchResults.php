@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/23/18
- * Time: 5:34 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Server\Imposter;
 
@@ -15,8 +10,13 @@ namespace Imposter\Server\Imposter;
  */
 class MatchResults extends \ArrayObject
 {
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return 'okay';
+        return (string)array_reduce($this->getArrayCopy(), function ($string, $item) {
+            return $string . ' ' . $item;
+        });
     }
 }

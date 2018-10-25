@@ -1,20 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/23/18
- * Time: 5:34 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Server\Imposter;
 
+use Imposter\Common\Model\MockAbstract;
 
-use Imposter\Common\Model\Mock;
-
+/**
+ * Class MatchResult
+ * @package Imposter\Server\Imposter
+ */
 class MatchResult
 {
     /**
-     * @var Mock
+     * @var MockAbstract
      */
     private $mock;
 
@@ -25,19 +23,19 @@ class MatchResult
 
     /**
      * MatchResult constructor.
-     * @param Mock $mock
+     * @param MockAbstract $mock
      * @param \Exception[] $exceptions
      */
-    public function __construct(Mock $mock, array $exceptions)
+    public function __construct(MockAbstract $mock, array $exceptions)
     {
         $this->mock = $mock;
         $this->exceptions = $exceptions;
     }
 
     /**
-     * @return Mock
+     * @return MockAbstract
      */
-    public function getMock(): Mock
+    public function getMock(): MockAbstract
     {
         return $this->mock;
     }

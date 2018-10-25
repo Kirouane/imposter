@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Imposter\Server\Log;
 
@@ -8,11 +9,14 @@ namespace Imposter\Server\Log;
  */
 class TdElement
 {
-    /** @var string $content */
+    /**
+     * @var string
+     */
     private $content;
 
     /**
      * TdElement constructor.
+     * @param string $content
      */
     private function __construct(string $content)
     {
@@ -23,7 +27,7 @@ class TdElement
      * @param string $content
      * @return TdElement
      */
-    public static function default(string $content)
+    public static function default(string $content): TdElement
     {
         return new self($content);
     }
@@ -32,7 +36,7 @@ class TdElement
      * @param string $content
      * @return TdElement
      */
-    public static function escaped(string $content)
+    public static function escaped(string $content): TdElement
     {
         return new self('<pre>' . self::escapeHtml($content) . '</pre>');
     }
@@ -41,9 +45,9 @@ class TdElement
      * @param string $content
      * @return string
      */
-    private static function escapeHtml(string $content)
+    private static function escapeHtml(string $content): string
     {
-        return htmlspecialchars($content, ENT_NOQUOTES, 'UTF-8');
+        return htmlspecialchars($content, ENT_NOQUOTES);
     }
 
     /**

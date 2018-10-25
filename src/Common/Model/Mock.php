@@ -9,18 +9,8 @@ use PHPUnit\Framework\Constraint\Constraint;
  * Class Mock
  * @package Imposter\Model
  */
-class Mock implements \JsonSerializable
+class Mock extends MockAbstract implements \JsonSerializable
 {
-    /**
-     * @var string|null
-     */
-    private $id;
-
-    /**
-     * @var int
-     */
-    private $port;
-
     /**
      * @var Constraint|null
      */
@@ -50,57 +40,6 @@ class Mock implements \JsonSerializable
      * @var array
      */
     private $responseHeaders = [];
-
-    /**
-     * @var string
-     */
-    private $file;
-
-    /**
-     * @var int
-     */
-    private $line;
-
-    /**
-     * @var int
-     */
-    private $hits = 0;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     * @return Mock
-     */
-    public function setId($id): Mock
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPort(): int
-    {
-        return $this->port;
-    }
-
-    /**
-     * @param int $port
-     * @return Mock
-     */
-    public function setPort(int $port): Mock
-    {
-        $this->port = $port;
-        return $this;
-    }
 
     /**
      * @return Constraint|null
@@ -211,60 +150,6 @@ class Mock implements \JsonSerializable
     }
 
     /**
-     * @return int
-     */
-    public function getHits(): int
-    {
-        return $this->hits;
-    }
-
-    /**
-     * @param int $hits
-     * @return Mock
-     */
-    public function setHits(int $hits): Mock
-    {
-        $this->hits = $hits;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFile(): string
-    {
-        return $this->file;
-    }
-
-    /**
-     * @param string $file
-     * @return Mock
-     */
-    public function setFile(string $file): Mock
-    {
-        $this->file = $file;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLine(): int
-    {
-        return $this->line;
-    }
-
-    /**
-     * @param int $line
-     * @return Mock
-     */
-    public function setLine(int $line): Mock
-    {
-        $this->line = $line;
-        return $this;
-    }
-
-    /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
@@ -286,5 +171,20 @@ class Mock implements \JsonSerializable
                 'headers' => $this->getResponseHeaders(),
             ]
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function toString(): string
+    {
+        return (string)printf(
+            "- Method %s \n" .
+            "- Path %s \n" .
+            "- Body %s \n",
+            $this->getRequestMethod() ? $this->getRequestMethod()->toString() : '(No data)',
+            $this->getRequestUriPath() ? $this->getRequestUriPath()->toString() : '(No data)',
+            $this->getRequestBody() ? $this->getRequestBody()->toString() : '(No data)'
+        );
     }
 }

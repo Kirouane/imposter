@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-use Imposter\Client\ImposterHttp;
-use Imposter\Client\ImposterState;
-use Imposter\Client\Repository\HttpMock;
+use Imposter\Client\Imposter\Builder\Builder;
+use Imposter\Client\Imposter\Builder\ProxyAlwaysBuilder;
+use Imposter\Client\State;
+use Imposter\Client\Http;
 
 /**
  * Class Imposter
@@ -13,31 +14,49 @@ use Imposter\Client\Repository\HttpMock;
  */
 class Imposter
 {
-
     /**
      * @var Imposter[]
      */
     private static $httpImposters = [];
 
     /**
-     * @var ImposterState
+     * @var State
      */
     private static $state;
 
     /**
+     * @var Common\Di
+     */
+    private static $di;
+
+    /**
      * @param int $port
-     * @return ImposterHttp
+     * @return Builder
      * @throws \Exception
      */
-    public static function mock(int $port): ImposterHttp
+    public static function mock(int $port): Builder
     {
         self::init();
-        return self::$httpImposters[] = new ImposterHttp($port, self::$state->getDi()->get(HttpMock::class));
+        return self::$httpImposters[] = new Builder($port, self::getDi()->get(Http::class));
     }
 
 
     /**
-     *
+     * @param int $port
+     * @param $url
+     * @param $file
+     * @return ProxyAlwaysBuilder
+     * @throws \Exception
+     */
+    public static function mockProxyAlways(int $port, $url, $file)
+    {
+        self::init();
+        return self::$httpImposters[] = new ProxyAlwaysBuilder($port, $url, $file, self::getDi()->get(Http::class));
+    }
+
+
+    /**
+     * @throws \Exception
      */
     public static function reset()
     {
@@ -46,13 +65,12 @@ class Imposter
     }
 
     /**
-     * @param int $port
      * @return void
      * @throws \Exception
      */
     public static function init()
     {
-        self::$state = self::$state ?: new ImposterState();
+        self::$state = self::$state ?: new State(self::getDi()->get(Http::class));
         self::$state->capture();
     }
 
@@ -62,7 +80,7 @@ class Imposter
     public static function close()
     {
         self::$state->release();
-        /** @var ImposterHttp $imposter */
+        /** @var Builder $imposter */
         foreach (self::$httpImposters as $imposter) {
             $imposter->resolve();
         }
@@ -70,9 +88,24 @@ class Imposter
         self::$httpImposters = [];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function shutdown()
     {
-        self::$state = self::$state ?: new ImposterState();
+        self::$state = self::$state ?: new State(self::getDi()->get(Http::class));
         self::$state->stop();
+    }
+
+    /**
+     * @return Common\Di
+     */
+    public static function getDi(): Common\Di
+    {
+        if (self::$di) {
+            return self::$di;
+        }
+
+        return self::$di = new Common\Di();
     }
 }

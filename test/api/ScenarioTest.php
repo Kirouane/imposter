@@ -2,7 +2,7 @@
 
 namespace Imposter;
 
-use Imposter\Common\Constraint\MatchJson;
+use Imposter\Common\Constraint\JsonRegularExpression;
 use PHPUnit\Framework\Constraint\JsonMatches;
 use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\TestCase;
@@ -41,7 +41,7 @@ class ScenarioTest extends TestCase
     {
         $this
             ->openImposter(8081)
-            ->withBody(new MatchJson('{"test":"[a-z]{4}"}'))
+            ->withBody(new JsonRegularExpression('{"test":"[a-z]{4}"}'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();
@@ -60,7 +60,7 @@ class ScenarioTest extends TestCase
         //Imposter::shutdown();
         $this
             ->openImposter(8081)
-            ->withBody(new MatchJson('{"test":"[a-z]{4}"}'))
+            ->withBody(new JsonRegularExpression('{"test":"[a-z]{4}"}'))
             ->returnBody('{"response" :"okay"}')
             ->once()
             ->send();

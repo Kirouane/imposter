@@ -9,7 +9,6 @@ use Imposter\Server\Log\LoggerFactory;
 use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
-use React\Http\Response as HttpResponse;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

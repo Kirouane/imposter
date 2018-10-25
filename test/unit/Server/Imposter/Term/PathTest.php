@@ -1,0 +1,66 @@
+<?php
+
+namespace Imposter\Server\Imposter\Term;
+
+use Imposter\Common\Model\Mock;
+use Imposter\Common\PredicateFactory;
+use Imposter\Server\Imposter\Matcher\Term\Path;
+use PHPUnit\Framework\Constraint\IsIdentical;
+
+/**
+ * Created by PhpStorm.
+ * User: nassim.kirouane
+ * Date: 9/16/18
+ * Time: 8:53 PM
+ */
+
+class PathTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * @test
+     */
+    public function matchNoConstraint()
+    {
+        $request = new \RingCentral\Psr7\ServerRequest('GET', '/path');
+        $mock    = new Mock(1);
+
+        $term = new Path($mock);
+        self::assertNull($term->match($request));
+    }
+
+    /**
+     * @test
+     */
+    public function matchWithConstraintSuccess()
+    {
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request->shouldReceive('getUri->getPath')->andReturn('/path')->once();
+        $mock = new Mock(1);
+        $mock->setRequestUriPath(new IsIdentical('/path'));
+
+        $term = new Path($mock);
+        self::assertNull($term->match($request));
+    }
+
+    /**
+     * @test
+     */
+    public function matchWithConstraintFail()
+    {
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request->shouldReceive('getUri->getPath')->andReturn('/none')->once();
+        $mock = new Mock(1);
+        $mock->setRequestUriPath(new IsIdentical('/path'));
+
+
+        $term = new Path($mock);
+
+        $e = null;
+        try {
+            $term->match($request);
+        } catch (\Exception $e) {
+        }
+
+        self::assertInstanceOf(\Exception::class, $e);
+    }
+}

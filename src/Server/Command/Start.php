@@ -24,6 +24,7 @@ class Start extends Command
         $this->addOption('port', 'p', InputOption::VALUE_OPTIONAL);
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @param InputInterface $input
      * @param OutputInterface $output

@@ -43,9 +43,10 @@ class Get extends AbstractController
     public function __invoke(ServerRequestInterface $request)
     {
         $id = $request->getQueryParams()['id'] ?? null;
+        $port = $request->getQueryParams()['port'] ?? null;
 
         if ($id) {
-            return $this->getOne($id, $request);
+            return $this->getOne((int)$port, $id, $request);
         }
 
         return $this->getAll($request);
@@ -77,9 +78,9 @@ class Get extends AbstractController
      * @param ServerRequestInterface $request
      * @return Response
      */
-    private function getOne($id, ServerRequestInterface $request): Response
+    private function getOne(int $port, $id, ServerRequestInterface $request): Response
     {
-        $row = $this->repository->findById($id);
+        $row = $this->repository->findById($port, $id);
         $format = $request->getQueryParams()['format'] ?? null;
 
         if ($format) {
