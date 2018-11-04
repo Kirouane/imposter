@@ -5,7 +5,6 @@ namespace Imposter\Server\Api\Controller;
 
 use Imposter\Server\Repository\Mock;
 
-use Imposter\Server\Api\Controller\AbstractController;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
 

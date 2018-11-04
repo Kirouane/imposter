@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Imposter\Client\Imposter\Prediction\CallTime;
 
-use Imposter\Common\Model\Mock;
+use Imposter\Common\Model\MockAbstract;
 
 /**
  * Class AbstractCallTime
@@ -18,16 +18,16 @@ abstract class AbstractCallTime
     protected $times;
 
     /**
-     * @var Mock
+     * @var MockAbstract
      */
     protected $mock;
 
     /**
      * Equals constructor.
      * @param int $times
-     * @param \Imposter\Common\Model\Mock $mock
+     * @param \Imposter\Common\Model\MockAbstract $mock
      */
-    public function __construct(int $times, Mock $mock)
+    public function __construct(int $times, MockAbstract $mock)
     {
         $this->times = $times;
         $this->mock  = $mock;

@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 9/23/18
- * Time: 5:38 PM
- */
+declare(strict_types=1);
 
 namespace Imposter\Server\Log;
 
 
-use Imposter\Server\Log\TdElement;
 use Imposter\Server\Imposter\MatchResult;
 use Imposter\Server\Imposter\MatchResults;
 use Monolog\Formatter\NormalizerFormatter;
@@ -25,7 +19,7 @@ class HtmlFormatter extends NormalizerFormatter
     /**
      * Translates Monolog log levels to html color priorities.
      */
-    protected $logLevels = [
+    protected static $logLevels = [
         Logger::DEBUG     => '#cccccc',
         Logger::INFO      => '#468847',
         Logger::NOTICE    => '#3a87ad',
@@ -37,23 +31,15 @@ class HtmlFormatter extends NormalizerFormatter
     ];
 
     /**
-     * @param string $dateFormat The format of the timestamp: one supported by DateTime::format
-     */
-    public function __construct($dateFormat = null)
-    {
-        parent::__construct($dateFormat);
-    }
-
-    /**
      * Creates an HTML table row
      *
      * @param  string $th       Row header content
      * @param  TdElement $td       Row standard cell content
      * @return string
      */
-    protected function addRow($th, TdElement $td)
+    protected function addRow($th, TdElement $td): string
     {
-        $th = htmlspecialchars($th, ENT_NOQUOTES, 'UTF-8');
+        $th = htmlspecialchars($th, ENT_NOQUOTES);
 
         return "<tr style=\"padding: 4px;text-align: left;\">\n<th style=\"vertical-align: top;background: #ccc;color: #000\" width=\"100\">$th:</th>\n<td style=\"padding: 4px;text-align: left;vertical-align: top;background: #eee;color: #000\">".$td."</td>\n</tr>";
     }
@@ -64,10 +50,11 @@ class HtmlFormatter extends NormalizerFormatter
      * @param $record
      * @return string
      */
-    private function addTable($record)
+    private function addTable($record): string
     {
         $embeddedTable = '<table cellspacing="1" width="100%">';
 
+        /** @var array $record */
         foreach ($record as $key => $value) {
             $value = TdElement::escaped($this->convertToString($value));
             $embeddedTable .= $this->addRow($key, $value);
@@ -85,13 +72,14 @@ class HtmlFormatter extends NormalizerFormatter
      * @param  int    $time Error level
      * @return string
      */
-    protected function addTitle($title, $level, $time)
+    protected function addTitle($title, $level, $time): string
     {
-        $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
+        $title = htmlspecialchars($title, ENT_NOQUOTES);
 
-        return '<h3 style="margin-bottom: 0; background: '.$this->logLevels[$level].';color: #ffffff;padding: 5px;" class="monolog-output">' . $time . ' - ' . $title.'</h3>';
+        return '<h3 style="margin-bottom: 0; background: '.self::$logLevels[$level].';color: #ffffff;padding: 5px;" class="monolog-output">' . $time . ' - ' . $title.'</h3>';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * Formats a log record.
      *
@@ -121,13 +109,15 @@ class HtmlFormatter extends NormalizerFormatter
         return $output.'</table>';
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * Formats a set of log records.
      *
      * @param  array $records A set of records to format
      * @return mixed The formatted set of records
      */
-    public function formatBatch(array $records)
+    public function
+    formatBatch(array $records)
     {
         $message = '';
         foreach ($records as $record) {
@@ -148,7 +138,7 @@ class HtmlFormatter extends NormalizerFormatter
         }
 
         $data = $this->normalize($data);
-        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+        if (PHP_VERSION_ID >= 50400) {
             return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
@@ -160,7 +150,7 @@ class HtmlFormatter extends NormalizerFormatter
      * @param MatchResults $matchResults
      * @return string
      */
-    private function addMatchResults(MatchResults $matchResults)
+    private function addMatchResults(MatchResults $matchResults): string
     {
         $output = '';
         /** @var MatchResult $matchResult */

@@ -53,7 +53,7 @@ class Post extends AbstractController
         $body = $request->getBody()->getContents();
         $mock = unserialize($body, [\Imposter\Common\Model\Mock::class]);
 
-        if (!$mock instanceof \Imposter\Common\Model\Mock) {
+        if (!$mock instanceof \Imposter\Common\Model\MockAbstract) {
             $this->output->writeln('Invalid mock description :' . $body);
             throw new \RuntimeException('Invalid body' . $body);
         }

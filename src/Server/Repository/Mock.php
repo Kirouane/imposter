@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Imposter\Server\Repository;
 
-use Imposter\Server\Imposter\Matcher;
+use Imposter\Common\Model\MockAbstract;
+use Imposter\Server\Imposter\Matcher\Matcher;
+use Imposter\Server\Imposter\Matcher\MatcherProxyAlways;
 use Imposter\Server\Imposter\MatchResult;
 use Imposter\Server\Imposter\MatchResults;
-use Imposter\Common\Model\Mock as MockModel;
 use Monolog\Logger;
-use PHPUnit\Framework\TestFailure;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class Mock
 {
     /**
-     * @var MockModel[]
+     * @var array
      */
     private $data = [];
 
@@ -51,33 +51,33 @@ class Mock
     }
 
     /**
-     * @param MockModel $mock
-     * @return MockModel
+     * @param MockAbstract $mock
+     * @return MockAbstract
      */
-    public function insert(MockModel $mock): MockModel
+    public function insert(MockAbstract $mock): MockAbstract
     {
         $mock->setId(uniqid('', true));
-        $this->data[$mock->getId()] = $mock;
+        $this->data[$mock->getPort()][$mock->getId()] = $mock;
         return $mock;
     }
 
     /**
      * @param $id
-     * @return MockModel|null
+     * @return MockAbstract|null
      */
-    public function findById($id)
+    public function findById(int $port, $id)
     {
-        return $this->data[$id] ?? null;
+        return $this->data[$port][$id] ?? null;
     }
 
     /**
-     * @param MockModel $row
-     * @return MockModel
+     * @param MockAbstract $mock
+     * @return MockAbstract
      */
-    public function update(MockModel $row): MockModel
+    public function update(MockAbstract $mock): MockAbstract
     {
-        $this->data[$row->getId()] = $row;
-        return $row;
+        $this->data[$mock->getPort()][$mock->getId()] = $mock;
+        return $mock;
     }
 
     public function drop()
@@ -87,16 +87,21 @@ class Mock
 
     /**
      * @param ServerRequestInterface $request
-     * @return MockModel|null
+     * @return MockAbstract|null
      */
     public function matchRequest(ServerRequestInterface $request)
     {
         $match = null;
 
         $results = new MatchResults();
-        /** @var MockModel $mock */
-        foreach ($this->data as $mock) {
-            $matcher    = new Matcher($mock);
+        /** @var MockAbstract $mock */
+        foreach ($this->data[$request->getUri()->getPort()] as $mock) {
+            if ($mock instanceof \Imposter\Common\Model\Mock) {
+                $matcher    = new Matcher($mock);
+            } elseif ($mock instanceof \Imposter\Common\Model\MockProxyAlways) {
+                $matcher    = new MatcherProxyAlways($mock);
+            }
+
             $exceptions = $matcher->match($request);
             $results[] = new MatchResult($mock, $exceptions);
             if (empty($exceptions)) {
@@ -114,7 +119,7 @@ class Mock
     }
 
     /**
-     * @return MockModel[]
+     * @return MockAbstract[]
      */
     public function findAll(): array
     {

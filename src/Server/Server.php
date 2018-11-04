@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Imposter\Server;
 
 use Imposter\Common\Di;
-use Imposter\Server\RouterMiddleware;
 use React\Http\Server as ReactServer;
 
 /**
