@@ -16,7 +16,7 @@ class AtMost extends AbstractCallTime
      */
     public function check(int $times)
     {
-        if ($this->times > $times) {
+        if ($this->times < $times) {
             TestCase::fail($this->getMessage($times));
         }
     }

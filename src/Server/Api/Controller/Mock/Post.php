@@ -62,7 +62,7 @@ class Post extends AbstractController
         $this->createImposter($mock->getPort());
 
         return new Response(
-            200,
+            201,
             [
                 'Content-Type' => 'application/json',
             ],

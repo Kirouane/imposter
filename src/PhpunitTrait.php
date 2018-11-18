@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-use Imposter\Client\Imposter\Builder\Builder;
+use Imposter\Client\Imposter\MockBuilder;
 /**
  * Trait PhpunitTrait
  * @package Imposter
@@ -13,9 +13,9 @@ trait PhpunitTrait
 {
     /**
      * @param int $port
-     * @return Builder
+     * @return MockBuilder
      */
-    public function openImposter(int $port): Builder
+    public function openImposter(int $port): MockBuilder
     {
         return Imposter::mock($port);
     }

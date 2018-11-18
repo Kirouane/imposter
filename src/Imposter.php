@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Imposter;
 
-use Imposter\Client\Imposter\Builder\Builder;
-use Imposter\Client\Imposter\Builder\ProxyAlwaysBuilder;
+use Imposter\Client\Imposter\MockBuilder;
 use Imposter\Client\State;
 use Imposter\Client\Http;
 
@@ -31,27 +30,13 @@ class Imposter
 
     /**
      * @param int $port
-     * @return Builder
+     * @return MockBuilder
      * @throws \Exception
      */
-    public static function mock(int $port): Builder
+    public static function mock(int $port): MockBuilder
     {
         self::init();
-        return self::$httpImposters[] = new Builder($port, self::getDi()->get(Http::class));
-    }
-
-
-    /**
-     * @param int $port
-     * @param $url
-     * @param $file
-     * @return ProxyAlwaysBuilder
-     * @throws \Exception
-     */
-    public static function mockProxyAlways(int $port, $url, $file)
-    {
-        self::init();
-        return self::$httpImposters[] = new ProxyAlwaysBuilder($port, $url, $file, self::getDi()->get(Http::class));
+        return self::$httpImposters[] = new MockBuilder($port, self::getDi()->get(Http::class));
     }
 
 
@@ -80,7 +65,7 @@ class Imposter
     public static function close()
     {
         self::$state->release();
-        /** @var Builder $imposter */
+        /** @var \Imposter\Client\Imposter\MockBuilder $imposter */
         foreach (self::$httpImposters as $imposter) {
             $imposter->resolve();
         }

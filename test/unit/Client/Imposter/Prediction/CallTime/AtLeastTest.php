@@ -9,8 +9,8 @@ class AtLeastTest extends \PHPUnit\Framework\TestCase
         return [
             [0, 0, false],
             [1, 1, false],
-            [1, 0, true],
-            [0, 1, false],
+            [1, 0, false],
+            [0, 1, true],
         ];
     }
 

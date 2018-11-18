@@ -5,7 +5,6 @@ namespace Imposter\Server\Repository;
 
 use Imposter\Common\Model\MockAbstract;
 use Imposter\Server\Imposter\Matcher\Matcher;
-use Imposter\Server\Imposter\Matcher\MatcherProxyAlways;
 use Imposter\Server\Imposter\MatchResult;
 use Imposter\Server\Imposter\MatchResults;
 use Monolog\Logger;
@@ -96,12 +95,7 @@ class Mock
         $results = new MatchResults();
         /** @var MockAbstract $mock */
         foreach ($this->data[$request->getUri()->getPort()] as $mock) {
-            if ($mock instanceof \Imposter\Common\Model\Mock) {
-                $matcher    = new Matcher($mock);
-            } elseif ($mock instanceof \Imposter\Common\Model\MockProxyAlways) {
-                $matcher    = new MatcherProxyAlways($mock);
-            }
-
+            $matcher    = new Matcher($mock);
             $exceptions = $matcher->match($request);
             $results[] = new MatchResult($mock, $exceptions);
             if (empty($exceptions)) {

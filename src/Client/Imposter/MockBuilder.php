@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Imposter\Client\Imposter\Builder;
+namespace Imposter\Client\Imposter;
 
 use Imposter\Client\Http;
 use Imposter\Client\Imposter\Prediction\CallTime\AbstractCallTime;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Constraint\IsIdentical;
  * Class Imposter
  * @package Imposter
  */
-class Builder
+class MockBuilder
 {
     /**
      * @var \Imposter\Common\Model\Mock
@@ -33,7 +33,6 @@ class Builder
      * @var Http
      */
     private $repository;
-
 
     /**
      * Imposter constructor.
@@ -65,9 +64,9 @@ class Builder
 
     /**
      * @param $value
-     * @return Builder
+     * @return MockBuilder
      */
-    public function withPath($value): Builder
+    public function withPath($value): MockBuilder
     {
         $this->mock->setRequestUriPath($this->getConstraintFromValue($value));
         return $this;
@@ -75,9 +74,9 @@ class Builder
 
     /**
      * @param $value
-     * @return Builder
+     * @return MockBuilder
      */
-    public function withMethod($value): Builder
+    public function withMethod($value): MockBuilder
     {
         $this->mock->setRequestMethod($this->getConstraintFromValue($value));
         return $this;
@@ -85,9 +84,9 @@ class Builder
 
     /**
      * @param $value
-     * @return Builder
+     * @return MockBuilder
      */
-    public function withBody($value): Builder
+    public function withBody($value): MockBuilder
     {
         $this->mock->setRequestBody($this->getConstraintFromValue($value));
         return $this;
@@ -95,9 +94,9 @@ class Builder
 
     /**
      * @param array $values
-     * @return Builder
+     * @return MockBuilder
      */
-    public function withHeaders(array $values): Builder
+    public function withHeaders(array $values): MockBuilder
     {
         $value = $values;
         if (!$values instanceof Constraint) {
@@ -110,9 +109,9 @@ class Builder
 
     /**
      * @param string $responseBody
-     * @return Builder
+     * @return MockBuilder
      */
-    public function returnBody(string $responseBody): Builder
+    public function returnBody(string $responseBody): MockBuilder
     {
         $this->mock->setResponseBody($responseBody);
         return $this;
@@ -120,9 +119,9 @@ class Builder
 
     /**
      * @param array $responseHeaders
-     * @return Builder
+     * @return MockBuilder
      */
-    public function returnHeaders(array $responseHeaders): Builder
+    public function returnHeaders(array $responseHeaders): MockBuilder
     {
 
         $this->mock->setResponseHeaders($responseHeaders);
@@ -130,34 +129,34 @@ class Builder
     }
 
     /**
-     * @return Builder
+     * @return MockBuilder
      */
-    public function once(): Builder
+    public function once(): MockBuilder
     {
         return $this->times(1);
     }
 
     /**
-     * @return Builder
+     * @return MockBuilder
      */
-    public function never(): Builder
+    public function never(): MockBuilder
     {
         return $this->times(0);
     }
 
     /**
-     * @return Builder
+     * @return MockBuilder
      */
-    public function twice(): Builder
+    public function twice(): MockBuilder
     {
         return $this->times(2);
     }
 
     /**
      * @param int $times
-     * @return Builder
+     * @return MockBuilder
      */
-    public function times(int $times): Builder
+    public function times(int $times): MockBuilder
     {
         $this->callTimePrediction = new Equals($times, $this->mock);
         return $this;
@@ -165,9 +164,9 @@ class Builder
 
     /**
      * @param int $times
-     * @return Builder
+     * @return MockBuilder
      */
-    public function atLeast(int $times): Builder
+    public function atLeast(int $times): MockBuilder
     {
         $this->callTimePrediction = new AtLeast($times, $this->mock);
         return $this;
@@ -175,9 +174,9 @@ class Builder
 
     /**
      * @param int $times
-     * @return Builder
+     * @return MockBuilder
      */
-    public function atMost(int $times): Builder
+    public function atMost(int $times): MockBuilder
     {
         $this->callTimePrediction = new AtMost($times, $this->mock);
         return $this;
@@ -192,10 +191,18 @@ class Builder
     }
 
     /**
-     * @noinspection PhpDocMissingThrowsInspection
-     * @return Builder
+     * @return Mock
      */
-    public function send(): Builder
+    public function getMock(): Mock
+    {
+        return $this->mock;
+    }
+
+    /**
+     * @noinspection PhpDocMissingThrowsInspection
+     * @return MockBuilder
+     */
+    public function send(): MockBuilder
     {
         $trace = debug_backtrace();
         $trace = reset($trace);
@@ -210,10 +217,10 @@ class Builder
     }
 
     /**
-     * @return Builder
+     * @return MockBuilder
      * @throws \Exception
      */
-    public function resolve(): Builder
+    public function resolve(): MockBuilder
     {
         $mock = $this->repository->find($this->mock);
 
