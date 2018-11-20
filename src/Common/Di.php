@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Imposter\Common;
 
+use Imposter\Client\Console;
+use Imposter\Client\Http;
 use Imposter\Common\Di\InterfaceFactory;
 use Imposter\Server;
 use Imposter\Server\Log\LoggerFactory;
@@ -43,6 +45,10 @@ class Di
         ],
         Server\Repository\Mock::class => [
             LoggerFactory::class
+        ],
+        Http::class => [
+            \GuzzleHttp\Client::class,
+            Console::class
         ]
     ];
 

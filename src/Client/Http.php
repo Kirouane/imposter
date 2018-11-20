@@ -5,8 +5,8 @@ namespace Imposter\Client;
 
 use Imposter\Common\Model\Mock;
 use Imposter\Common\Model\MockAbstract;
-use Imposter\Common\Model\MockProxyAlways;
 use Imposter\Server\Server;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Http
@@ -15,17 +15,22 @@ use Imposter\Server\Server;
 class Http
 {
     /**
-     * @var \\GuzzleHttp\ClientInterface
+     * @var \\GuzzleHttp\Client
      */
     private $client;
+    /**
+     * @var Console
+     */
+    private $console;
 
     /**
      * HttpMock constructor.
-     * @param \GuzzleHttp\ClientInterface|null $client
+     * @param \GuzzleHttp\Client $client
      */
-    public function __construct(\GuzzleHttp\ClientInterface $client = null)
+    public function __construct(\GuzzleHttp\Client $client, Console $console)
     {
-        $this->client = $client ?: new \GuzzleHttp\Client();
+        $this->client = $client;
+        $this->console = $console;
     }
 
     /**
@@ -35,13 +40,37 @@ class Http
      */
     public function insert(MockAbstract $mock): MockAbstract
     {
-        $response = $this->client->post(Server::URL . '/mock', ['body' => serialize($mock)]);
+        $response = $this->client->post(
+            Server::URL . '/mock',
+            ['body' => serialize($mock)]
+        );
 
         if (!$response) {
             throw new \UnexpectedValueException('Response not found');
         }
 
-        return unserialize($response->getBody()->getContents(), [Mock::class]);
+        return $this->getMockFromHttpResponse($response);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return mixed
+     */
+    private function getMockFromHttpResponse(ResponseInterface $response)
+    {
+        $content = $response->getBody()->getContents();
+        $acceptedHttpCodes = [200, 201];
+
+        if (!\in_array($response->getStatusCode(), $acceptedHttpCodes, true)) {
+            throw new \RuntimeException($content);
+        }
+
+        $mock = @unserialize($content, [Mock::class]);
+        if (!$mock instanceof MockAbstract) {
+            throw new \UnexpectedValueException('Cannot userialize this content : "' . $content . '"');
+        }
+
+        return $mock;
     }
 
     /**
@@ -57,7 +86,7 @@ class Http
             throw new \UnexpectedValueException('Response body not found');
         }
 
-        return unserialize($response->getBody()->getContents(), [Mock::class, MockProxyAlways::class]);
+        return $this->getMockFromHttpResponse($response);
     }
 
     /**
@@ -71,7 +100,19 @@ class Http
             throw new \UnexpectedValueException('Response body not found');
         }
 
-        return unserialize($response->getBody()->getContents(), [Mock::class, MockProxyAlways::class]);
+        $content = $response->getBody()->getContents();
+        $acceptedHttpCodes = [200, 201];
+
+        if (!\in_array($response->getStatusCode(), $acceptedHttpCodes, true)) {
+            throw new \RuntimeException($content);
+        }
+
+        $mocks = @unserialize($content, [Mock::class]);
+        if (!is_array($mocks)) {
+            throw new \UnexpectedValueException('Cannot userialize this content : "' . $content . '"');
+        }
+
+        return $mocks;
     }
 
     /**
@@ -88,12 +129,12 @@ class Http
      */
     public function start(): bool
     {
-        $dir = \dirname(__DIR__ , 2) . '/bin';
-        pclose(popen("php $dir/Imposter.php start &", 'r'));
-        $sleep = 1/100;
+        $this->console->startImposter();
+
+        $sleep = 1 / 100;
         $count = 0;
         while (!$this->isStarted()) {
-            if ($count > 1/$sleep) {
+            if ($count > 1 / $sleep) {
                 throw new \RuntimeException('Cannot start Imposter');
             }
             usleep((int)($sleep * 1000));
