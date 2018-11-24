@@ -6,6 +6,7 @@ namespace Imposter;
 use Imposter\Client\Imposter\MockBuilder;
 use Imposter\Client\State;
 use Imposter\Client\Http;
+use Imposter\Common\Container;
 
 /**
  * Class Imposter
@@ -24,7 +25,7 @@ class Imposter
     private static $state;
 
     /**
-     * @var Common\Di
+     * @var Container
      */
     private static $di;
 
@@ -83,14 +84,14 @@ class Imposter
     }
 
     /**
-     * @return Common\Di
+     * @return Container
      */
-    public static function getDi(): Common\Di
+    public static function getDi(): Container
     {
         if (self::$di) {
             return self::$di;
         }
 
-        return self::$di = new Common\Di();
+        return self::$di = new Container();
     }
 }

@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Imposter\Server;
 
-use Imposter\Common\Di;
+use Imposter\Common\Container;
 use Imposter\Server\Api\Controller\Match;
-use Imposter\Server\Log\LoggerFactory;
 use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
 use React\Http\Response;
@@ -23,7 +22,7 @@ class RouterMiddleware
     private $output;
 
     /**
-     * @var Di
+     * @var Container
      */
     private $di;
 
@@ -34,13 +33,15 @@ class RouterMiddleware
 
     /**
      * RouterMiddleware constructor.
-     * @param Di $di
+     * @param Container $di
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
-    public function __construct(Di $di)
+    public function __construct(Container $di)
     {
         $this->di     = $di;
         $this->output = $di->get('output');
-        $this->logger = $di->get(LoggerFactory::class);
+        $this->logger = $di->get('logger');
     }
 
     /**

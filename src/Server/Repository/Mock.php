@@ -27,6 +27,7 @@ class Mock
     private $logger;
 
     /**
+     * @Inject({"logger"})
      * Mock constructor.
      * @param Logger $logger
      */
