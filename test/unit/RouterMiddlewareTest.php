@@ -9,6 +9,7 @@
 namespace Imposter;
 
 
+use Imposter\Common\Container;
 use Imposter\Common\Di;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +22,7 @@ class RouterMiddlewareTest extends TestCase
      */
     public function invokeTest()
     {
-        $di = \Mockery::mock(Di::class);
+        $di = \Mockery::mock(Container::class);
         $di->shouldReceive('get')->with('output')->andReturn(
             \Mockery::mock(OutputInterface::class)
                 ->shouldReceive('writeln')
@@ -31,7 +32,7 @@ class RouterMiddlewareTest extends TestCase
         $di->shouldReceive('get')->with('Imposter\Server\Api\Controller\Mock\Test\Get')->andReturn(function() {
             return new \React\Http\Response(200);
         });
-        $di->shouldReceive('get')->with('Imposter\Server\Log\LoggerFactory');
+        $di->shouldReceive('get')->with('logger');
         $request = \Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $request->shouldReceive('getUri->getPath')->andReturn('mock/test');
         $request->shouldReceive('getMethod')->andReturn('GET');

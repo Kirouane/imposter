@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Imposter\Server;
 
-use Imposter\Common\Di;
+use Imposter\Common\Container;
 use React\Http\Server as ReactServer;
 
 /**
@@ -19,7 +19,7 @@ class Server
     const URL = self::PROTOCOL . '://' . self::HOST . ':' . self::PORT;
 
     /**
-     * @var Di
+     * @var Container
      */
     private $di;
 
@@ -40,9 +40,11 @@ class Server
 
     /**
      * Server constructor.
-     * @param Di $di
+     * @param Container $di
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
-    public function __construct(Di $di)
+    public function __construct(Container $di)
     {
         $this->di          = $di;
         $this->loop        = \React\EventLoop\Factory::create();
@@ -52,6 +54,8 @@ class Server
 
     /**
      * @param int $port
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function run(int $port)
     {
@@ -66,6 +70,8 @@ class Server
 
     /**
      * @param int $port
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function listen(int $port)
     {

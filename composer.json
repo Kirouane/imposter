@@ -37,7 +37,8 @@
         "monolog/monolog": ">= 1,  < 2",
         "guzzlehttp/guzzle": ">= 6, < 7 ",
         "react/http": "^0.8.3",
-        "phpunit/phpunit": "> 6, < 8"
+        "phpunit/phpunit": "> 6, < 8",
+        "php-di/php-di": "^6.0"
     },
     "require-dev": {
         "php-coveralls/php-coveralls": "2.1.x-dev",

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Imposter\Server\Command;
 
+use Imposter\Common\Container;
 use Imposter\Common\Di;
 
 use Imposter\Server\Server;
@@ -28,10 +29,14 @@ class Start extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $di = new Di();
+
+        $di = new Container();
         $di->set('output', $output);
 
         $port = $input->getOption('port');
