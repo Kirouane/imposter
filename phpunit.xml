@@ -13,6 +13,10 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory suffix=".php">./src/Server/Api</directory>
+                <directory suffix=".php">./src/Server/Command</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
