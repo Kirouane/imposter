@@ -26,6 +26,7 @@ class Http
     /**
      * HttpMock constructor.
      * @param \GuzzleHttp\Client $client
+     * @param Console $console
      */
     public function __construct(\GuzzleHttp\Client $client, Console $console)
     {
@@ -67,7 +68,7 @@ class Http
 
         $mock = @unserialize($content, [Mock::class]);
         if (!$mock instanceof MockAbstract) {
-            throw new \UnexpectedValueException('Cannot userialize this content : "' . $content . '"');
+            throw new \UnexpectedValueException('Cannot unserialize this content : "' . $content . '"');
         }
 
         return $mock;
@@ -108,8 +109,8 @@ class Http
         }
 
         $mocks = @unserialize($content, [Mock::class]);
-        if (!is_array($mocks)) {
-            throw new \UnexpectedValueException('Cannot userialize this content : "' . $content . '"');
+        if (!\is_array($mocks)) {
+            throw new \UnexpectedValueException('Cannot unserialize this content : "' . $content . '"');
         }
 
         return $mocks;

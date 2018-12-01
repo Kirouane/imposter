@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace Imposter\Server\Command;
 
 use Imposter\Common\Container;
-use Imposter\Common\Di;
-
 use Imposter\Server\Server;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,7 +33,6 @@ class Start extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $di = new Container();
         $di->set('output', $output);
 

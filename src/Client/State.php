@@ -10,7 +10,7 @@ namespace Imposter\Client;
 class State
 {
     /**
-     * @var
+     * @var bool
      */
     private $initialized = false;
 
@@ -52,8 +52,20 @@ class State
      */
     public function stop()
     {
+        $this->release();
         if ($this->httpClient->isStarted()) {
             $this->httpClient->stop();
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isInitialized(): bool
+    {
+        return $this->initialized;
+    }
+
+
+
 }

@@ -74,6 +74,7 @@ class Get extends AbstractController
     }
 
     /**
+     * @param int $port
      * @param $id
      * @param ServerRequestInterface $request
      * @return Response
