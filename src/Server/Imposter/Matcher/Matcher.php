@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Imposter\Server\Imposter\Matcher;
 
 use Imposter\Common\Model\MockAbstract;
-use Imposter\Server\Imposter\Matcher\Term\AbstractTerm;
 use Imposter\Server\Imposter\Matcher\Term\Body;
 use Imposter\Server\Imposter\Matcher\Term\Headers;
 use Imposter\Server\Imposter\Matcher\Term\Method;

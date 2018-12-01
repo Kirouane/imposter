@@ -27,7 +27,6 @@ class Mock
     private $logger;
 
     /**
-     * @Inject({"logger"})
      * Mock constructor.
      * @param Logger $logger
      */
@@ -62,6 +61,7 @@ class Mock
     }
 
     /**
+     * @param int $port
      * @param $id
      * @return MockAbstract|null
      */
@@ -87,14 +87,14 @@ class Mock
 
     /**
      * @param ServerRequestInterface $request
-     * @return MockAbstract|null
+     * @return \Imposter\Common\Model\Mock|null
      */
     public function matchRequest(ServerRequestInterface $request)
     {
         $match = null;
 
         $results = new MatchResults();
-        /** @var MockAbstract $mock */
+        /** @var \Imposter\Common\Model\Mock $mock */
         foreach ($this->data[$request->getUri()->getPort()] as $mock) {
             $matcher    = new Matcher($mock);
             $exceptions = $matcher->match($request);
@@ -114,7 +114,7 @@ class Mock
     }
 
     /**
-     * @return MockAbstract[]
+     * @return \Imposter\Common\Model\Mock[]
      */
     public function findAll(): array
     {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Imposter\Server\Imposter\Matcher\Term;
 
-use Imposter\Server\Imposter\Matcher\Term\AbstractTerm;
 use Psr\Http\Message\ServerRequestInterface;
 
 /***

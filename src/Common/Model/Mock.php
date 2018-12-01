@@ -174,7 +174,7 @@ class Mock extends MockAbstract implements \JsonSerializable
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function toString(): string
     {

@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace Imposter\Common;
 
-
-use Imposter\Server\Api\Controller\Mock\Get;
-use Imposter\Server\Api\Controller\Mock\Post;
 use Imposter\Server\Log\Handler;
 use Imposter\Server\Log\HtmlFormatter;
 use Imposter\Server\Repository\Mock;
@@ -35,7 +32,6 @@ class Container
 
     /**
      * Container constructor.
-     * @param array|null $config
      * @throws \Exception
      */
     public function __construct()
@@ -45,9 +41,6 @@ class Container
         }
     }
 
-    /**
-     * @param \DI\Container $container
-     */
     public static function reset()
     {
         self::$container = null;
@@ -82,19 +75,19 @@ class Container
         self::$container->set($key, $value);
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'logger' => function(Container $c) {
                 $handler = new Handler($c->get(\Imposter\Server\Log\LogRepository::class));
-                $handler->setFormatter(new HtmlFormatter());
+                $handler->setFormatter(new HtmlFormatter($c->get('view')));
                 $log = new Logger('Imposter');
                 $log->pushHandler($handler);
 
                 return $log;
             },
 
-            Post::class => \DI\create()->constructor(
+            \Imposter\Server\Api\Controller\Mock\Post::class => \DI\create()->constructor(
                 \DI\get('server'),
                 \DI\get('output'),
                 \DI\get(Mock::class)
@@ -107,7 +100,17 @@ class Container
 
             Mock::class => \DI\create()->constructor(\DI\get('logger')),
 
-            Get::class => \DI\create()->constructor(\DI\get(Mock::class), \DI\get('view')),
+            \Imposter\Server\Api\Controller\Mock\Get::class => \DI\create()->constructor(
+                \DI\get(Mock::class),
+                \DI\get('view')
+            ),
+            \Imposter\Server\Api\Controller\Mock\Log\Html\Get::class => \DI\create()->constructor(
+                \DI\get(\Imposter\Server\Log\LogRepository::class),
+                \DI\get('view')
+            ),
+            \Imposter\Server\Api\Controller\Mock\Delete::class => \DI\create()->constructor(
+                \DI\get(Mock::class)
+            ),
         ];
     }
 }
