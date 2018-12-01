@@ -51,9 +51,7 @@ class HtmlFormatter extends NormalizerFormatter
      */
     public function format(array $record)
     {
-
-        $dataView = [
-            'record' => $record,
+       $dataView = [
             'title' => [
                 'backgroundColor' => self::$logLevels[$record['level']],
                 'title' => $record['level_name'],
@@ -67,18 +65,5 @@ class HtmlFormatter extends NormalizerFormatter
         }
 
         return $this->view->render(__DIR__ . '/record.phtml', $dataView);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function formatBatch(array $records)
-    {
-        $message = '';
-        foreach ($records as $record) {
-            $message .= $this->format($record);
-        }
-
-        return $message;
     }
 }
