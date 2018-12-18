@@ -52,6 +52,7 @@ class HtmlFormatter extends NormalizerFormatter
     public function format(array $record)
     {
        $dataView = [
+           'message' => $record['message'],
             'title' => [
                 'backgroundColor' => self::$logLevels[$record['level']],
                 'title' => $record['level_name'],

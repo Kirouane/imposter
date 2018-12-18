@@ -59,4 +59,9 @@ class StateTest extends TestCase
         $state->stop();
         self::assertFalse($state->isInitialized());
     }
+
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
 }

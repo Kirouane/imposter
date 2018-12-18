@@ -29,6 +29,7 @@ class HtmlFormatterTest extends TestCase
 
         $formatter = new HtmlFormatter($view);
         $formatter->format([
+            'message' => 'test',
             'level' => Logger::ERROR,
             'level_name' => 'ERROR',
             'datetime' => new \DateTime(),
