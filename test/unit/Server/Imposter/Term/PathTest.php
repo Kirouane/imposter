@@ -63,4 +63,9 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
         self::assertInstanceOf(\Exception::class, $e);
     }
+
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
 }

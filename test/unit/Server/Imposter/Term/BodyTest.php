@@ -35,6 +35,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
     {
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getBody->getContents')->andReturn('{}')->once();
+        $request->shouldReceive('getParsedBody')->andReturn([])->once();
         $mock = new Mock(1);
         $mock->setRequestBody(new IsIdentical('{}'));
 
@@ -49,6 +50,7 @@ class BodyTest extends \PHPUnit\Framework\TestCase
     {
         $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
         $request->shouldReceive('getBody->getContents')->andReturn('[]')->once();
+        $request->shouldReceive('getParsedBody');
         $mock = new Mock(1);
         $mock->setRequestBody(new IsIdentical('{}'));
 
@@ -61,6 +63,20 @@ class BodyTest extends \PHPUnit\Framework\TestCase
         }
 
         self::assertInstanceOf(\Exception::class, $e);
+    }
+
+    /**
+     * @test
+     */
+    public function matchParsedBody()
+    {
+        $request = \Mockery::mock(\RingCentral\Psr7\ServerRequest::class);
+        $request->shouldReceive('getParsedBody')->andReturn(['a' => 'b'])->once();
+        $mock = new Mock(1);
+        $mock->setRequestBody(new IsIdentical(['a' => 'b']));
+
+        $term = new \Imposter\Server\Imposter\Matcher\Term\Body($mock);
+        self::assertNull($term->match($request));
     }
 
     public function tearDown()

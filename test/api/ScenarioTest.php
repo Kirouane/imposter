@@ -3,6 +3,7 @@
 namespace Imposter;
 
 use Imposter\Common\Constraint\JsonRegularExpression;
+use PHPUnit\Framework\Constraint\ArraySubset;
 use PHPUnit\Framework\Constraint\JsonMatches;
 use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\TestCase;
@@ -198,7 +199,6 @@ class ScenarioTest extends TestCase
         $this->closeImposers();
     }
 
-
     /**
      * @test
      */
@@ -221,5 +221,32 @@ class ScenarioTest extends TestCase
         }
 
         self::assertNotNull($e);
+        Imposter::reset();
+    }
+
+    /**
+     * @test
+     */
+    public function matchFormUrlencoded()
+    {
+        $this
+            ->openImposter(8081)
+            ->withHeaders(['Content-Type' => ['application/x-www-form-urlencoded']])
+            ->withBody(new ArraySubset(['a' => 'b']))
+            ->returnBody('{"response" :"OK"}')
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->request(
+            'POST',
+            'http://localhost:8081',
+            [
+                'form_params' => ['a' => 'b', 'c' => 'd']
+            ]
+        )->getBody()->getContents();
+
+        self::assertSame($response, '{"response" :"OK"}');
+        $this->closeImposers();
     }
 }

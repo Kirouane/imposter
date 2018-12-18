@@ -20,6 +20,11 @@ class Body extends AbstractTerm
             return;
         }
 
-        $this->mock->getRequestBody()->evaluate($request->getBody()->getContents());
+        $parserBody = $request->getParsedBody();
+        if (!empty($parserBody)) {
+            $this->mock->getRequestBody()->evaluate($parserBody);
+        } else {
+            $this->mock->getRequestBody()->evaluate($request->getBody()->getContents());
+        }
     }
 }
