@@ -12,7 +12,7 @@ use React\Http\Server as ReactServer;
  */
 class Server
 {
-    const HOST     = 'localhost';
+    const HOST     = '127.0.0.1';
     const PROTOCOL = 'http';
     const PORT     = 2424;
 
@@ -60,11 +60,12 @@ class Server
     public function run(int $port)
     {
         if (isset($this->sockets[$port])) {
-            $this->di->get('output')->writelin("$port already in use.");
+            $this->di->get('output')->writeln("$port already in use.");
             return;
         }
 
         $this->listen($port);
+        $this->di->get('output')->writeln("$port in use.");
         $this->loop->run();
     }
 
@@ -85,6 +86,9 @@ class Server
         $this->reactServer->listen($socket);
     }
 
+    /**
+     *
+     */
     public function stop()
     {
         $this->loop->stop();

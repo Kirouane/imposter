@@ -17,7 +17,8 @@ class Console
 {
     public function startImposter()
     {
-        $dir = \dirname(__DIR__ , 2) . '/bin';
-        pclose(popen("php $dir/Imposter.php start &", 'r'));
+        $root = \dirname(__DIR__ , 2);
+        $binDir = $root . '/bin';
+        pclose(popen("php $binDir/Imposter.php start &", 'r'));
     }
 }

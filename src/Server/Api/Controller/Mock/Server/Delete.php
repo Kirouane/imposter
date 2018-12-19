@@ -5,6 +5,7 @@ namespace Imposter\Server\Api\Controller\Mock\Server;
 
 use Imposter\Server\Api\Controller\AbstractController;
 use Psr\Http\Message\ServerRequestInterface;
+use React\Http\Response;
 
 /***
  * Class Delete
@@ -29,10 +30,16 @@ class Delete extends AbstractController
 
     /**
      * @param ServerRequestInterface $request
-     * @return void
+     * @return Response
      */
     public function __invoke(ServerRequestInterface $request)
     {
         $this->server->stop();
+        return new Response(
+            200,
+            [
+                'Content-Type' => 'application/json',
+            ]
+        );
     }
 }
