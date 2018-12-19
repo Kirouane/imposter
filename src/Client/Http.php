@@ -18,6 +18,7 @@ class Http
      * @var \\GuzzleHttp\Client
      */
     private $client;
+
     /**
      * @var Console
      */
@@ -124,25 +125,30 @@ class Http
         $this->client->delete(Server::URL . '/mock', null);
     }
 
-    /**
-     * @return bool
-     * @throws \Exception
-     */
-    public function start(): bool
+    public function start()
     {
         $this->console->startImposter();
 
-        $sleep = 1 / 100;
-        $count = 0;
-        while (!$this->isStarted()) {
-            if ($count > 1 / $sleep) {
-                throw new \RuntimeException('Cannot start Imposter');
+        $times = 100;
+        $duration = 10; //seconds
+        $sleep = $duration / $times;
+
+        foreach (range(1, $times) as $i) {
+            $e = null;
+            try {
+                $this->findAll();
+            } catch (\Exception $e) {
+
             }
-            usleep((int)($sleep * 1000));
-            $count ++;
+
+            \usleep((int)($sleep * 1000000));
+
+            if (!$e) {
+                return;
+            }
         }
 
-        return true;
+        throw $e;
     }
 
     /**

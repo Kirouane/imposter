@@ -147,8 +147,7 @@ class HttpTest extends TestCase
 
 
         $http = new Http($client, $console);
-        self::assertTrue($http->start());
-
+        $http->start();
     }
 
     /**
@@ -223,6 +222,7 @@ class HttpTest extends TestCase
 
     public function tearDown()
     {
+        $this->addToAssertionCount(\Mockery::getContainer()->mockery_getExpectationCount());
         \Mockery::close();
     }
 }

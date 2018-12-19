@@ -11,7 +11,6 @@ namespace Imposter\Common;
 
 use Imposter\Server\Log\Handler;
 use Imposter\Server\Log\HtmlFormatter;
-use Imposter\Server\Repository\Mock;
 use Monolog\Logger;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\PhpEngine;
@@ -23,8 +22,6 @@ use Symfony\Component\Templating\TemplateNameParser;
  */
 class Container
 {
-
-
     /**
      * @var \DI\Container
      */
@@ -45,7 +42,6 @@ class Container
     {
         self::$container = null;
     }
-
 
     /**
      * @param $key
@@ -70,11 +66,18 @@ class Container
         self::$container = $builder->build();
     }
 
+    /**
+     * @param $key
+     * @param $value
+     */
     public function set($key, $value)
     {
         self::$container->set($key, $value);
     }
 
+    /**
+     * @return array
+     */
     public function getConfig(): array
     {
         return [
@@ -86,22 +89,20 @@ class Container
 
                 return $log;
             },
-
             \Imposter\Server\Api\Controller\Mock\Post::class => \DI\create()->constructor(
                 \DI\get('server'),
                 \DI\get('output'),
-                \DI\get(Mock::class)
+                \DI\get(\Imposter\Server\Repository\Mock::class)
 
             ),
             'view' => function() {
                 $filesystemLoader = new FilesystemLoader([__DIR__ . '/../Api/Controller/%name%']);
                 return new PhpEngine(new TemplateNameParser(), $filesystemLoader);
             },
-
-            Mock::class => \DI\create()->constructor(\DI\get('logger')),
+            \Imposter\Server\Repository\Mock::class => \DI\create()->constructor(\DI\get('logger')),
 
             \Imposter\Server\Api\Controller\Mock\Get::class => \DI\create()->constructor(
-                \DI\get(Mock::class),
+                \DI\get(\Imposter\Server\Repository\Mock::class),
                 \DI\get('view')
             ),
             \Imposter\Server\Api\Controller\Mock\Log\Html\Get::class => \DI\create()->constructor(
@@ -109,8 +110,11 @@ class Container
                 \DI\get('view')
             ),
             \Imposter\Server\Api\Controller\Mock\Delete::class => \DI\create()->constructor(
-                \DI\get(Mock::class)
+                \DI\get(\Imposter\Server\Repository\Mock::class)
             ),
+            \Imposter\Server\Api\Controller\Mock\Server\Delete::class =>  \DI\create()->constructor(
+                \DI\get('server')
+            )
         ];
     }
 }

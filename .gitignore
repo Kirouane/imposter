@@ -7,3 +7,4 @@ data/
 build/
 .php_cs.cache
 composer.lock
+imposter.log
