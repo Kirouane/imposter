@@ -20,7 +20,6 @@ class JsonRegularExpressionTest extends TestCase
     public function matchesProvider()
     {
         return [
-            ['', '', false],
             ['{}', '{}', true],
             ['{"a":"a"}', '{"a":"a"}', true],
             ['{"a":"a"}', '{"a":"b"}', false],
@@ -48,6 +47,8 @@ class JsonRegularExpressionTest extends TestCase
 
             ['{"abc":"abc"}', '{"abc":"[a-z]{3}"}', true],
             ['{"abc":"ab"}', '{"abc":"[a-z]{3}"}', false],
+
+            ['{"a" : 0.00}', '{"a" : ".*"}', true],
         ];
     }
 

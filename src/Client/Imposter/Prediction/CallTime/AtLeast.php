@@ -28,9 +28,9 @@ class AtLeast extends AbstractCallTime
     private function getMessage($times): string
     {
         return sprintf(
-            "Expected at least %d calls that match:\n" .
+            "Expected at least %s calls that match:\n" .
             "%s \n" .
-            'but %d were made.',
+            'but %s were made.',
             $this->mock->toString(),
             $this->times,
             $times

@@ -178,10 +178,12 @@ class Mock extends MockAbstract implements \JsonSerializable
      */
     public function toString(): string
     {
-        return (string)printf(
-            "- Method %s \n" .
-            "- Path %s \n" .
-            "- Body %s \n",
+        return (string)sprintf(
+            "Mock %s : \n" .
+            "-- Method %s \n" .
+            "-- Path %s \n" .
+            "-- Body %s \n",
+            $this->getId() ?? '(undefined UD)',
             $this->getRequestMethod() ? $this->getRequestMethod()->toString() : '(No data)',
             $this->getRequestUriPath() ? $this->getRequestUriPath()->toString() : '(No data)',
             $this->getRequestBody() ? $this->getRequestBody()->toString() : '(No data)'

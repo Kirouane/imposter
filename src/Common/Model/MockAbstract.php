@@ -55,7 +55,7 @@ abstract class MockAbstract
     /**
      * @return null|string
      */
-    public function getId(): string
+    public function getId()
     {
         return $this->id;
     }

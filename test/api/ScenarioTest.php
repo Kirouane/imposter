@@ -2,6 +2,7 @@
 
 namespace Imposter;
 
+use Imposter\Common\Constraint\ArrayRegularExpression;
 use Imposter\Common\Constraint\JsonRegularExpression;
 use PHPUnit\Framework\Constraint\ArraySubset;
 use PHPUnit\Framework\Constraint\JsonMatches;
@@ -232,7 +233,7 @@ class ScenarioTest extends TestCase
         $this
             ->openImposter(8081)
             ->withHeaders(['Content-Type' => ['application/x-www-form-urlencoded']])
-            ->withBody(new ArraySubset(['a' => 'b']))
+            ->withBody(new ArrayRegularExpression(['a' => 'b']))
             ->returnBody('{"response" :"OK"}')
             ->once()
             ->send();

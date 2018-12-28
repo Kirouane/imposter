@@ -171,6 +171,7 @@ class HttpTest extends TestCase
         $mock->shouldReceive('getPort')->andReturn(1);
 
         $http = new Http($client, $console);
+        $http->setTimeout(0.1);
         $http->start();
     }
 
