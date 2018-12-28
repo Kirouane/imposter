@@ -14,6 +14,7 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Http
 {
+    const DEFAULT_TIMEOUT = 10; // seconds
     /**
      * @var \\GuzzleHttp\Client
      */
@@ -23,6 +24,11 @@ class Http
      * @var Console
      */
     private $console;
+
+    /**
+     * @var int
+     */
+    private $timeout = self::DEFAULT_TIMEOUT;
 
     /**
      * HttpMock constructor.
@@ -130,8 +136,8 @@ class Http
         $this->console->startImposter();
 
         $times = 100;
-        $duration = 10; //seconds
-        $sleep = $duration / $times;
+        $timeout = $this->timeout;
+        $sleep = $timeout / $times;
 
         foreach (range(1, $times) as $i) {
             $e = null;
@@ -186,5 +192,15 @@ class Http
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * @param int $timeout
+     * @return Http
+     */
+    public function setTimeout(int $timeout): Http
+    {
+        $this->timeout = $timeout;
+        return $this;
     }
 }

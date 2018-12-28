@@ -2,6 +2,8 @@
 
 namespace Imposter\Client\Imposter\Prediction\CallTime;
 
+use PHPUnit\Framework\Constraint\IsIdentical;
+
 class AtLeastTest extends \PHPUnit\Framework\TestCase
 {
     public function checkProvider()
