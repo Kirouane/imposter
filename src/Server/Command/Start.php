@@ -19,8 +19,10 @@ class Start extends Command
 
     protected function configure()
     {
-        $this->setName('start');
-        $this->addOption('port', 'p', InputOption::VALUE_OPTIONAL);
+        $this
+            ->setName('start')
+            ->addOption('config', 'c', InputOption::VALUE_REQUIRED);
+
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -36,12 +38,7 @@ class Start extends Command
         $di = new Container();
         $di->set('output', $output);
 
-        $port = $input->getOption('port');
-        if (!$port) {
-            $port = Server::PORT;
-        }
-
         $server = new Server($di);
-        $server->run($port);
+        $server->run($di->get('config')->getPort());
     }
 }

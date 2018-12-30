@@ -15,10 +15,24 @@ namespace Imposter\Client;
  */
 class Console
 {
+    /**
+     * @var string
+     */
+    private $configPath;
+
+    public function __construct(string $configPath = null)
+    {
+        $this->configPath = $configPath;
+    }
+
     public function startImposter()
     {
         $root = \dirname(__DIR__ , 2);
         $binDir = $root . '/bin';
-        pclose(popen("php $binDir/Imposter.php start &", 'r'));
+        $command = "php $binDir/Imposter.php start";
+        if ($this->configPath) {
+            $command .= "-c $this->configPath";
+        }
+        pclose(popen("$command &", 'r'));
     }
 }

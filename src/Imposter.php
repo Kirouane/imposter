@@ -94,4 +94,16 @@ class Imposter
 
         return self::$di = new Container();
     }
+
+    /**
+     * @param string $configPath
+     */
+    public static function setConfigPath(string $configPath)
+    {
+        if (!is_file($configPath)) {
+            throw new \InvalidArgumentException("The file $configPath doesn't exist.");
+        }
+
+        self::getDi()->set('config.path', realpath($configPath));
+    }
 }

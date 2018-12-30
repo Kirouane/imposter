@@ -12,11 +12,7 @@ use React\Http\Server as ReactServer;
  */
 class Server
 {
-    const HOST     = '127.0.0.1';
-    const PROTOCOL = 'http';
     const PORT     = 2424;
-
-    const URL = self::PROTOCOL . '://' . self::HOST . ':' . self::PORT;
 
     /**
      * @var Container
