@@ -49,7 +49,7 @@ class Http
     public function insert(MockAbstract $mock): MockAbstract
     {
         $response = $this->client->post(
-            Server::URL . '/mock',
+            '/mock',
             ['body' => serialize($mock)]
         );
 
@@ -88,7 +88,7 @@ class Http
      */
     public function find(MockAbstract $mock): MockAbstract
     {
-        $response = $this->client->get(Server::URL . '/mock', ['query' => ['id' => $mock->getId(), 'port' => $mock->getPort()]]);
+        $response = $this->client->get('/mock', ['query' => ['id' => $mock->getId(), 'port' => $mock->getPort()]]);
 
         if (!$response) {
             throw new \UnexpectedValueException('Response body not found');
@@ -102,7 +102,7 @@ class Http
      */
     public function findAll(): array
     {
-        $response = $this->client->get(Server::URL . '/mock');
+        $response = $this->client->get('/mock');
 
         if (!$response) {
             throw new \UnexpectedValueException('Response body not found');
@@ -128,7 +128,7 @@ class Http
      */
     public function drop()
     {
-        $this->client->delete(Server::URL . '/mock', null);
+        $this->client->delete('/mock', null);
     }
 
     public function start()
@@ -163,7 +163,7 @@ class Http
     public function stop()
     {
         try {
-            $this->client->delete(Server::URL . '/mock/server', null);
+            $this->client->delete('/mock/server', null);
             return true;
         } catch (\Exception $e) {
             return false;

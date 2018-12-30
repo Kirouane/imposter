@@ -12,6 +12,7 @@ namespace Imposter\Common;
 use Imposter\Server\Log\Handler;
 use Imposter\Server\Log\HtmlFormatter;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\PhpEngine;
 use Symfony\Component\Templating\TemplateNameParser;
@@ -81,7 +82,7 @@ class Container
     public function getConfig(): array
     {
         return [
-            'logger' => function(Container $c) {
+            'logger' => function(ContainerInterface $c) {
                 $handler = new Handler($c->get(\Imposter\Server\Log\LogRepository::class));
                 $handler->setFormatter(new HtmlFormatter($c->get('view')));
                 $log = new Logger('Imposter');
@@ -114,7 +115,18 @@ class Container
             ),
             \Imposter\Server\Api\Controller\Mock\Server\Delete::class =>  \DI\create()->constructor(
                 \DI\get('server')
-            )
+            ),
+            'config' => function (ContainerInterface $c) {
+                return new Config($c->has('config.path') ? require $c->get('config.path') : []);
+            },
+            \Imposter\Client\Http::class =>  function (ContainerInterface $c) {
+                return new \Imposter\Client\Http(
+                    new \GuzzleHttp\Client([
+                        'base_uri' => $c->get('config')->getUrl()
+                    ]),
+                    new \Imposter\Client\Console($c->has('config.path') ? $c->get('config.path') : null)
+                );
+            },
         ];
     }
 }

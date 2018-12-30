@@ -14,9 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class ArrayRegularExpressionTest extends TestCase
 {
-
-
-
     public function matchesProvider()
     {
         return [
