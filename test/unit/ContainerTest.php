@@ -20,8 +20,8 @@ class ContainerTest extends TestCase
      */
     public function get()
     {
-        \Imposter\Common\Container::reset();
         $container = new \Imposter\Common\Container();
+        $container->set('port', 123);
         self::assertInstanceOf(
             \Imposter\Client\Http::class,
             $container->get(\Imposter\Client\Http::class)

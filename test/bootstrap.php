@@ -2,4 +2,4 @@
 declare(strict_types=1);
 require __DIR__.'/../vendor/autoload.php';
 
-\Imposter\Imposter::shutdown();
+\Imposter\ImposterFactory::get()->shutdown();

@@ -18,12 +18,12 @@ class ServerTest extends TestCase
      */
     public function stop()
     {
-        \Imposter\Imposter::reset();
+        \Imposter\ImposterFactory::get()->destruct();
         $client   = new \GuzzleHttp\Client();
         $response = $client->get('http://localhost:2424/mock/log/html');
         self::assertSame(200, $response->getStatusCode());
 
-        \Imposter\Imposter::shutdown();
+        \Imposter\ImposterFactory::get()->shutdown();
 
         $e = null;
 

@@ -10,11 +10,6 @@ namespace Imposter\Client;
 class State
 {
     /**
-     * @var bool
-     */
-    private $initialized = false;
-
-    /**
      * @var Http
      */
     private $httpClient;
@@ -26,25 +21,11 @@ class State
     public function __construct(Http $httpClient)
     {
         $this->httpClient = $httpClient;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function capture()
-    {
-        if (!$this->initialized) {
-            if (!$this->httpClient->isStarted()) {
-                $this->httpClient->restart();
-            }
-            $this->httpClient->drop();
-            $this->initialized = true;
+        if (!$this->httpClient->isStarted()) {
+            $this->httpClient->restart();
         }
-    }
 
-    public function release()
-    {
-        $this->initialized = false;
+        $this->httpClient->drop();
     }
 
     /**
@@ -52,20 +33,8 @@ class State
      */
     public function stop()
     {
-        $this->release();
         if ($this->httpClient->isStarted()) {
             $this->httpClient->stop();
         }
     }
-
-    /**
-     * @return bool
-     */
-    public function isInitialized(): bool
-    {
-        return $this->initialized;
-    }
-
-
-
 }

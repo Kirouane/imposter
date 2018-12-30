@@ -26,7 +26,7 @@ class Container
     /**
      * @var \DI\Container
      */
-    private static $container;
+    private $container;
 
     /**
      * Container constructor.
@@ -34,14 +34,7 @@ class Container
      */
     public function __construct()
     {
-        if (self::$container === null) {
-            $this->createContainer();
-        }
-    }
-
-    public static function reset()
-    {
-        self::$container = null;
+       $this->createContainer();
     }
 
     /**
@@ -52,7 +45,7 @@ class Container
      */
     public function get($key)
     {
-        return self::$container->get($key);
+        return $this->container->get($key);
     }
 
     /**
@@ -64,7 +57,7 @@ class Container
         $builder->addDefinitions($this->getConfig());
         $builder->useAutowiring(true);
 
-        self::$container = $builder->build();
+        $this->container = $builder->build();
     }
 
     /**
@@ -73,7 +66,7 @@ class Container
      */
     public function set($key, $value)
     {
-        self::$container->set($key, $value);
+        $this->container->set($key, $value);
     }
 
     /**
@@ -117,14 +110,14 @@ class Container
                 \DI\get('server')
             ),
             'config' => function (ContainerInterface $c) {
-                return new Config($c->has('config.path') ? require $c->get('config.path') : []);
+                return new Config($c->has('config.path') ? require $c->get('config.path') : [], (int)$c->get('port'));
             },
             \Imposter\Client\Http::class =>  function (ContainerInterface $c) {
                 return new \Imposter\Client\Http(
                     new \GuzzleHttp\Client([
                         'base_uri' => $c->get('config')->getUrl()
                     ]),
-                    new \Imposter\Client\Console($c->has('config.path') ? $c->get('config.path') : null)
+                    new \Imposter\Client\Console((int)$c->get('port'), $c->has('config.path') ? $c->get('config.path') : null)
                 );
             },
         ];

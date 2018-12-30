@@ -7,6 +7,7 @@ use Imposter\Client\Imposter\MockBuilder;
 use Imposter\Client\State;
 use Imposter\Client\Http;
 use Imposter\Common\Container;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class Imposter
@@ -17,93 +18,70 @@ class Imposter
     /**
      * @var Imposter[]
      */
-    private static $httpImposters = [];
+    private $httpImposters = [];
 
     /**
      * @var State
      */
-    private static $state;
+    private $state;
 
     /**
-     * @var Container
+     * @var Http
      */
-    private static $di;
+    private $httpClient;
+    /**
+     * @var int
+     */
+    private $imposterPort;
+
+
+    /**
+     * Imposter constructor.
+     * @param Container $di
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function __construct(int $imposterPort, \Imposter\Client\Http $httpClient)
+    {
+        $this->state = new State($httpClient);
+        $this->httpClient = $httpClient;
+        $this->imposterPort = $imposterPort;
+    }
 
     /**
      * @param int $port
      * @return MockBuilder
      * @throws \Exception
      */
-    public static function mock(int $port): MockBuilder
+    public function mock(int $port): MockBuilder
     {
-        self::init();
-        return self::$httpImposters[] = new MockBuilder($port, self::getDi()->get(Http::class));
-    }
-
-
-    /**
-     * @throws \Exception
-     */
-    public static function reset()
-    {
-        self::$httpImposters = [];
-        self::init();
-    }
-
-    /**
-     * @return void
-     * @throws \Exception
-     */
-    public static function init()
-    {
-        self::$state = self::$state ?: new State(self::getDi()->get(Http::class));
-        self::$state->capture();
+        return $this->httpImposters[] = new MockBuilder($port, $this->httpClient);
     }
 
     /**
      * @throws \Exception
      */
-    public static function close()
+    public function close()
     {
-        self::$state->release();
         /** @var \Imposter\Client\Imposter\MockBuilder $imposter */
-        foreach (self::$httpImposters as $imposter) {
+        foreach ($this->httpImposters as $imposter) {
             $imposter->resolve();
         }
 
-        self::$httpImposters = [];
+        $this->destruct();
     }
 
     /**
      * @throws \Exception
      */
-    public static function shutdown()
+    public function shutdown()
     {
-        self::$state = self::$state ?: new State(self::getDi()->get(Http::class));
-        self::$state->stop();
+        $this->state->stop();
+        $this->destruct();
     }
 
-    /**
-     * @return Container
-     */
-    public static function getDi(): Container
+    public function destruct()
     {
-        if (self::$di) {
-            return self::$di;
-        }
-
-        return self::$di = new Container();
-    }
-
-    /**
-     * @param string $configPath
-     */
-    public static function setConfigPath(string $configPath)
-    {
-        if (!is_file($configPath)) {
-            throw new \InvalidArgumentException("The file $configPath doesn't exist.");
-        }
-
-        self::getDi()->set('config.path', realpath($configPath));
+        ImposterFactory::remove($this->imposterPort);
     }
 }

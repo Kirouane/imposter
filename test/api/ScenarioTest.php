@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ScenarioTest extends TestCase
 {
-    use PhpunitTrait;
+    use ImposterTrait;
 
     /**
      * @test
@@ -124,12 +124,13 @@ class ScenarioTest extends TestCase
         $e = null;
         $client->post('http://localhost:8081/users/1')->getBody()->getContents();
         try {
-            Imposter::close();
+            $this->closeImposers();
         } catch (\Exception $e) {
 
         }
 
-        Imposter::reset();
+
+        \Imposter\ImposterFactory::get()->destruct();
 
         self::assertNotNull($e);
     }
@@ -222,7 +223,7 @@ class ScenarioTest extends TestCase
         }
 
         self::assertNotNull($e);
-        Imposter::reset();
+        \Imposter\ImposterFactory::get()->destruct();
     }
 
     /**
