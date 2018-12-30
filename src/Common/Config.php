@@ -16,10 +16,12 @@ class Config
 
     const PROTOCOL = 'http';
 
+    const DEFAULT_PORT = 2424;
+
     /**
      * @var int
      */
-    private $port = 2424;
+    private $port = self::DEFAULT_PORT;
 
     /**
      * @var array
@@ -29,11 +31,12 @@ class Config
     /**
      * Config constructor.
      * @param array $config
+     * @param int $port
      */
-    public function __construct(array $config)
+    public function __construct(array $config, int $port)
     {
         $this->config = $config;
-        $this->port = $config['port'] ?? $this->port;
+        $this->port = $port;
     }
 
     /**

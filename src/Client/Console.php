@@ -19,17 +19,22 @@ class Console
      * @var string
      */
     private $configPath;
+    /**
+     * @var int
+     */
+    private $port;
 
-    public function __construct(string $configPath = null)
+    public function __construct(int $port, string $configPath = null)
     {
         $this->configPath = $configPath;
+        $this->port = $port;
     }
 
     public function startImposter()
     {
         $root = \dirname(__DIR__ , 2);
         $binDir = $root . '/bin';
-        $command = "php $binDir/Imposter.php start";
+        $command = "php $binDir/Imposter.php start $this->port";
         if ($this->configPath) {
             $command .= "-c $this->configPath";
         }

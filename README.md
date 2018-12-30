@@ -22,10 +22,11 @@ class ReadMeTest extends TestCase
 {
     /**
      * @test
+     *
      */
     public function match()
     {
-        Imposter::mock(8081)
+        ImposterFactory::get()->mock(8081)
             ->withPath('/users/1')
             ->withMethod('POST')
             ->returnBody('{"response" :"okay"}')
@@ -39,7 +40,7 @@ class ReadMeTest extends TestCase
 
     public function tearDown()
     {
-        Imposter::close();
+        ImposterFactory::get()->close();
     }
 }
 
@@ -83,7 +84,7 @@ class ReadMeTest extends TestCase
      */
     public function match()
     {
-        Imposter::mock(8081)
+        ImposterFactory::get()->mock(8081)
             ->withPath('/users/1')
             ->withMethod(new RegularExpression('/POST|PUT/'))
             ->returnBody('{"response" :"okay"}')
@@ -100,7 +101,7 @@ class ReadMeTest extends TestCase
 
     public function tearDown()
     {
-        Imposter::close();
+        ImposterFactory::get()->close();
     }
 
 }
