@@ -33,4 +33,9 @@ trait ImposterTrait
         ImposterFactory::get($imposterPort)->close();
     }
 
+    public function createImposter($configPath, $imposterPort = Config::DEFAULT_PORT)
+    {
+        ImposterFactory::create($imposterPort, $configPath);
+    }
+
 }

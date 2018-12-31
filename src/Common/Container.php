@@ -11,6 +11,7 @@ namespace Imposter\Common;
 
 use Imposter\Server\Log\Handler;
 use Imposter\Server\Log\HtmlFormatter;
+use Imposter\Server\Log\TextFormatter;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
@@ -76,10 +77,18 @@ class Container
     {
         return [
             'logger' => function(ContainerInterface $c) {
+                $log = new Logger('Imposter');
+
                 $handler = new Handler($c->get(\Imposter\Server\Log\LogRepository::class));
                 $handler->setFormatter(new HtmlFormatter($c->get('view')));
-                $log = new Logger('Imposter');
                 $log->pushHandler($handler);
+
+
+                if ($c->get('config')->isFileLoggerEnabled()) {
+                    $handler = new \Monolog\Handler\StreamHandler($c->get('config')->getLogFilePath());
+                    $handler->setFormatter(new TextFormatter($c->get('view')));
+                    $log->pushHandler($handler);
+                }
 
                 return $log;
             },
@@ -113,12 +122,16 @@ class Container
                 return new Config($c->has('config.path') ? require $c->get('config.path') : [], (int)$c->get('port'));
             },
             \Imposter\Client\Http::class =>  function (ContainerInterface $c) {
-                return new \Imposter\Client\Http(
+                $httpClient =  new \Imposter\Client\Http(
                     new \GuzzleHttp\Client([
                         'base_uri' => $c->get('config')->getUrl()
                     ]),
                     new \Imposter\Client\Console((int)$c->get('port'), $c->has('config.path') ? $c->get('config.path') : null)
                 );
+
+                $httpClient->setTimeout($c->get('config')->getServerTimeout());
+
+                return $httpClient;
             },
         ];
     }

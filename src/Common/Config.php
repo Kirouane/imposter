@@ -18,6 +18,8 @@ class Config
 
     const DEFAULT_PORT = 2424;
 
+    const DEFAULT_TIMEOUT = 10; // seconds;
+
     /**
      * @var int
      */
@@ -53,5 +55,23 @@ class Config
     public function getUrl(): string
     {
         return self::PROTOCOL . '://' . self::HOST . ':' . $this->port;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServerTimeout(): int
+    {
+        return $this->config['server']['timeout'] ?? self::DEFAULT_TIMEOUT;
+    }
+
+    public function isFileLoggerEnabled(): bool
+    {
+        return $this->getLogFilePath() !== null;
+    }
+
+    public function getLogFilePath()
+    {
+        return $this->config['log']['filePath'] ?? null;
     }
 }

@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Imposter\Client;
 
+use Imposter\Common\Config;
 use Imposter\Common\Model\Mock;
 use Imposter\Common\Model\MockAbstract;
-use Imposter\Server\Server;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -14,7 +14,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Http
 {
-    const DEFAULT_TIMEOUT = 10; // seconds
     /**
      * @var \\GuzzleHttp\Client
      */
@@ -28,7 +27,7 @@ class Http
     /**
      * @var int
      */
-    private $timeout = self::DEFAULT_TIMEOUT;
+    private $timeout = Config::DEFAULT_TIMEOUT;
 
     /**
      * HttpMock constructor.

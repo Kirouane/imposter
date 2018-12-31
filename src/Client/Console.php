@@ -36,7 +36,7 @@ class Console
         $binDir = $root . '/bin';
         $command = "php $binDir/Imposter.php start $this->port";
         if ($this->configPath) {
-            $command .= "-c $this->configPath";
+            $command .= " -c $this->configPath";
         }
         pclose(popen("$command &", 'r'));
     }

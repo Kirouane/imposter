@@ -2,5 +2,10 @@
 declare(strict_types=1);
 
 return [
-    'port' => '2626'
+    'server' => [
+        'timeout' => 10
+    ],
+    'log' => [
+        'filePath' => __DIR__ . '/config-test.log'
+    ]
 ];
