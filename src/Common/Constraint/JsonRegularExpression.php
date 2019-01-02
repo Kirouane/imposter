@@ -19,9 +19,10 @@ class JsonRegularExpression extends ArrayRegularExpression
      * MatchJson constructor.
      * @param $arrayPattern
      */
-    public function __construct($arrayPattern)
+    public function __construct($jsonPattern)
     {
-        parent::__construct(json_decode($arrayPattern, true));
+        $this->jsonPattern = $jsonPattern;
+        parent::__construct(json_decode($jsonPattern, true));
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
