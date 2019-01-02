@@ -59,7 +59,6 @@ class ScenarioTest extends TestCase
      */
     public function matchNotBody()
     {
-        //Imposter::shutdown();
         $this
             ->openImposter(8081)
             ->withBody(new JsonRegularExpression('{"test":"[a-z]{4}"}'))
@@ -71,8 +70,7 @@ class ScenarioTest extends TestCase
 
         $e = null;
         try {
-            $response = $client->post('http://localhost:8081/users/1', ['body' => '{"test":"abc"}'])->getBody()->getContents();
-            Imposter::close();
+            $client->post('http://localhost:8081/users/1', ['body' => '{"test":"abc"}'])->getBody()->getContents();
         } catch (\Exception $e) {
 
         }
@@ -98,7 +96,6 @@ class ScenarioTest extends TestCase
         $e = null;
         try {
             $client->get('http://localhost:8081/users/1')->getBody()->getContents();
-            Imposter::close();
         } catch (\Exception $e) {
 
         }
@@ -161,6 +158,34 @@ class ScenarioTest extends TestCase
         $response = $client->post('http://localhost:8081/users/1')->getBody()->getContents();
         self::assertSame($response, '{"response" :"1"}');
         $response = $client->post('http://localhost:8081/users/2')->getBody()->getContents();
+        self::assertSame($response, '{"response" :"2"}');
+        $this->closeImposers();
+    }
+
+    /**
+     * @test
+     */
+    public function matchMultipleMockWithBody()
+    {
+        $this
+            ->openImposter(8081)
+            ->withBody('{"a":"1"}')
+            ->returnBody('{"response" :"1"}')
+            ->once()
+            ->send();
+
+        $this
+            ->openImposter(8081)
+            ->withBody('{"a":"2"}')
+            ->returnBody('{"response" :"2"}')
+            ->once()
+            ->send();
+
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->post('http://localhost:8081', ['body' => '{"a":"1"}'])->getBody()->getContents();
+        self::assertSame($response, '{"response" :"1"}');
+        $response = $client->post('http://localhost:8081', ['body' => '{"a":"2"}'])->getBody()->getContents();
         self::assertSame($response, '{"response" :"2"}');
         $this->closeImposers();
     }

@@ -24,7 +24,8 @@ class Body extends AbstractTerm
         if (!empty($parserBody)) {
             $this->mock->getRequestBody()->evaluate($parserBody);
         } else {
-            $this->mock->getRequestBody()->evaluate($request->getBody()->getContents());
+            $body = clone $request->getBody();
+            $this->mock->getRequestBody()->evaluate($body->getContents());
         }
     }
 }
