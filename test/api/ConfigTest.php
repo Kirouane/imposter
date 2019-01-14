@@ -20,18 +20,22 @@ class ConfigTest extends TestCase
      */
     public function logPath()
     {
-        $logFile = __DIR__ . '/config-test.log';
+        $logFile = __DIR__ . '/config-test.json';
         $this->createImposter(__DIR__ . '/config.php');
         $this
             ->openImposter(8081)
             ->withPath('/users/1')
             ->withMethod(new RegularExpression('/GET|PUT|POST/'))
             ->returnBody('{"response" :"okay"}')
-            ->once()
             ->send();
 
         $client   = new \GuzzleHttp\Client();
-        $client->post('http://localhost:8081/users/1')->getBody()->getContents();
+        try {
+
+            $client->post('http://localhost:8081/users/2')->getBody()->getContents();
+        } catch (\Exception $e) {
+
+        }
         $this->closeImposers();
         self::assertFileExists($logFile);
         unlink($logFile);

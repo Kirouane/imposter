@@ -97,9 +97,9 @@ class Mock
         /** @var \Imposter\Common\Model\Mock $mock */
         foreach ($this->data[$request->getUri()->getPort()] as $mock) {
             $matcher    = new Matcher($mock);
-            $exceptions = $matcher->match($request);
-            $results[] = new MatchResult($mock, $exceptions);
-            if (empty($exceptions)) {
+            $termResults = $matcher->match($request);
+            $results[] = new MatchResult($mock, $termResults);
+            if (empty($termResults)) {
                 $this->logger->info('Mock found');
                 $match = $mock;
                 break;

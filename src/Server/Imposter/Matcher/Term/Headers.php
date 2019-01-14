@@ -22,4 +22,16 @@ class Headers extends AbstractTerm
 
         $this->mock->getRequestHeaders()->evaluate($request->getHeaders());
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => 'headers'
+        ];
+    }
+
+    public function __toString()
+    {
+        return 'Headers';
+    }
 }
