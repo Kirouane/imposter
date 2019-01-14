@@ -22,4 +22,16 @@ class Path extends AbstractTerm
 
         $this->mock->getRequestUriPath()->evaluate($request->getUri()->getPath());
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => 'path'
+        ];
+    }
+
+    public function __toString()
+    {
+        return 'Path';
+    }
 }

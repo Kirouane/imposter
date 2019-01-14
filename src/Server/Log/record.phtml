@@ -15,8 +15,9 @@
         <th style="vertical - align: top;background: #ccc;color: #000" width="100">localhost:<?=$mock->getPort(); ?></th>
         <td style="padding: 4px;text-align: left;vertical-align: top;background: #eee;color: #000">
             <?= $mock->getFile(); ?> : <?= $mock->getLine(); ?><br />
-        <?php foreach ($matchResult->getExceptions() as $exception) : ?>
-            <pre> <?= \PHPUnit\Framework\TestFailure::exceptionToString($exception); ?></pre>
+        <?php foreach ($matchResult->getTermResults() as $termResult) : ?>
+            <div style="text-decoration: underline"><?= (string)$termResult->getTerm(); ?> assertion</div>
+            <pre> <?= \PHPUnit\Framework\TestFailure::exceptionToString($termResult->getException()); ?></pre>
         <?php endforeach;?>
         </td>
      </tr>

@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * Class AbstractTerm
  * @package Imposter\Imposter\Term
  */
-abstract class AbstractTerm
+abstract class AbstractTerm implements \JsonSerializable
 {
     /**
      * @var Mock

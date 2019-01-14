@@ -32,7 +32,7 @@ class Matcher
 
     /**
      * @param ServerRequestInterface $request
-     * @return \Exception[]
+     * @return TermResult[]
      */
     public function match(ServerRequestInterface $request): array
     {
@@ -42,17 +42,17 @@ class Matcher
             new Method($this->mock),
             new Headers($this->mock),
         ];
-        $exceptions = [];
+        $termResults = [];
 
         /** @var \Imposter\Server\Imposter\Matcher\Term\AbstractTerm $term */
         foreach ($terms as $term) {
             try {
                 $term->match($request);
             } catch (\Exception $e) {
-                $exceptions[] = $e;
+                $termResults[] = new TermResult($term, $e);
             }
         }
 
-        return $exceptions;
+        return $termResults;
     }
 }

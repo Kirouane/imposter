@@ -53,6 +53,11 @@ class Start extends Command
         $container->set('port', $input->getArgument('port'));
 
         $server = new Server($container);
-        $server->run($container->get('config')->getPort());
+
+        try {
+            $server->run($container->get('config')->getPort());
+        } catch (\Throwable $e) {
+            $container->get('logger')->critical($e);
+        }
     }
 }

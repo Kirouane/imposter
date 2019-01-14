@@ -28,4 +28,16 @@ class Body extends AbstractTerm
             $this->mock->getRequestBody()->evaluate($body->getContents());
         }
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => 'body'
+        ];
+    }
+
+    public function __toString()
+    {
+        return 'Body';
+    }
 }

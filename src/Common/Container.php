@@ -11,7 +11,7 @@ namespace Imposter\Common;
 
 use Imposter\Server\Log\Handler;
 use Imposter\Server\Log\HtmlFormatter;
-use Imposter\Server\Log\TextFormatter;
+use Imposter\Server\Log\JsonFormatter;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
@@ -86,7 +86,7 @@ class Container
 
                 if ($c->get('config')->isFileLoggerEnabled()) {
                     $handler = new \Monolog\Handler\StreamHandler($c->get('config')->getLogFilePath());
-                    $handler->setFormatter(new TextFormatter($c->get('view')));
+                    $handler->setFormatter(new JsonFormatter(\Monolog\Formatter\JsonFormatter::BATCH_MODE_NEWLINES));
                     $log->pushHandler($handler);
                 }
 

@@ -22,4 +22,16 @@ class Method extends AbstractTerm
 
         $this->mock->getRequestMethod()->evaluate($request->getMethod());
     }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => 'method'
+        ];
+    }
+
+    public function __toString()
+    {
+        return 'Method';
+    }
 }
