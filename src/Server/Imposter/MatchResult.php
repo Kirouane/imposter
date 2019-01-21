@@ -60,7 +60,6 @@ class MatchResult implements \JsonSerializable
     {
         $mock = $this->getMock();
 
-
         return [
             'host' => 'localhost:' . $mock->getPort(),
             'file' => $mock->getFile(),

@@ -6,6 +6,6 @@ return [
         'timeout' => 10
     ],
     'log' => [
-        'filePath' => __DIR__ . '/config-test.json'
+        'filePath' => __DIR__ . '/config-test.log'
     ]
 ];

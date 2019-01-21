@@ -59,8 +59,9 @@ class Server
             $this->di->get('output')->writeln("$port already in use.");
             return;
         }
-
+        $this->di->get('logger')->info("Server starting on $port ...");
         $this->listen($port);
+        $this->di->get('logger')->info("Server started on $port");
         $this->di->get('output')->writeln("$port in use.");
         $this->loop->run();
     }
@@ -87,6 +88,7 @@ class Server
      */
     public function stop()
     {
+        $this->di->get('logger')->info("Server stopped.");
         $this->loop->stop();
     }
 }

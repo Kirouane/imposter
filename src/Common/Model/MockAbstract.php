@@ -142,6 +142,15 @@ abstract class MockAbstract
         return $this;
     }
 
+    /**
+     * @return MockAbstract
+     */
+    public function hit() : MockAbstract
+    {
+        $this->hits++;
+        return $this;
+    }
+
     /***
      * @return string
      */
