@@ -37,13 +37,13 @@ class Start extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $container = new Container();
         $configPath = $input->getOption('config');
 
         if ($configPath && !is_file($configPath)) {
+            $container->get('logger')->info("The file $configPath doesn't exist.");
             throw new \InvalidArgumentException("The file $configPath doesn't exist.");
         }
-
-        $container = new Container();
 
         if ($configPath) {
             $container->set('config.path', realpath($configPath));

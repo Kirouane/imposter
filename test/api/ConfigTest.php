@@ -20,7 +20,7 @@ class ConfigTest extends TestCase
      */
     public function logPath()
     {
-        $logFile = __DIR__ . '/config-test.json';
+        $logFile = __DIR__ . '/config-test.log';
         $this->createImposter(__DIR__ . '/config.php');
         $this
             ->openImposter(8081)

@@ -34,25 +34,31 @@ class Match extends AbstractController
      */
     public function __invoke(ServerRequestInterface $request)
     {
-        $row = $this->repository->matchRequest($request);
+        $mock = $this->repository->matchRequest($request);
 
-        if ($row) {
-            $row->setHits($row->getHits() + 1);
-            $this->repository->update($row);
+        return $mock ? $this->getMockResponse($mock) : $this->getNotFoundMockResponse();
+    }
 
-            return new Response(
-                200,
-                $row->getResponseHeaders(),
-                $row->getResponseBody()
-            );
-        }
-
+    private function getNotFoundMockResponse(): Response
+    {
         return new Response(
             404,
             [
                 'Content-Type' => 'application/json',
             ],
-            'Not found'
+            'Mock not found.'
+        );
+    }
+
+    private function getMockResponse(\Imposter\Common\Model\Mock $mock): Response
+    {
+        $mock->hit();
+        $this->repository->update($mock);
+
+        return new Response(
+            $mock->getResponseHeaders()['status'] ?? 200,
+            $mock->getResponseHeaders(),
+            $mock->getResponseBody()
         );
     }
 }

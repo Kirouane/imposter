@@ -254,6 +254,24 @@ class ScenarioTest extends TestCase
     /**
      * @test
      */
+    public function returnStatusHeader()
+    {
+        $this
+            ->openImposter(8081)
+            ->returnHeaders(['status' => 204])
+            ->once()
+            ->send();
+
+        $client   = new \GuzzleHttp\Client();
+        $response = $client->get('http://localhost:8081');
+        self::assertSame($response->getStatusCode(), 204);
+        $this->closeImposers();
+    }
+
+
+    /**
+     * @test
+     */
     public function matchFormUrlencoded()
     {
         $this

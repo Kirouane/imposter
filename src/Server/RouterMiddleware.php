@@ -62,7 +62,7 @@ class RouterMiddleware
         try {
 
             $path = trim($request->getUri()->getPath(), '/');
-
+            $this->logger->info("Receiving request $path");
             if (stripos($path, 'mock') !== false) {
                 return $this->getMockResponse($path, $request);
             }
@@ -96,6 +96,7 @@ class RouterMiddleware
         $arrayPath  = explode('/', $path);
         $arrayPath  = array_map('ucfirst', $arrayPath);
         $controller = 'Imposter\Server\Api\Controller\\' . implode('\\', $arrayPath) . '\\' . ucfirst(strtolower($request->getMethod()));
+        $this->logger->info("Routing to $controller");
 
         return ($this->di->get($controller))($request);
     }
@@ -106,6 +107,7 @@ class RouterMiddleware
      */
     private function getMatchResponse(ServerRequestInterface $request): Response
     {
+        $this->logger->info('Routing to the ' . Match::class . ' to match the request.');
         return ($this->di->get(Match::class))($request);
     }
 }

@@ -10,6 +10,7 @@ namespace Imposter;
 
 
 use Imposter\Common\Container;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -31,7 +32,10 @@ class RouterMiddlewareTest extends TestCase
         $di->shouldReceive('get')->with('Imposter\Server\Api\Controller\Mock\Test\Get')->andReturn(function() {
             return new \React\Http\Response(200);
         });
-        $di->shouldReceive('get')->with('logger');
+
+        $logger = \Mockery::mock(Logger::class);
+        $logger->shouldReceive('info');
+        $di->shouldReceive('get')->with('logger')->andReturn($logger);
         $request = \Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $request->shouldReceive('getUri->getPath')->andReturn('mock/test');
         $request->shouldReceive('getMethod')->andReturn('GET');
@@ -58,11 +62,12 @@ class RouterMiddlewareTest extends TestCase
         $di->shouldReceive('get')->with('Imposter\Server\Api\Controller\Match')->andReturn(function() {
             return new \React\Http\Response(200);
         });
-        $di->shouldReceive('get')->with('logger');
+        $logger = \Mockery::mock(Logger::class);
+        $logger->shouldReceive('info');
+        $di->shouldReceive('get')->with('logger')->andReturn($logger);
         $request = \Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $request->shouldReceive('getUri->getPath')->andReturn('test/test');
         $request->shouldReceive('getMethod')->andReturn('GET');
-
 
         $middleware = new Server\RouterMiddleware($di);
         $response = $middleware->__invoke($request);
