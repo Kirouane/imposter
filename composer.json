@@ -4,6 +4,7 @@
     "type": "library",
     "homepage": "https://github.com/Kirouane/imposter",
     "license": "MIT",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "nassim.kirouane",
