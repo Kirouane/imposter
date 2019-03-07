@@ -1,9 +1,10 @@
 {
     "name": "kirouane/imposter",
-    "description": "API mock for PHPUnit",
+    "description": "HTTP Mock and Stub",
     "type": "library",
     "homepage": "https://github.com/Kirouane/imposter",
     "license": "MIT",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "nassim.kirouane",
@@ -37,8 +38,8 @@
         "monolog/monolog": ">= 1,  < 2",
         "guzzlehttp/guzzle": ">= 6, < 7 ",
         "react/http": "^0.8.3",
-        "phpunit/phpunit": "> 6, < 8",
-        "php-di/php-di": "^6.0"
+        "php-di/php-di": "^6.0",
+        "phpunit/phpunit": "^6"
     },
     "require-dev": {
         "php-coveralls/php-coveralls": "2.1.x-dev",
