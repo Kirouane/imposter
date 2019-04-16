@@ -20,6 +20,7 @@ class ConfigTest extends TestCase
      */
     public function logPath()
     {
+        \Imposter\ImposterFactory::get()->shutdown();
         $logFile = __DIR__ . '/config-test.log';
         $this->createImposter(__DIR__ . '/config.php');
         $this
