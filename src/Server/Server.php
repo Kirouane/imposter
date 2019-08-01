@@ -78,7 +78,7 @@ class Server
             return;
         }
 
-        $socket               = new \React\Socket\Server($port, $this->loop);
+        $socket               = new \React\Socket\Server('0.0.0.0:' . $port, $this->loop);
         $this->sockets[$port] = $socket;
         $this->reactServer->listen($socket);
     }
