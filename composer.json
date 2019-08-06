@@ -25,6 +25,10 @@
             "Imposter\\" : ["test/unit", "test/api"]
         }
     },
+    "bin": [
+        "bin/imposter",
+        "bin/Imposter.php"
+    ],
     "config": {
         "platform": {
             "php": "7.0"
