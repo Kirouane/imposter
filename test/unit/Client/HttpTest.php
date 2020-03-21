@@ -8,7 +8,6 @@
 
 namespace Imposter\Client;
 
-
 use Imposter\Common\Model\Mock;
 use Imposter\Common\Model\MockAbstract;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +36,8 @@ class HttpTest extends TestCase
             self::expectException(\Exception::class);
         }
 
-        $mock = \Mockery::mock(MockAbstract::class);
+        $mock = new MockAsset(8081);
+
         $response = \Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
         $response->shouldReceive('getBody->getContents')->andReturn($content);
         $response->shouldReceive('getStatusCode')->andReturn($code);
@@ -46,7 +46,7 @@ class HttpTest extends TestCase
         $client->shouldReceive('post')->andReturn($response);
         $http = new Http($client, \Mockery::mock(Console::class));
 
-        $returnedMock =$http->insert($mock);
+        $returnedMock = $http->insert($mock);
         self::assertInstanceOf(MockAbstract::class, $returnedMock);
     }
 
@@ -225,5 +225,13 @@ class HttpTest extends TestCase
     {
         $this->addToAssertionCount(\Mockery::getContainer()->mockery_getExpectationCount());
         \Mockery::close();
+    }
+}
+
+class MockAsset extends MockAbstract
+{
+    public function toString(): string
+    {
+        return 'asset';
     }
 }
