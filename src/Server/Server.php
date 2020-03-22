@@ -12,7 +12,7 @@ use React\Http\Server as ReactServer;
  */
 class Server
 {
-    const PORT     = 2424;
+    const PORT = 2424;
 
     /**
      * @var Container

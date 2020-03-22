@@ -1,11 +1,5 @@
 <?php
 declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: nassim.kirouane
- * Date: 11/18/18
- * Time: 3:41 PM
- */
 
 namespace Imposter\Client;
 
@@ -38,6 +32,10 @@ class Console
         if ($this->configPath) {
             $command .= " -c $this->configPath";
         }
-        pclose(popen("$command &", 'r'));
+        $handler = popen("$command &", 'r');
+
+        // Since php 7.4, the speed of php is so fast that there is a race condition without this waiting time
+        \usleep(1000000);
+        pclose($handler);
     }
 }

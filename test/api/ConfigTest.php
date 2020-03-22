@@ -30,7 +30,7 @@ class ConfigTest extends TestCase
             ->returnBody('{"response" :"okay"}')
             ->send();
 
-        $client   = new \GuzzleHttp\Client();
+        $client = new \GuzzleHttp\Client();
         try {
 
             $client->post('http://localhost:8081/users/2')->getBody()->getContents();
